@@ -25,6 +25,26 @@ type workerAgentOutput struct {
 	Data     workerAgentData `json:"data"`
 }
 
+func (o *workerAgentOutput) UnmarshalJSON(data []byte) error {
+	type workerAgentOutputAlias struct {
+		Accepted   bool             `json:"accepted"`
+		Reason     string           `json:"reason"`
+		Data       workerAgentData  `json:"data"`
+		GraphDelta workerGraphDelta `json:"graph_delta"`
+	}
+	var raw workerAgentOutputAlias
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	o.Accepted = raw.Accepted
+	o.Reason = raw.Reason
+	o.Data = raw.Data
+	if raw.GraphDelta.hasContent() {
+		o.Data = raw.GraphDelta.toWorkerAgentData(raw.Data)
+	}
+	return nil
+}
+
 type workerAgentData struct {
 	Summary               string                          `json:"summary"`
 	Facts                 []string                        `json:"facts"`
@@ -33,6 +53,72 @@ type workerAgentData struct {
 	NegativeFacts         []workerAgentNegativeFact       `json:"negative_facts"`
 	UnverifiedRisks       []workerAgentUnverifiedRisk     `json:"unverified_risks"`
 	NextIntentSuggestions []SecurityGraphIntentSuggestion `json:"next_intent_suggestions"`
+}
+
+type workerGraphDelta struct {
+	NewFacts                []json.RawMessage         `json:"new_facts"`
+	UpdatedFacts            []json.RawMessage         `json:"updated_facts"`
+	NewIntents              []json.RawMessage         `json:"new_intents"`
+	NewEvidence             []workerAgentEvidence     `json:"new_evidence"`
+	NewNegativeFacts        []workerAgentNegativeFact `json:"new_negative_facts"`
+	NewCapabilityCandidates []workerAgentCapability   `json:"new_capability_candidates"`
+	VerifiedCapabilities    []workerAgentCapability   `json:"verified_capabilities"`
+	Diagnostics             []string                  `json:"diagnostics"`
+	Errors                  []string                  `json:"errors"`
+}
+
+func (d workerGraphDelta) hasContent() bool {
+	return len(d.NewFacts)+len(d.UpdatedFacts)+len(d.NewIntents)+len(d.NewEvidence)+len(d.NewNegativeFacts)+len(d.NewCapabilityCandidates)+len(d.VerifiedCapabilities)+len(d.Diagnostics)+len(d.Errors) > 0
+}
+
+func (d workerGraphDelta) toWorkerAgentData(existing workerAgentData) workerAgentData {
+	out := existing
+	out.Facts = append(out.Facts, normalizeWorkerGraphFacts(d.NewFacts)...)
+	out.Facts = append(out.Facts, normalizeWorkerGraphFacts(d.UpdatedFacts)...)
+	out.Evidence = append(out.Evidence, d.NewEvidence...)
+	out.CapabilityCandidates = append(out.CapabilityCandidates, d.NewCapabilityCandidates...)
+	out.CapabilityCandidates = append(out.CapabilityCandidates, d.VerifiedCapabilities...)
+	out.NegativeFacts = append(out.NegativeFacts, d.NewNegativeFacts...)
+	out.NextIntentSuggestions = append(out.NextIntentSuggestions, normalizeWorkerNextIntentSuggestions(d.NewIntents)...)
+	if out.Summary == "" {
+		out.Summary = firstNonEmpty(strings.Join(d.Diagnostics, "; "), strings.Join(d.Errors, "; "), "Worker returned GraphDelta.")
+	}
+	return out
+}
+
+func normalizeWorkerGraphFacts(rawItems []json.RawMessage) []string {
+	items := make([]string, 0, len(rawItems))
+	for _, raw := range rawItems {
+		var text string
+		if err := json.Unmarshal(raw, &text); err == nil {
+			text = strings.TrimSpace(text)
+			if text != "" {
+				items = append(items, text)
+			}
+			continue
+		}
+		var obj map[string]any
+		if err := json.Unmarshal(raw, &obj); err != nil {
+			continue
+		}
+		candidate := firstNonEmpty(
+			stringFromMap(obj, "summary"),
+			stringFromMap(obj, "subject"),
+			stringFromMap(obj, "title"),
+			stringFromMap(obj, "kind"),
+		)
+		if candidate != "" {
+			items = append(items, candidate)
+		}
+	}
+	return items
+}
+
+func stringFromMap(values map[string]any, key string) string {
+	if value, ok := values[key]; ok && value != nil {
+		return strings.TrimSpace(fmt.Sprint(value))
+	}
+	return ""
 }
 
 func (d *workerAgentData) UnmarshalJSON(data []byte) error {
@@ -598,6 +684,9 @@ func (o *AgentOrchestrator) createWorkerSuggestedIntent(ctx context.Context, tas
 	if title == "" || objective == "" {
 		return false, true
 	}
+	if NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor).intentMatchesNegativeFact(ctx, taskID, title, objective) {
+		return false, true
+	}
 	intentType, ok := workerSuggestedIntentType(suggestion.IntentType)
 	if !ok {
 		appendAuditEvent(ctx, o.db, &taskID, "worker_agent.unsupported_intent_skipped", "worker-runtime", "Worker suggested an unsupported intent type; skipped.", map[string]any{"parentIntentId": parentIntentID, "intentType": suggestion.IntentType})
@@ -778,6 +867,7 @@ func writePiWorkerRuntimeSnapshot(agentDir string, task model.AISecurityTask, in
 		},
 		"intent":         intent,
 		"graph":          agentContext,
+		"graph_summary":  agentContext.GraphSummary,
 		"safe_policy":    safePolicyFromTask(task),
 		"phase_contract": phaseContract,
 		"runtime": map[string]any{
@@ -800,7 +890,7 @@ func writePiWorkerRuntimeSnapshot(agentDir string, task model.AISecurityTask, in
 			"ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
 		},
 		"contract": map[string]any{
-			"role": "Explore the current intent and return facts/evidence only. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report.",
+			"role": "Explore the current intent and return a GraphDelta-style packet. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report.",
 			"forbidden_outputs": []string{
 				"finding",
 				"report",
@@ -877,7 +967,7 @@ Your job is to explore only the Current Intent inside the authorized task scope.
 Before exploring, read the full execution snapshot from:
 %s
 
-The snapshot contains graph facts, evidence context, safe policy, phase boundaries, and the current Intent. Treat it as the source of truth. The inline Intent below is only a quick routing copy.
+The snapshot contains GraphSummary, graph facts, evidence context, NegativeFacts, capability state, safe policy, phase boundaries, and the current Intent. Treat GraphSummary as the source of truth. The inline Intent below is only a quick routing copy.
 
 Phase Responsibility Contract:
 %s
@@ -896,6 +986,7 @@ Strict boundaries:
 - Do not turn this into external CVE/PoC repository lookup or ProofPacket-style side probing.
 - Save long command output, scan output, request/response packets, or proof files under /workspace/evidence or /workspace/artifacts and reference the path in artifact_path.
 - If a path is refuted, return a NegativeFact. If scope, authentication, state, timeout, or tooling prevents a reliable conclusion, return an UnverifiedRisk. Do not invent results.
+- Your final output is a GraphDelta-style state change packet. Do not return natural-language conclusions that Rabbit must guess from.
 - The final assistant message must be exactly one compact raw JSON object. Do not include thinking text, markdown, commentary, or tool transcripts outside that JSON object.
 
 Return exactly one raw JSON object:
@@ -913,6 +1004,9 @@ Return exactly one raw JSON object:
     "next_intent_suggestions": []
   }
 }
+
+Equivalent GraphDelta form is also accepted:
+{"accepted":true,"graph_delta":{"new_facts":[],"new_evidence":[],"new_negative_facts":[],"new_capability_candidates":[],"new_intents":[],"diagnostics":[],"errors":[]}}
 
 If you cannot safely or meaningfully execute the intent, return:
 {"accepted": false, "reason": "brief reason"}
@@ -1287,12 +1381,26 @@ func (o *AgentOrchestrator) workerCapabilityCandidateIsVerified(ctx context.Cont
 	_ = ctx
 	_ = taskID
 	_ = intentID
-	switch capType {
-	case model.CapSQLInjection:
-		return containsSQLiProofSignal(strings.ToLower(workerCapabilityEvidenceText(output, evidenceItems)))
-	default:
+	if len(evidenceItems) == 0 || strings.TrimSpace(capType) == "" {
 		return false
 	}
+	text := strings.ToLower(workerCapabilityEvidenceText(output, evidenceItems))
+	if containsSQLiProofSignal(text) {
+		return true
+	}
+	for _, item := range evidenceItems {
+		relation := strings.ToLower(strings.TrimSpace(item.RelationType))
+		if relation == "validation" || relation == "observed_signal" || relation == "strong_static_proof" || relation == "reproduction_step" {
+			return true
+		}
+	}
+	for _, item := range output.Data.Evidence {
+		relation := strings.ToLower(strings.TrimSpace(item.RelationType))
+		if relation == "validation" || relation == "observed_signal" || relation == "strong_static_proof" || relation == "reproduction_step" {
+			return true
+		}
+	}
+	return false
 }
 
 func workerCapabilityEvidenceText(output workerAgentOutput, evidenceItems []model.AIEvidence) string {
@@ -1336,6 +1444,10 @@ func workerSuggestedIntentType(value string) (string, bool) {
 
 func workerHypothesisTypeForIntent(intentType string) string {
 	switch strings.ToLower(strings.TrimSpace(intentType)) {
+	case model.IntentBootstrapGraph, model.IntentExploreEntrypoint, model.IntentInspectDataflow, model.IntentInspectGuard,
+		model.IntentValidateHypothesis, model.IntentRunTool, model.IntentResolveUnknown, model.IntentCompareBehavior,
+		model.IntentExpandAttackSurface, model.IntentPromoteCapability:
+		return model.HypothesisTypeInfoDisclosureCandidate
 	case model.IntentAuthProbe:
 		return model.HypothesisTypeAuthzBypassCandidate
 	case model.IntentIDORProbe, model.IntentObjectOwnerCheck, model.IntentEntryToAuthzTrace:
@@ -1369,6 +1481,12 @@ func workerHypothesisTypeForIntent(intentType string) string {
 
 func workerExpectedCapabilityForIntent(intentType string) string {
 	switch strings.ToLower(strings.TrimSpace(intentType)) {
+	case model.IntentBootstrapGraph, model.IntentExploreEntrypoint, model.IntentInspectDataflow, model.IntentInspectGuard,
+		model.IntentValidateHypothesis, model.IntentRunTool, model.IntentResolveUnknown, model.IntentCompareBehavior,
+		model.IntentExpandAttackSurface:
+		return ""
+	case model.IntentPromoteCapability:
+		return model.CapInternalServiceAccess
 	case model.IntentAuthProbe:
 		return model.CapAdminAccess
 	case model.IntentIDORProbe, model.IntentObjectOwnerCheck, model.IntentEntryToAuthzTrace:

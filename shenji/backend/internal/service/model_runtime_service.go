@@ -1257,7 +1257,7 @@ func compactStringListForModel(values []string) []string {
 }
 
 func buildPlannerPrompt(task model.AISecurityTask, intent *model.AIIntent, agentContext AgentContext) (string, string) {
-	systemPrompt := "You are Rabbit Security Validation Platform's iteration planner. Respond with a single JSON object only. Keys: thought_summary, planned_action, next_intents. next_intents is optional and must contain 0-3 evidence-seeking follow-up intents with title, objective, intent_type, required_evidence. Do not reveal chain-of-thought. Do not create findings. Keep every suggestion inside the authorized scope and focused on facts that can be observed or validated."
+	systemPrompt := "You are Rabbit Security Validation Platform's Cairn-style graph reasoner. Respond with a single JSON object only. Keys: thought_summary, planned_action, next_intents. next_intents is optional and must contain 0-3 evidence-seeking follow-up intents with title, objective, intent_type, required_evidence. Prefer generic graph-search intent types such as inspect_dataflow, inspect_guard, validate_hypothesis, resolve_unknown, compare_behavior, expand_attack_surface, or run_tool. Vulnerability type is a result label, not the planning boundary. Do not reveal chain-of-thought. Do not create findings. Keep every suggestion inside the authorized scope and focused on facts that can be observed or validated."
 	intentType := ""
 	intentTitle := ""
 	intentObjective := ""
@@ -1268,9 +1268,13 @@ func buildPlannerPrompt(task model.AISecurityTask, intent *model.AIIntent, agent
 	}
 	factLines := summarizeBlackboard(agentContext.KeyFacts, 8)
 	evidenceLines := summarizeEvidence(agentContext.RecentEvidence, 6)
-	findingLines := summarizeFindings(agentContext.OpenFindings, 6)
+	graphSummary := "{}"
+	if agentContext.GraphSummary != nil {
+		raw, _ := json.Marshal(agentContext.GraphSummary)
+		graphSummary = string(raw)
+	}
 	userPrompt := fmt.Sprintf(
-		"Task Type: %s\nObjective: %s\nAuthorization: %s\nCurrent Intent Type: %s\nCurrent Intent Title: %s\nCurrent Intent Objective: %s\nRecommended Next: %s\nKey Facts:\n%s\nRecent Evidence:\n%s\nOpen Findings:\n%s\nReturn JSON only. Example shape: {\"thought_summary\":\"...\",\"planned_action\":\"...\",\"next_intents\":[{\"title\":\"...\",\"objective\":\"...\",\"intent_type\":\"behavior_probe\",\"required_evidence\":[\"response_diff\"]}]}",
+		"Task Type: %s\nObjective: %s\nAuthorization: %s\nCurrent Intent Type: %s\nCurrent Intent Title: %s\nCurrent Intent Objective: %s\nRecommended Next: %s\nGraphSummary:\n%s\nKey Facts:\n%s\nRecent Evidence:\n%s\nReturn JSON only. Example shape: {\"thought_summary\":\"...\",\"planned_action\":\"...\",\"next_intents\":[{\"title\":\"Inspect unresolved guard\",\"objective\":\"Determine whether the observed source-to-sink path has an effective guard.\",\"intent_type\":\"inspect_guard\",\"required_evidence\":[\"code_slice\",\"guard\"]}]}",
 		task.TaskType,
 		task.Objective,
 		agentContext.AuthorizationView,
@@ -1278,9 +1282,9 @@ func buildPlannerPrompt(task model.AISecurityTask, intent *model.AIIntent, agent
 		intentTitle,
 		intentObjective,
 		agentContext.RecommendedNext,
+		graphSummary,
 		factLines,
 		evidenceLines,
-		findingLines,
 	)
 	return systemPrompt, userPrompt
 }

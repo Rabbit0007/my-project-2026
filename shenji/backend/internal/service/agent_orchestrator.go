@@ -838,6 +838,9 @@ func (o *AgentOrchestrator) createPlannerSuggestedIntent(ctx context.Context, ta
 	if title == "" || objective == "" {
 		return false
 	}
+	if NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor).intentMatchesNegativeFact(ctx, taskID, title, objective) {
+		return false
+	}
 	intentType, ok := workerSuggestedIntentType(suggestion.IntentType)
 	if !ok {
 		appendAuditEvent(ctx, o.db, &taskID, "planner.unsupported_intent_skipped", "model-runtime", "Planner suggested an unsupported runtime intent; skipped.", map[string]any{"parentIntentId": parent.ID, "intentType": suggestion.IntentType})
@@ -1667,7 +1670,17 @@ func (o *AgentOrchestrator) runPentestIntent(ctx context.Context, task *model.AI
 			model.IntentCommandInjProbe,
 			model.IntentSecretVerify,
 			model.IntentCapabilityExpand,
-			model.IntentGoalAttempt:
+			model.IntentGoalAttempt,
+			model.IntentBootstrapGraph,
+			model.IntentExploreEntrypoint,
+			model.IntentInspectDataflow,
+			model.IntentInspectGuard,
+			model.IntentValidateHypothesis,
+			model.IntentRunTool,
+			model.IntentResolveUnknown,
+			model.IntentCompareBehavior,
+			model.IntentExpandAttackSurface,
+			model.IntentPromoteCapability:
 			mode := validationProbeMarker
 			if intent.IntentType == model.IntentSQLiProbe || intentExpectedCapability(intent) == model.CapSQLInjection {
 				mode = validationProbeSQLi
@@ -1699,7 +1712,17 @@ func (o *AgentOrchestrator) runPentestIntent(ctx context.Context, task *model.AI
 
 func isCodeAuditRuntimeIntent(intentType string) bool {
 	switch intentType {
-	case model.IntentCodeProjectIndex,
+	case model.IntentBootstrapGraph,
+		model.IntentExploreEntrypoint,
+		model.IntentInspectDataflow,
+		model.IntentInspectGuard,
+		model.IntentValidateHypothesis,
+		model.IntentRunTool,
+		model.IntentResolveUnknown,
+		model.IntentCompareBehavior,
+		model.IntentExpandAttackSurface,
+		model.IntentPromoteCapability,
+		model.IntentCodeProjectIndex,
 		model.IntentCodeSliceAnalysis,
 		model.IntentDataflowTrace,
 		model.IntentRouteToSinkTrace,
@@ -1722,7 +1745,17 @@ func isCodeAuditRuntimeIntent(intentType string) bool {
 
 func isPentestRuntimeIntent(intentType string) bool {
 	switch intentType {
-	case model.IntentSurfaceDiscovery,
+	case model.IntentBootstrapGraph,
+		model.IntentExploreEntrypoint,
+		model.IntentInspectDataflow,
+		model.IntentInspectGuard,
+		model.IntentValidateHypothesis,
+		model.IntentRunTool,
+		model.IntentResolveUnknown,
+		model.IntentCompareBehavior,
+		model.IntentExpandAttackSurface,
+		model.IntentPromoteCapability,
+		model.IntentSurfaceDiscovery,
 		model.IntentFingerprintConfirm,
 		model.IntentJSAnalysis,
 		model.IntentBehaviorProbe,

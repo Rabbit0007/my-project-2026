@@ -28,6 +28,7 @@ type AgentContext struct {
 	FileStructure   []string               `json:"fileStructure,omitempty"`
 	SourceSinkPairs []SourceSinkPair       `json:"sourceSinkPairs,omitempty"`
 	Capabilities    []string               `json:"capabilities,omitempty"`
+	GraphSummary    *GraphSummary          `json:"graphSummary,omitempty"`
 }
 
 type FailedToolRunSummary struct {
@@ -116,6 +117,9 @@ func (b *ContextBuilder) Build(ctx context.Context, taskID uint, intent *model.A
 		capStrings = append(capStrings, fmt.Sprintf("[%s] %s: %s", cap.Strength, cap.CapabilityType, cap.Target))
 	}
 
+	graphSummary := NewCairnLoop(b.db, NewBlackboardService(b.db), NewIntentService(b.db), nil, NewFindingService(b.db), nil, nil, nil, nil).
+		BuildGraphSummary(ctx, task, 0, 0)
+
 	return AgentContext{
 		Task:              task,
 		Intent:            intent,
@@ -128,5 +132,6 @@ func (b *ContextBuilder) Build(ctx context.Context, taskID uint, intent *model.A
 		FailedToolRuns:    failedSummaries,
 		FileStructure:     fileStructure,
 		Capabilities:      capStrings,
+		GraphSummary:      &graphSummary,
 	}, nil
 }

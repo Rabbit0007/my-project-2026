@@ -2,6 +2,19 @@ package model
 
 // Structured Intent types for Cairn-style exploration
 const (
+	// Cairn-style graph search intents. These are capability-seeking
+	// exploration directions, not vulnerability-type scanners.
+	IntentBootstrapGraph      = "bootstrap_graph"
+	IntentExploreEntrypoint   = "explore_entrypoint"
+	IntentInspectDataflow     = "inspect_dataflow"
+	IntentInspectGuard        = "inspect_guard"
+	IntentValidateHypothesis  = "validate_hypothesis"
+	IntentRunTool             = "run_tool"
+	IntentResolveUnknown      = "resolve_unknown"
+	IntentCompareBehavior     = "compare_behavior"
+	IntentExpandAttackSurface = "expand_attack_surface"
+	IntentPromoteCapability   = "promote_capability"
+
 	// Discovery intents
 	IntentSurfaceDiscovery   = "surface_discovery"
 	IntentFingerprintConfirm = "fingerprint_confirm"
