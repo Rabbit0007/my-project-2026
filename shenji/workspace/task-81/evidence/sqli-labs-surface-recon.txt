@@ -1,0 +1,64 @@
+=== SQLi-Labs Surface Reconnaissance ===
+Target: http://154.8.192.137:60000/sqli-labs/
+Date: 2026-05-22
+
+=== Main Index (HTTP 200, 7933 bytes) ===
+Title: SQLi-LABS Page-1 (Basic Challenges)
+Features:
+- sql-connections/setup-db.php (Database setup/reset)
+- index-1.html: Page-2 (Advanced Injections)
+- index-2.html: Page-3 (Stacked Injections)
+- index-3.html: Page-4 (Challenges)
+
+=== Lesson Structure Discovered ===
+Less-1: GET - Error based - Single quotes - String
+Less-2: GET - Error based - Integer based
+Less-3: GET - Error based - Single quotes with twist
+Less-4: GET - Error based - Double Quotes - String
+Less-5: GET - Double Injection - Single Quotes
+Less-6: GET - Double Injection - Double Quotes
+Less-7: GET - Dump into outfile - String
+Less-8: GET - Blind - Boolean Based - Single Quotes
+Less-9: GET - Blind - Time based - Single Quotes
+Less-10: GET - Blind - Time based - Double Quotes
+Less-11: POST - Error Based - Single quotes - String
+Less-12: POST - Error Based - Double quotes - String
+Less-13: POST - Double Injection - Single quotes
+Less-14: POST - Double Injection - Single quotes
+Less-15: POST - Blind - Boolean/Time Based - Single quotes
+Less-16: POST - Blind - Boolean/Time Based - Double quotes
+Less-17: POST - Update Query - Error Based - String
+Less-18: POST - Header Injection - Uagent field
+Less-19: POST - Header Injection - Referer field
+Less-20: POST - Cookie injections - Uagent field
+Less-21: POST - Dump into outfile - String
+Less-22: (Future editions)
+
+=== Less-1 Endpoint Test ===
+URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1
+HTTP: 200
+Response shows database data:
+  - Your Login name: Dumb
+  - Your Password: Dumb
+This confirms SQL injection entry point is functional.
+
+=== Less-5 Endpoint ===
+URL: http://154.8.192.137:60000/sqli-labs/Less-5/
+HTTP: 200
+Title: Double Query - Single Quotes - String
+Expects: ?id=numeric parameter
+
+=== Less-11 Endpoint (POST-based) ===
+URL: http://154.8.192.137:60000/sqli-labs/Less-11/
+HTTP: 200
+Title: Error Based - String
+Form fields: uname, passwd (POST method)
+Entry point: POST-based SQL injection through login form
+
+=== Summary ===
+Confirmed: SQLi-Labs deliberately vulnerable web application
+Multiple SQL injection vectors confirmed:
+- GET parameter injection (Less-1 through Less-10)
+- POST form injection (Less-11 through Less-16)
+- Header injection (Less-18, Less-19)
+- Cookie injection (Less-20)

@@ -1,0 +1,1785 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rabbit 项目详细分析报告</title>
+<style>
+:root{color-scheme:light;--ink:#17213a;--muted:#5f6f8d;--line:#dbe5f2;--blue:#245edb;--bg:#f4f7fb;--panel:#fff;}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.75;}
+main{max-width:1120px;margin:0 auto;padding:44px 28px 72px;background:var(--panel);box-shadow:0 20px 70px rgba(31,42,68,.08);min-height:100vh;}
+h1{font-size:38px;line-height:1.18;margin:0 0 24px;color:#0f1b33} h2{font-size:28px;margin:42px 0 14px;border-top:1px solid var(--line);padding-top:28px;color:#17213a} h3{font-size:22px;margin:30px 0 12px;color:#1b2f5d} h4{font-size:18px;margin:24px 0 10px;color:#263c6b}
+p{margin:10px 0;color:#26354f} ul{margin:10px 0 16px 24px;padding:0} li{margin:4px 0} code{background:#eef4ff;color:#174ea6;border:1px solid #d9e6fb;border-radius:5px;padding:1px 5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em} pre{overflow:auto;background:#101827;color:#edf4ff;border-radius:10px;padding:16px 18px;border:1px solid #25324a;line-height:1.55} pre code{background:transparent;border:0;color:inherit;padding:0} hr{border:0;border-top:1px solid var(--line);margin:30px 0} strong{font-weight:800} a{color:var(--blue)}
+@media print{body{background:#fff} main{box-shadow:none;max-width:none;padding:0} h2{break-after:avoid} pre{white-space:pre-wrap}}
+</style>
+</head>
+<body><main>
+<h1 id="rabbit-ai-security-validation-platform-项目详细分析报告">Rabbit AI Security Validation Platform 项目详细分析报告</h1>
+<p>生成时间：2026-05-12 项目路径：<code>/Users/rabbit/Desktop/shenji</code> 分析对象：后端、前端、Runner 镜像、Docker 编排、脚本、workspace 历史产物 分析方式：静态代码阅读 + 配置审查 + 本地构建与测试验证</p>
+<hr>
+<h2 id="1-执行摘要">1. 执行摘要</h2>
+<p>这个项目不是一个普通的任务管理后台，而是一个围绕“AI 原生安全验证闭环”搭建的第一阶段平台。它的核心目标是让安全审计任务从创建、授权范围定义、工具执行、证据沉淀、漏洞发现、Contract 检查到报告导出形成真实可运行链路。项目 README 中称其为 Rabbit AI Security Validation Platform，当前实现已经具备可演示、可验收、可导出报告的最小闭环。</p>
+<p>从代码实现看，项目的主干设计非常明确：</p>
+<ul>
+<li>后端使用 Go + Gin + GORM + PostgreSQL。</li>
+<li>前端使用 Vue 3 + Vite + TypeScript + Element Plus。</li>
+<li>运行环境通过 Docker Compose 编排 PostgreSQL、Redis、MinIO、Backend、Agent Worker、Frontend。</li>
+<li>安全工具执行通过 Docker Runner 动态容器隔离，包括 code-audit、pentest、sandbox 三类核心 Runner。</li>
+<li>平台以 Task 为入口，以 Intent 作为 Agent 的阶段目标，以 ToolRun 记录工具执行，以 Evidence 记录证据，以 Blackboard 维护事实图，以 Finding/Contract 判断是否达到交付门槛，以 Report 输出 Markdown/HTML 报告。</li>
+<li>模型能力已接入 OpenAI / OpenAI-compatible 风格接口，支持 Responses API 与 Chat Completions API，并提供 deterministic fallback。</li>
+</ul>
+<p>本次验证结果：</p>
+<ul>
+<li><code>cd backend &amp;&amp; go test ./...</code> 通过。</li>
+<li><code>cd frontend &amp;&amp; npm run build</code> 通过。</li>
+<li><code>docker compose ps</code> 显示核心服务正在运行，backend healthy。</li>
+<li>当前 workspace 约 949 MB，包含 53 个历史 task 目录与 89 个 artifact 文件，可视为本地演示与调试痕迹。</li>
+</ul>
+<p>整体判断：</p>
+<p>项目已经达到“第一阶段可运行闭环”的状态，工程分层、领域模型、审计链路和报告产物都比较完整。最强的部分是 Agent 执行链路、证据模型、工具运行记录、安全策略与报告生成的端到端设计。最大短板是生产化能力：认证授权缺失、Agent Worker 仍是心跳占位、Docker socket 权限边界偏大、数据库迁移和任务调度还不够生产级、前端聚合页存在取样限制、测试覆盖集中在基础安全和模型解析，尚未覆盖大部分业务闭环。</p>
+<hr>
+<h2 id="2-项目定位与产品目标">2. 项目定位与产品目标</h2>
+<h3 id="2-1-产品定位">2.1 产品定位</h3>
+<p>项目定位是一个 AI 原生安全验证平台，核心不是传统“规则扫描器”，而是一个可观察、可追溯、可交付的安全验证工作台。它强调以下几个产品动作：</p>
+<p>1. 创建安全验证任务。 2. 对代码包或授权目标进行安全分析。 3. 用工具产生真实证据。 4. 用模型或 deterministic runtime 进行推理。 5. 用 Contract 判断 Finding 是否满足交付条件。 6. 自动生成正式报告。</p>
+<p>这类系统的价值不在于单点工具，而在于“证据闭环”。代码里多次体现了这个理念：工具只是 sensor，模型/图推理才是 brain；漏洞结论不能由置信度代替，必须由证据、验证状态和 Contract 完整度驱动。</p>
+<h3 id="2-2-当前阶段边界">2.2 当前阶段边界</h3>
+<p>README 和源码都表明当前属于第一阶段。第一阶段重点包括：</p>
+<ul>
+<li>代码审计闭环：创建任务 -&gt; 上传 ZIP -&gt; 安全解压 -&gt; code_search/code_slice -&gt; Evidence -&gt; Finding -&gt; Contract -&gt; Report。</li>
+<li>渗透验证闭环：创建任务 -&gt; 授权目标 -&gt; recon/http_request/http_surface/response_diff -&gt; Evidence -&gt; Finding -&gt; Contract -&gt; Report。</li>
+<li>模型配置 CRUD。</li>
+<li>模型不可用时 fallback。</li>
+<li>报告 Markdown/HTML 导出。</li>
+</ul>
+<p>当前未完全进入真实主链路或仍在计划中的能力：</p>
+<ul>
+<li>Browser runner。</li>
+<li>PDF / Word / evidence package 导出。</li>
+<li>多 Worker 分布式调度。</li>
+<li>更成熟的开放式状态空间搜索。</li>
+<li>Human review 治理闭环。</li>
+<li>固定漏洞模板化扫描能力。</li>
+</ul>
+<hr>
+<h2 id="3-仓库结构总览">3. 仓库结构总览</h2>
+<p>项目根目录关键结构如下：</p>
+<pre><code class="language-text">/Users/rabbit/Desktop/shenji
+├── README.md
+├── .env.example
+├── docker-compose.yml
+├── backend/
+│   ├── cmd/api/main.go
+│   ├── cmd/worker/main.go
+│   ├── internal/api/
+│   ├── internal/config/
+│   ├── internal/database/
+│   ├── internal/middleware/
+│   ├── internal/model/
+│   ├── internal/runner/
+│   ├── internal/safety/
+│   ├── internal/service/
+│   ├── internal/storage/
+│   └── internal/tools/
+├── frontend/
+│   ├── src/api/
+│   ├── src/router/
+│   ├── src/stores/
+│   ├── src/views/
+│   ├── src/assets/
+│   ├── Dockerfile
+│   └── nginx.conf
+├── runner-images/
+│   ├── browser/
+│   ├── code-audit/
+│   ├── pentest/
+│   ├── report/
+│   └── sandbox/
+├── scripts/
+│   ├── smoke-first-stage.sh
+│   └── archive-smoke-tasks.sh
+└── workspace/
+    ├── task-*/
+    └── artifacts/</code></pre>
+<p>规模统计：</p>
+<ul>
+<li>项目源码与脚本约 69 个文件。</li>
+<li>后端 Go 代码约 12k 行级别，其中 Agent Orchestrator、Model Runtime、Report Service 是最大模块。</li>
+<li>前端源码约 2k 行级别。</li>
+<li>当前 workspace 占用约 949 MB，主要是历史任务输入、解压内容和报告/证据产物。</li>
+<li><code>frontend/node_modules</code> 与 <code>frontend/dist</code> 已存在，属于依赖与构建产物，不应作为核心源码分析对象。</li>
+</ul>
+<hr>
+<h2 id="4-技术栈分析">4. 技术栈分析</h2>
+<h3 id="4-1-后端技术栈">4.1 后端技术栈</h3>
+<p>后端位于 <code>backend/</code>，模块名为 <code>shenji/backend</code>，Go 版本声明为 1.25.0。</p>
+<p>主要依赖：</p>
+<ul>
+<li><code>github.com/gin-gonic/gin</code>：HTTP API 路由。</li>
+<li><code>gorm.io/gorm</code>：ORM。</li>
+<li><code>gorm.io/driver/postgres</code>：PostgreSQL 驱动。</li>
+<li><code>gorm.io/datatypes</code>：JSONB 字段。</li>
+<li><code>github.com/minio/minio-go/v7</code>：MinIO 对象存储。</li>
+<li><code>github.com/docker/docker</code>：Docker SDK，用于动态构建和运行 Runner 容器。</li>
+<li><code>github.com/rs/zerolog</code>：结构化日志。</li>
+</ul>
+<p>后端整体是单体服务架构，内部按领域拆分为：</p>
+<ul>
+<li>API 层：<code>internal/api</code></li>
+<li>Service 层：<code>internal/service</code></li>
+<li>Tool 层：<code>internal/tools</code></li>
+<li>Runner 层：<code>internal/runner</code></li>
+<li>Storage 层：<code>internal/storage</code></li>
+<li>Safety 层：<code>internal/safety</code></li>
+<li>Model 层：<code>internal/model</code></li>
+</ul>
+<h3 id="4-2-前端技术栈">4.2 前端技术栈</h3>
+<p>前端位于 <code>frontend/</code>，技术栈为：</p>
+<ul>
+<li>Vue 3</li>
+<li>Vite 6</li>
+<li>TypeScript</li>
+<li>Vue Router</li>
+<li>Pinia</li>
+<li>Element Plus</li>
+<li>Axios</li>
+<li>Dayjs</li>
+</ul>
+<p>前端构建命令：</p>
+<pre><code class="language-bash">cd frontend
+npm run build</code></pre>
+<p>构建结果本次验证通过。构建产物中 Element Plus chunk 较大，<code>element-Cid9jWIB.js</code> gzip 后约 296.72 KB，属于正常但需要关注的体积点。</p>
+<h3 id="4-3-基础设施">4.3 基础设施</h3>
+<p><code>docker-compose.yml</code> 编排以下服务：</p>
+<ul>
+<li>PostgreSQL 16 Alpine</li>
+<li>Redis 7 Alpine</li>
+<li>MinIO</li>
+<li>Backend</li>
+<li>Agent Worker</li>
+<li>Frontend Nginx</li>
+</ul>
+<p>默认本机端口：</p>
+<ul>
+<li>前端：<code>http://localhost:13110</code></li>
+<li>后端：<code>http://localhost:18190</code></li>
+<li>MinIO API：<code>http://localhost:19110</code></li>
+<li>MinIO Console：<code>http://localhost:19111</code></li>
+<li>PostgreSQL：<code>localhost:25440</code></li>
+<li>Redis：<code>localhost:16400</code></li>
+</ul>
+<hr>
+<h2 id="5-后端架构详解">5. 后端架构详解</h2>
+<h3 id="5-1-启动入口">5.1 启动入口</h3>
+<p>后端 API 入口是 <code>backend/cmd/api/main.go</code>。</p>
+<p>启动流程：</p>
+<p>1. 加载配置。 2. 初始化 zerolog。 3. 连接数据库。 4. 执行 GORM AutoMigrate。 5. 根据配置初始化 Artifact Store：local 或 MinIO。 6. 初始化 WorkspaceManager。 7. 初始化 RunnerManager。 8. 注册默认工具。 9. 构建 Services。 10. 恢复中断任务。 11. 启动 Gin Router。</p>
+<p>这说明 API 进程当前承担了几乎全部业务能力，包括任务调度和 Agent 异步执行。</p>
+<p><code>backend/cmd/worker/main.go</code> 当前只是连接数据库并输出心跳日志，代码中明确写着：</p>
+<pre><code class="language-text">agent worker ready; API process currently dispatches first-stage runs asynchronously</code></pre>
+<p>因此，当前 Agent Worker 不是实际任务消费者。它更像是为第二阶段分布式调度预留的进程壳。</p>
+<h3 id="5-2-配置系统">5.2 配置系统</h3>
+<p>配置定义在 <code>backend/internal/config/config.go</code>，由环境变量驱动，提供默认值。</p>
+<p>关键配置：</p>
+<ul>
+<li><code>DATABASE_DSN</code></li>
+<li><code>REDIS_ADDR</code></li>
+<li><code>WORKSPACE_ROOT</code></li>
+<li><code>HOST_WORKSPACE_ROOT</code></li>
+<li><code>ARTIFACT_ROOT</code></li>
+<li><code>ARTIFACT_STORE_TYPE</code></li>
+<li><code>RUNNER_IMAGES_ROOT</code></li>
+<li><code>MINIO_*</code></li>
+<li><code>PUBLIC_BASE_URL</code></li>
+<li><code>CORS_ORIGINS</code></li>
+<li><code>MODEL_TIMEOUT_SECONDS</code></li>
+<li><code>TOOL_TIMEOUT_SECONDS</code></li>
+<li><code>SANDBOX_TIMEOUT_SECONDS</code></li>
+<li><code>WORKER_LEASE_TIMEOUT_SECONDS</code></li>
+<li><code>MAX_ITERATIONS</code></li>
+<li><code>MAX_RUNTIME_MINUTES</code></li>
+<li><code>MAX_TOOL_RUNS</code></li>
+<li><code>MAX_PENDING_INTENTS</code></li>
+<li><code>CODE_AUDIT_MAX_HITS</code></li>
+<li><code>CODE_AUDIT_MAX_SNIPPETS</code></li>
+<li><code>CODE_AUDIT_BATCH_SIZE</code></li>
+<li><code>CODE_AUDIT_MAX_BATCHES</code></li>
+</ul>
+<p>配置优点：</p>
+<ul>
+<li>大部分运行参数可通过环境变量调节。</li>
+<li>支持 Runner 镜像名称切换。</li>
+<li>支持 MinIO 与 Local artifact store 两种模式。</li>
+<li>对模型、工具、任务最大运行时长都有预算控制。</li>
+</ul>
+<p>配置风险：</p>
+<ul>
+<li>默认数据库密码、MinIO 用户名密码在 <code>.env.example</code> 和 compose 中是固定弱口令，只适合本地开发。</li>
+<li>当前没有配置层面的必填校验，例如生产环境下是否必须设置强密码、认证密钥、MinIO 凭据等。</li>
+<li>Redis 配置存在，但当前未看到真实队列消费逻辑使用 Redis。</li>
+</ul>
+<h3 id="5-3-api-路由">5.3 API 路由</h3>
+<p>API 路由定义在 <code>backend/internal/api/router.go</code>。</p>
+<p>基础路由：</p>
+<ul>
+<li><code>GET /healthz</code></li>
+<li><code>GET /artifacts/*filepath</code></li>
+</ul>
+<p>API v1：</p>
+<ul>
+<li><code>GET /api/v1/overview</code></li>
+<li><code>GET /api/v1/tools</code></li>
+<li><code>GET /api/v1/model-configs</code></li>
+<li><code>POST /api/v1/model-configs</code></li>
+<li><code>PATCH /api/v1/model-configs/:id</code></li>
+<li><code>GET /api/v1/tasks</code></li>
+<li><code>POST /api/v1/tasks</code></li>
+<li><code>GET /api/v1/tasks/:id</code></li>
+<li><code>POST /api/v1/tasks/:id/start</code></li>
+<li><code>POST /api/v1/tasks/:id/upload</code></li>
+<li><code>GET /api/v1/tasks/:id/timeline</code></li>
+<li><code>GET /api/v1/tasks/:id/tool-runs</code></li>
+<li><code>GET /api/v1/tasks/:id/evidence</code></li>
+<li><code>GET /api/v1/tasks/:id/findings</code></li>
+<li><code>GET /api/v1/tasks/:id/reports</code></li>
+<li><code>POST /api/v1/tasks/:id/reports/regenerate</code></li>
+<li><code>POST /api/v1/tasks/:id/archive</code></li>
+<li><code>POST /api/v1/findings/:id/review</code></li>
+</ul>
+<p>API 设计特点：</p>
+<ul>
+<li>任务详情接口聚合了 task、toolRuns、evidence、findings、reports、intents、contractChecks、timeline、blackboard、toolCatalog。</li>
+<li>artifact 读取由后端统一代理，可支持 local/minio 两种引用形式。</li>
+<li>下载由 <code>?download=1</code> 或 <code>?download=true</code> 控制。</li>
+</ul>
+<p>主要缺口：</p>
+<ul>
+<li>没有认证中间件。</li>
+<li>没有基于用户/工作区的访问控制。</li>
+<li>Artifact 读取只要知道 ref 路径就能访问，生产环境需要鉴权和权限校验。</li>
+<li>Handler 中 <code>GetTask</code> 对多个子查询忽略错误，例如 <code>toolRuns, _ := ...</code>，这会降低故障可观测性。</li>
+</ul>
+<h3 id="5-4-中间件">5.4 中间件</h3>
+<p>中间件位于 <code>backend/internal/middleware/middleware.go</code>。</p>
+<p>包括：</p>
+<ul>
+<li>RequestLogger</li>
+<li>Recovery</li>
+<li>CORS</li>
+</ul>
+<p>CORS 只允许配置中的 Origin，但允许 credentials。当前没有认证，所以 credentials 的意义有限。若后续加入 Cookie/JWT，需要严格审计 CORS 与 CSRF 方案。</p>
+<hr>
+<h2 id="6-数据模型详解">6. 数据模型详解</h2>
+<p>数据模型定义在 <code>backend/internal/model/models.go</code>，由 GORM AutoMigrate 自动建表。</p>
+<p>核心实体：</p>
+<h3 id="6-1-aiworkspace">6.1 AIWorkspace</h3>
+<p>代表任务隔离工作区。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>Name</code></li>
+<li><code>Description</code></li>
+<li><code>RootPath</code></li>
+<li><code>StorageRef</code></li>
+<li><code>CreatedBy</code></li>
+</ul>
+<p>当前每个任务创建时都会创建一个 workspace，并在本地 workspace 目录准备任务文件夹。</p>
+<h3 id="6-2-aisecuritytask">6.2 AISecurityTask</h3>
+<p>任务主表，是平台最核心实体。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>WorkspaceID</code></li>
+<li><code>Name</code></li>
+<li><code>TaskType</code></li>
+<li><code>Status</code></li>
+<li><code>Objective</code></li>
+<li><code>ScopeJSON</code></li>
+<li><code>AuthorizationJSON</code></li>
+<li><code>SafePolicyJSON</code></li>
+<li><code>ModelConfigID</code></li>
+<li><code>IsTestTask</code></li>
+<li><code>Archived</code></li>
+<li><code>ProgressStage</code></li>
+<li><code>ProgressPercent</code></li>
+<li><code>StartedAt</code></li>
+<li><code>FinishedAt</code></li>
+</ul>
+<p>TaskType 支持：</p>
+<ul>
+<li><code>code_audit</code></li>
+<li><code>pentest</code></li>
+<li><code>hybrid</code></li>
+</ul>
+<p>Status 支持：</p>
+<ul>
+<li><code>pending</code></li>
+<li><code>running</code></li>
+<li><code>paused</code></li>
+<li><code>completed</code></li>
+<li><code>failed</code></li>
+<li><code>cancelled</code></li>
+</ul>
+<h3 id="6-3-aitasktarget">6.3 AITaskTarget</h3>
+<p>任务目标表，用于记录授权范围内的 URL、domain、CIDR、repo 等。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>TaskID</code></li>
+<li><code>TargetType</code></li>
+<li><code>Value</code></li>
+<li><code>ScopeStatus</code></li>
+<li><code>Metadata</code></li>
+</ul>
+<h3 id="6-4-aiagentloop-与-aiagentloopiteration">6.4 AIAgentLoop 与 AIAgentLoopIteration</h3>
+<p>表示 Agent 执行循环和每次迭代。</p>
+<p>Iteration 记录：</p>
+<ul>
+<li>当前 Intent</li>
+<li>输入上下文引用</li>
+<li>模型 provider/name</li>
+<li>ThoughtSummary</li>
+<li>PlannedAction</li>
+<li>ToolRunIDs</li>
+<li>EvidenceRefs</li>
+<li>BlackboardDelta</li>
+<li>状态与错误</li>
+</ul>
+<p>这是平台可观测性的核心之一。</p>
+<h3 id="6-5-aiblackboardnode-与-aiblackboardedge">6.5 AIBlackboardNode 与 AIBlackboardEdge</h3>
+<p>黑板图是项目的关键架构抽象。</p>
+<p>Node 用于记录：</p>
+<ul>
+<li>origin</li>
+<li>goal</li>
+<li>intent</li>
+<li>fact</li>
+<li>evidence</li>
+<li>finding</li>
+<li>hint</li>
+<li>summary</li>
+<li>negative_fact</li>
+</ul>
+<p>Edge 用于表达：</p>
+<ul>
+<li>spawned_intent</li>
+<li>executed_tool</li>
+<li>produced_evidence</li>
+<li>supports_fact</li>
+<li>supports_finding</li>
+<li>reasoned_fact</li>
+</ul>
+<p>通过黑板图，平台把工具输出从“日志堆叠”变成可被模型读取和继续推理的事实图。</p>
+<h3 id="6-6-aiintent">6.6 AIIntent</h3>
+<p>Intent 是 Agent 的待执行目标。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>IntentType</code></li>
+<li><code>Title</code></li>
+<li><code>Objective</code></li>
+<li><code>ConstraintsJSON</code></li>
+<li><code>RequiredEvidence</code></li>
+<li><code>PriorityScore</code></li>
+<li><code>Status</code></li>
+<li><code>ClaimedBy</code></li>
+<li><code>ClaimExpiresAt</code></li>
+<li><code>CreatedBy</code></li>
+<li><code>CreatedReason</code></li>
+</ul>
+<p>当前主要 intent 类型：</p>
+<ul>
+<li><code>code_trace</code></li>
+<li><code>collect_evidence</code></li>
+<li><code>recon</code></li>
+<li><code>validate</code></li>
+<li><code>reason</code></li>
+</ul>
+<h3 id="6-7-aitoolrun">6.7 AIToolRun</h3>
+<p>ToolRun 记录每次工具执行。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>RunnerType</code></li>
+<li><code>ToolName</code></li>
+<li><code>InputJSON</code></li>
+<li><code>CommandPreview</code></li>
+<li><code>ContainerID</code></li>
+<li><code>ImageName</code></li>
+<li><code>WorkspacePath</code></li>
+<li><code>NetworkPolicy</code></li>
+<li><code>ResourceLimits</code></li>
+<li><code>Status</code></li>
+<li><code>ExitCode</code></li>
+<li><code>StdoutRef</code></li>
+<li><code>StderrRef</code></li>
+<li><code>ArtifactRefs</code></li>
+<li><code>SafePolicySnapshot</code></li>
+<li><code>BlockReason</code></li>
+</ul>
+<p>这张表提供了完整审计链路：谁执行了什么工具、输入是什么、容器是什么、输出在哪里、是否被 SafePolicy 阻断。</p>
+<h3 id="6-8-aievidence">6.8 AIEvidence</h3>
+<p>Evidence 是报告和 Finding 的证据基础。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>EvidenceType</code></li>
+<li><code>Title</code></li>
+<li><code>Summary</code></li>
+<li><code>RawRef</code></li>
+<li><code>Hash</code></li>
+<li><code>Target</code></li>
+<li><code>FilePath</code></li>
+<li><code>LineStart</code></li>
+<li><code>LineEnd</code></li>
+<li><code>RequestSnapshot</code></li>
+<li><code>ResponseSnapshot</code></li>
+<li><code>ArtifactURL</code></li>
+<li><code>RelationType</code></li>
+<li><code>Redacted</code></li>
+</ul>
+<p>证据类型包括：</p>
+<ul>
+<li><code>code_snippet</code></li>
+<li><code>tool_output</code></li>
+<li><code>http_exchange</code></li>
+<li><code>response_diff</code></li>
+<li><code>command_output</code></li>
+<li><code>marker_poc</code></li>
+</ul>
+<h3 id="6-9-aifinding">6.9 AIFinding</h3>
+<p>Finding 表示漏洞或候选风险。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>Title</code></li>
+<li><code>VulnerabilityType</code></li>
+<li><code>AffectedTarget</code></li>
+<li><code>AffectedComponent</code></li>
+<li><code>Severity</code></li>
+<li><code>Status</code></li>
+<li><code>ValidationStatus</code></li>
+<li><code>ContractType</code></li>
+<li><code>ContractStatus</code></li>
+<li><code>RichDetails</code></li>
+<li><code>EvidenceRefs</code></li>
+<li><code>Remediation</code></li>
+<li><code>RetestSteps</code></li>
+<li><code>HumanReviewStatus</code></li>
+<li><code>HumanReviewNote</code></li>
+</ul>
+<p>Finding 的状态设计比较细：</p>
+<ul>
+<li>hypothesis</li>
+<li>candidate</li>
+<li>candidate_incomplete</li>
+<li>contract_incomplete</li>
+<li>dynamically_validated</li>
+<li>human_confirmed</li>
+<li>false_positive</li>
+<li>accepted_risk</li>
+<li>fixed</li>
+<li>retested</li>
+</ul>
+<p>这说明项目有意区分“候选风险”“证据合同未闭环”“动态验证通过”“人工确认”等不同交付语义。</p>
+<h3 id="6-10-aicontractcheckresult">6.10 AIContractCheckResult</h3>
+<p>Contract 检查结果表，用于判断 Finding 是否满足报告交付门槛。</p>
+<p>检查字段包括：</p>
+<ul>
+<li>entrypoint</li>
+<li>controlled_input</li>
+<li>propagation_path</li>
+<li>sensitive_sink_or_behavior</li>
+<li>trigger_payload_or_action</li>
+<li>baseline_evidence</li>
+<li>validation_evidence</li>
+<li>observed_result</li>
+<li>impact_explanation</li>
+<li>scope_statement</li>
+<li>safety_statement</li>
+<li>remediation</li>
+<li>retest_steps</li>
+<li>evidence_mapping</li>
+<li>request_packet</li>
+<li>bash_poc</li>
+<li>python_poc</li>
+<li>success_criteria</li>
+<li>root_cause</li>
+</ul>
+<p>如果缺字段，Contract 会将 Finding 降级为 incomplete，并生成补证据 Intent。</p>
+<h3 id="6-11-aireport">6.11 AIReport</h3>
+<p>报告表，记录 Markdown 与 HTML 报告引用。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>Title</code></li>
+<li><code>Status</code></li>
+<li><code>Format</code></li>
+<li><code>MarkdownRef</code></li>
+<li><code>HTMLRef</code></li>
+<li><code>EvidencePack</code></li>
+<li><code>Summary</code></li>
+<li><code>GeneratedAt</code></li>
+</ul>
+<p>当前已经支持 Markdown + HTML，EvidencePack 字段尚未真实形成完整证据包。</p>
+<h3 id="6-12-aimodelconfig">6.12 AIModelConfig</h3>
+<p>模型配置表。</p>
+<p>关键字段：</p>
+<ul>
+<li><code>Name</code></li>
+<li><code>Provider</code></li>
+<li><code>BaseURL</code></li>
+<li><code>Model</code></li>
+<li><code>APIKeyRef</code></li>
+<li><code>OptionsJSON</code></li>
+<li><code>Enabled</code></li>
+</ul>
+<p>API Key 推荐用 <code>env://OPENAI_API_KEY</code> 形式引用，避免直接明文写入数据库。但当前前端仍允许输入明文引用，生产环境应加入密钥管理策略。</p>
+<h3 id="6-13-aiauditevent">6.13 AIAuditEvent</h3>
+<p>审计事件表，用于时间线。</p>
+<p>事件包括：</p>
+<ul>
+<li>task.created</li>
+<li>workspace.zip_extracted</li>
+<li>agent.started</li>
+<li>agent.model_plan</li>
+<li>agent.model_fallback</li>
+<li>agent.graph_reasoning</li>
+<li>toolrun.completed</li>
+<li>toolrun.blocked</li>
+<li>agent.completed</li>
+<li>agent.failed</li>
+</ul>
+<hr>
+<h2 id="7-核心业务流程分析">7. 核心业务流程分析</h2>
+<h3 id="7-1-任务创建流程">7.1 任务创建流程</h3>
+<p>实现位置：<code>backend/internal/service/task_service.go</code></p>
+<p>创建任务时执行以下动作：</p>
+<p>1. 校验 taskType。 2. 如果是 pentest/hybrid，要求至少一个 target。 3. 校验 authorizationLevel 为 0-3。 4. 如果没有显式选择模型配置，则选择第一个 enabled 且名称不含 fallback 的配置作为默认模型。 5. 生成 scope/auth/policy JSON。 6. 创建 AIWorkspace。 7. 创建 AISecurityTask。 8. 准备本地 workspace 目录。 9. 保存 workspace.RootPath。 10. 为每个目标创建 AITaskTarget。 11. 写入黑板 origin 节点。 12. 写入黑板 goal 节点。 13. 创建初始 AIIntent。 14. 写入 task.created 审计事件。</p>
+<p>设计优点：</p>
+<ul>
+<li>任务创建阶段就把授权范围、目标、策略、黑板起点和初始 Intent 建好。</li>
+<li>不把 Agent 的所有状态塞进 Task，而是用多张表记录演进过程。</li>
+<li>授权等级与 SafePolicy 在任务开始前就固化为快照。</li>
+</ul>
+<p>风险与改进：</p>
+<ul>
+<li>任务创建不是显式事务，workspace、task、target、blackboard、intent 中任一步失败可能留下部分数据。</li>
+<li><code>CreatedBy</code> 目前固定为 0，说明用户体系尚未接入。</li>
+<li>code_audit 任务 targets 可以为空，前端会把仓库说明写在 targetText 里但后端不保存为 target；这在产品语义上略有断裂。</li>
+</ul>
+<h3 id="7-2-zip-上传与安全解压">7.2 ZIP 上传与安全解压</h3>
+<p>实现位置：</p>
+<ul>
+<li><code>backend/internal/service/task_service.go</code></li>
+<li><code>backend/internal/runner/workspace.go</code></li>
+</ul>
+<p>上传流程：</p>
+<p>1. 校验任务存在。 2. 校验只有 code_audit 或 hybrid 可上传 ZIP。 3. 将上传文件保存到 <code>workspace/task-{id}/input/</code>。 4. 解压到 <code>workspace/task-{id}/input/extracted/</code>。 5. 生成 ExtractManifest。 6. 写入黑板 fact：Source archive extracted safely。 7. 更新任务进度为“代码已上传，等待审计”。 8. 写入 workspace.zip_extracted 审计事件。</p>
+<p>安全解压控制：</p>
+<ul>
+<li>文件数量最大 12000。</li>
+<li>单文件最大 16 MB。</li>
+<li>总解压大小最大 256 MB。</li>
+<li>上传读取最多 512 MB。</li>
+<li>阻断 <code>../</code> 路径穿越。</li>
+<li>阻断绝对路径。</li>
+<li>阻断 symlink 和 device 文件。</li>
+<li>目标路径二次校验必须位于 extracted 目录下。</li>
+</ul>
+<p>测试覆盖：</p>
+<ul>
+<li>已有测试验证 Zip Slip 阻断。</li>
+<li>已有测试验证总大小限制。</li>
+</ul>
+<p>改进建议：</p>
+<ul>
+<li>上传文件扩展名和 MIME 校验目前主要在前端，后端只依赖 <code>zip.OpenReader</code>；可以明确返回更友好的 ZIP 格式错误。</li>
+<li>解压前可以清理旧 extracted 内容，避免重复上传导致旧文件残留混入分析。</li>
+<li>可以记录原始 ZIP 哈希，增强报告追溯。</li>
+</ul>
+<h3 id="7-3-任务启动与-agent-执行">7.3 任务启动与 Agent 执行</h3>
+<p>实现位置：<code>backend/internal/service/agent_orchestrator.go</code></p>
+<p>启动入口：</p>
+<ul>
+<li>API 调用 <code>StartTask</code></li>
+<li>读取任务</li>
+<li>code_audit/hybrid 要求 extracted 非空</li>
+<li>调用 <code>Orchestrator.StartAsync(id)</code></li>
+<li>API 进程启动 goroutine 执行任务</li>
+</ul>
+<p>Agent Run 主流程：</p>
+<p>1. 加载任务。 2. 如果已 running，返回错误。 3. 标记任务 running。 4. 创建 AIAgentLoop。 5. 进入 <code>runLoopIterations</code>。 6. 完成后执行黑板压缩。 7. 生成报告。 8. 标记任务 completed。</p>
+<p>失败处理：</p>
+<ul>
+<li><code>failTask</code> 会标记任务 failed。</li>
+<li>服务启动时 <code>RecoverInterrupted</code> 会将 running task fail-closed，避免无限 running。</li>
+</ul>
+<p>设计优点：</p>
+<ul>
+<li>有最大运行时 <code>MaxRuntime</code>。</li>
+<li>有最大迭代数 <code>MaxIterations</code>。</li>
+<li>有 fail-closed 恢复机制。</li>
+<li>Agent 每次迭代都有 AIAgentLoopIteration 记录。</li>
+</ul>
+<p>关键短板：</p>
+<ul>
+<li>当前异步执行在 API 进程内，服务重启会中断任务。</li>
+<li><code>agent-worker</code> 还没有真实消费任务。</li>
+<li>没有分布式锁，多个 API 实例并发启动同一任务存在竞态风险。</li>
+<li>Redis 配置未实际承载任务队列。</li>
+</ul>
+<h3 id="7-4-intent-执行逻辑">7.4 Intent 执行逻辑</h3>
+<p><code>runLoopIterations</code> 的逻辑：</p>
+<p>1. 查找最高优先级 pending intent。 2. 如果不存在，进入 reason phase。 3. 如果 reason phase 创建新 intent，继续循环。 4. 如果没有新 intent，结束循环。 5. 如果存在 intent，claim 后执行单次迭代。</p>
+<p>支持的 intent 类型：</p>
+<ul>
+<li><code>code_trace</code></li>
+<li><code>collect_evidence</code></li>
+<li><code>recon</code></li>
+<li><code>validate</code></li>
+</ul>
+<p>未知 intent 会导致迭代失败。</p>
+<p>Reason phase：</p>
+<ul>
+<li>需要模型配置。</li>
+<li>读取黑板图、证据、代码片段。</li>
+<li>调用模型进行安全图推理。</li>
+<li>可能产生新 fact、finding、next intent。</li>
+<li>最多连续 2 次 no-op 后停止。</li>
+</ul>
+<p>设计优点：</p>
+<ul>
+<li>不是固定扫描流水线，而是保留了“图推理 -&gt; 生成下一步 intent”的架构。</li>
+<li>Contract 缺字段也会生成补证据 intent。</li>
+</ul>
+<p>现实边界：</p>
+<ul>
+<li>当没有模型配置时，reason phase 无法继续，只能依赖 deterministic first-stage。</li>
+<li>collect_evidence 在代码审计中主要扩大代码 slice，在渗透中主要继续 validate。</li>
+</ul>
+<hr>
+<h2 id="8-工具与-runner-体系分析">8. 工具与 Runner 体系分析</h2>
+<h3 id="8-1-toolregistry">8.1 ToolRegistry</h3>
+<p>默认注册工具：</p>
+<ul>
+<li><code>http_request</code></li>
+<li><code>http_surface</code></li>
+<li><code>pentest_probe</code></li>
+<li><code>response_diff</code></li>
+<li><code>code_search</code></li>
+<li><code>code_slice</code></li>
+<li><code>sandbox_exec</code></li>
+<li><code>report_assembler</code></li>
+</ul>
+<p>每个工具实现统一接口：</p>
+<ul>
+<li>Name</li>
+<li>Kind</li>
+<li>Schema</li>
+<li>Validate</li>
+<li>Run</li>
+<li>ExtractEvidence</li>
+</ul>
+<p>统一接口的好处是 ToolRunService 可以无差别处理校验、执行、持久化、证据抽取。</p>
+<h3 id="8-2-toolrunservice">8.2 ToolRunService</h3>
+<p>实现位置：<code>backend/internal/service/toolrun_service.go</code></p>
+<p>执行流程：</p>
+<p>1. 从 registry 获取工具。 2. 将输入序列化为 JSON。 3. 从任务生成 SafePolicy。 4. 创建 ToolRun pending。 5. 调用工具 Validate。 6. 如果被阻断，保存 blocked ToolRun 和 block reason。 7. 如果允许，保存 running ToolRun。 8. 调用工具 Run。 9. 保存 stdout/stderr 到 Artifact Store。 10. 更新 ToolRun 状态、容器 ID、镜像名、命令预览等。 11. 调用 ExtractEvidence。 12. 对每个 EvidenceDraft 创建 Evidence。 13. 写入 toolrun.completed 审计事件。</p>
+<p>这是非常重要的“可追溯执行封装”。所有工具无论是否跑 Docker，都会沉淀为统一 ToolRun/Evidence。</p>
+<h3 id="8-3-runnermanager">8.3 RunnerManager</h3>
+<p>实现位置：</p>
+<ul>
+<li><code>backend/internal/runner/manager.go</code></li>
+<li><code>backend/internal/runner/docker_client.go</code></li>
+</ul>
+<p>Runner 类型：</p>
+<ul>
+<li>sandbox</li>
+<li>code_audit</li>
+<li>pentest</li>
+<li>fallback local exec</li>
+</ul>
+<p>Docker Runner 关键设计：</p>
+<ul>
+<li>如果镜像不存在，则从 <code>runner-images/{runnerDir}</code> 动态构建。</li>
+<li>每次工具执行创建独立容器。</li>
+<li>挂载任务 workspace：</li>
+<p>- <code>/workspace/input</code> 只读 - <code>/workspace/work</code> 可写 - <code>/workspace/artifacts</code> 可写 - <code>/workspace/evidence</code> 可写 - <code>/workspace/logs</code> 可写</p>
+<li>code-audit 容器网络为 none。</li>
+<li>pentest 容器网络为 bridge。</li>
+<li>sandbox 容器按 SafePolicy 的 networkPolicy 传入，当前常用 none。</li>
+<li>容器资源限制：</li>
+<p>- Memory 256 MB - CPU 0.5 - PidsLimit 64</p>
+<li>容器执行后停止并移除。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>每次执行独立容器，隔离清晰。</li>
+<li>code audit 无网络，符合代码审计场景。</li>
+<li>输入目录只读，降低工具改写源码风险。</li>
+<li>容器 ID、镜像名、命令预览写入 ToolRun。</li>
+</ul>
+<p>风险：</p>
+<ul>
+<li>backend 与 agent-worker 都挂载了 <code>/var/run/docker.sock</code>，这等价于高权限主机控制能力。生产环境必须将后端所在主机视为高信任边界，或引入更受限的 Runner 执行平面。</li>
+<li>Runner 容器网络策略仍比较粗粒度，pentest 使用 bridge 后依赖 SafePolicy 做目标校验，但容器运行时本身没有 egress allowlist。</li>
+<li>fallback local exec 仍存在，如果 Docker runtime 初始化失败，部分工具可能退回本地执行。这对生产安全边界不理想，应在生产环境 fail-closed。</li>
+</ul>
+<h3 id="8-4-codesearch">8.4 code_search</h3>
+<p>实现位置：<code>backend/internal/tools/code_search.go</code></p>
+<p>作用：在解压源码中使用 ripgrep 搜索安全相关 source/sink 模式。</p>
+<p>默认搜索模式覆盖：</p>
+<ul>
+<li>命令执行/代码执行 sink</li>
+<li>文件上传 sink/source</li>
+<li>PHP superglobal 输入</li>
+<li>Web 框架 request input</li>
+<li>文件扩展名/MIME 校验函数</li>
+<li>反序列化</li>
+<li>动态 SQL 与 query 执行</li>
+<li>文件读取/包含</li>
+<li>SSRF/outbound request</li>
+<li>open redirect</li>
+<li>XXE parser</li>
+<li>weak crypto</li>
+</ul>
+<p>增强逻辑：</p>
+<ul>
+<li>对不同 pattern 做 priority。</li>
+<li>对 ERP、API、controller、service 等路径加权。</li>
+<li>排除 node_modules、vendor、dist、build、libs、min.js、图片、二进制等低价值路径。</li>
+<li>每类、每文件有限流。</li>
+<li>输出按优先级排序。</li>
+</ul>
+<p>输出 Evidence：</p>
+<ul>
+<li>类型：<code>code_snippet</code></li>
+<li>RelationType：<code>code_sink</code></li>
+<li>Raw：脱敏后的命中行。</li>
+</ul>
+<p>评价：</p>
+<p>这是第一阶段很实用的传感器。它不直接宣称漏洞，而是给模型/图推理提供候选 source/sink 点，设计是正确的。</p>
+<h3 id="8-5-codeslice">8.5 code_slice</h3>
+<p>实现位置：<code>backend/internal/tools/code_slice.go</code></p>
+<p>作用：围绕 code_search 命中行抽取上下文代码片段。</p>
+<p>特点：</p>
+<ul>
+<li>radius 默认 12，最大 60。</li>
+<li>通过 <code>nl -ba</code> + <code>sed</code> 抽取。</li>
+<li>命中行以 <code>&gt;&gt;</code> 标记。</li>
+<li>输出脱敏。</li>
+<li>Evidence 类型：<code>code_snippet</code></li>
+<li>RelationType：<code>code_source</code></li>
+</ul>
+<p>风险与改进：</p>
+<ul>
+<li>虽然 filePath 来自 code_search，工具自身没有强校验 filePath 是否位于 root 内部；当前命令使用 shellQuote 降低命令注入风险，但建议仍在 Validate 或 Run 中做路径规范化和 root containment 校验。</li>
+</ul>
+<h3 id="8-6-pentestprobe">8.6 pentest_probe</h3>
+<p>实现位置：<code>backend/internal/tools/pentest_probe.go</code></p>
+<p>支持模式：</p>
+<ul>
+<li><code>quick_http</code></li>
+<li><code>service_fingerprint</code></li>
+<li><code>dns</code></li>
+<li><code>web_crawl</code></li>
+</ul>
+<p>使用工具：</p>
+<ul>
+<li>curl</li>
+<li>whatweb</li>
+<li>nuclei</li>
+<li>nmap</li>
+<li>httpx</li>
+<li>katana</li>
+<li>sqlmap</li>
+<li>dig</li>
+</ul>
+<p>注意：这些工具依赖 <code>runner-images/pentest/Dockerfile</code> 的基础镜像 <code>ai-security/kali-tools:latest</code>。这不是 Docker Hub 官方通用镜像，构建与供应链可用性需要单独确认。</p>
+<p>输出会被 normalize 为 facts：</p>
+<ul>
+<li>http_status</li>
+<li>http_header</li>
+<li>service</li>
+<li>fingerprint</li>
+<li>tool_signal</li>
+<li>endpoint</li>
+<li>dns</li>
+</ul>
+<p>Evidence 类型：<code>tool_output</code>。</p>
+<p>评价：</p>
+<p>这个工具把复杂外部工具输出收敛成结构化 facts，很符合黑板图架构。但 web_crawl 里使用 sqlmap 作为低级别表单探测，虽然参数较保守，仍应在生产中明确授权级别与速率限制。</p>
+<h3 id="8-7-httprequest">8.7 http_request</h3>
+<p>实现位置：<code>backend/internal/tools/http_request.go</code></p>
+<p>作用：执行授权 HTTP 请求，记录请求/响应证据。</p>
+<p>安全校验：</p>
+<ul>
+<li>SafePolicy ValidateTarget。</li>
+<li>SafePolicy ValidatePayload。</li>
+</ul>
+<p>执行方式：</p>
+<ul>
+<li>Runner pentest 容器中执行 curl。</li>
+<li><code>curl -sS -i -X {method}</code>。</li>
+<li>通过 <code>__RABBIT_STATUS__</code> marker 提取状态码。</li>
+</ul>
+<p>Evidence 类型：</p>
+<ul>
+<li><code>http_exchange</code></li>
+<li>RequestSnapshot：method/url。</li>
+<li>ResponseSnapshot：status/header summary。</li>
+<li>Raw：脱敏响应 body。</li>
+</ul>
+<p>风险：</p>
+<ul>
+<li>Headers 会拼入 curl 命令，当前 header key/value 由上层控制，若未来开放用户输入，需要更严格校验。</li>
+<li>仅记录 response body，完整 headers 只在 snapshot；需要报告级别的原始 HTTP 包时还不够完整。</li>
+</ul>
+<h3 id="8-8-httpsurface">8.8 http_surface</h3>
+<p>实现位置：<code>backend/internal/tools/http_surface.go</code></p>
+<p>作用：解析 HTML body 中的 link、form、参数，生成 HTTP 输入面。</p>
+<p>特点：</p>
+<ul>
+<li>不运行外部命令，在平台内解析。</li>
+<li>使用正则解析 HTML。</li>
+<li>最多处理 512 KB body。</li>
+<li>Links 最多 60。</li>
+<li>Forms 最多 24。</li>
+<li>Params 最多 80。</li>
+</ul>
+<p>局限：</p>
+<ul>
+<li>正则解析 HTML 在复杂页面、JS 渲染页面、动态路由方面能力有限。</li>
+<li>Browser runner 尚未接入，所以 SPA 输入面发现会受限。</li>
+</ul>
+<h3 id="8-9-responsediff">8.9 response_diff</h3>
+<p>实现位置：<code>backend/internal/tools/response_diff.go</code></p>
+<p>作用：对 baseline 与 validation 响应做差异判断。</p>
+<p>判断项：</p>
+<ul>
+<li>状态码变化。</li>
+<li>Body 是否变化。</li>
+<li>marker 是否反射。</li>
+</ul>
+<p>Evidence 类型：</p>
+<ul>
+<li><code>response_diff</code></li>
+<li>RelationType：<code>poc_result</code></li>
+</ul>
+<p>评价：</p>
+<p>适合作为第一阶段“非破坏性 marker 验证”。但当前 diff 仍偏粗糙，后续可以增加结构化 diff、DOM diff、语义 diff、错误模式识别、时间差判断等。</p>
+<h3 id="8-10-sandboxexec">8.10 sandbox_exec</h3>
+<p>实现位置：<code>backend/internal/tools/sandbox_exec.go</code></p>
+<p>作用：执行只读 proof command，例如 whoami/id/hostname/pwd/echo marker。</p>
+<p>安全校验：</p>
+<ul>
+<li>SafePolicy ValidateCommand。</li>
+<li>默认阻断破坏、持久化、反弹 shell 等命令。</li>
+<li>Level 1+ 才允许只读命令证明。</li>
+</ul>
+<p>Evidence 类型：</p>
+<ul>
+<li>普通只读命令：<code>command_output</code> / <code>command_output</code></li>
+<li>PoC proof context：<code>command_output</code> / <code>poc_result</code></li>
+</ul>
+<p>评价：</p>
+<p>用于命令执行类漏洞的非破坏性证明很合适。但当前 Orchestrator 里对 sandbox_exec 的使用从 smoke 脚本期待看似存在动态验证路径，不过在读到的主流程中没有看到大量显式 sandbox_exec 调用路径，需要结合历史运行数据继续验证。</p>
+<hr>
+<h2 id="9-safepolicy-安全策略分析">9. SafePolicy 安全策略分析</h2>
+<p>实现位置：<code>backend/internal/safety/policy.go</code></p>
+<h3 id="9-1-授权等级">9.1 授权等级</h3>
+<p>DefaultPolicy：</p>
+<ul>
+<li>Level 0：只读信息收集，不允许只读命令证明。</li>
+<li>Level 1：允许 sandbox verification 与只读命令证明。</li>
+<li>Level 2：允许 chain exploration。</li>
+<li>Level 3：更高授权，命令策略更宽。</li>
+</ul>
+<h3 id="9-2-target-校验">9.2 Target 校验</h3>
+<p>ValidateTarget：</p>
+<ul>
+<li>从 URL 或 host 中提取 hostname。</li>
+<li>如果有 AllowedScopes，则必须匹配。</li>
+<li>如果没有 AllowedScopes，默认阻断敏感地址。</li>
+</ul>
+<p>默认阻断：</p>
+<ul>
+<li><code>169.254.169.254</code></li>
+<li><code>127.0.0.1</code></li>
+<li><code>localhost</code></li>
+<li><code>0.0.0.0</code></li>
+<li><code>::1</code></li>
+<li>私有 IPv4 网段</li>
+<li>私有/链路本地 IPv6 网段</li>
+</ul>
+<p>支持 scope 类型：</p>
+<ul>
+<li>精确 host。</li>
+<li>子域名后缀。</li>
+<li>CIDR。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>防 SSRF 基础策略存在。</li>
+<li>显式授权 loopback 可通过测试覆盖。</li>
+</ul>
+<p>改进建议：</p>
+<ul>
+<li>URL 重定向后的目标也需要校验，否则 curl 跟随跳转可能访问出范围目标。当前 http_request 未加 <code>-L</code>，pentest_probe 中部分 curl 使用 <code>-L</code>，需要关注。</li>
+<li>DNS rebinding 未处理。</li>
+<li>IDN/punycode、IPv6 zone、混合编码 URL 可进一步加强。</li>
+</ul>
+<h3 id="9-3-payload-与-command-校验">9.3 Payload 与 Command 校验</h3>
+<p>危险片段包括：</p>
+<ul>
+<li>rm/del/format/mkfs/shutdown/reboot/halt/poweroff</li>
+<li>rm -rf</li>
+<li>dd if/of</li>
+<li>crontab/systemctl/launchctl/schtasks</li>
+<li>useradd/adduser/net user</li>
+<li>authorized_keys/passwd/shadow</li>
+<li>nc/ncat shell</li>
+<li>curl|wget pipe shell</li>
+<li>eval/assert/Runtime/ProcessBuilder 与命令执行相关片段</li>
+</ul>
+<p>只读命令白名单：</p>
+<ul>
+<li>whoami</li>
+<li>id</li>
+<li>hostname</li>
+<li>pwd</li>
+<li>echo AI_VALIDATION_MARKER*</li>
+<li>printf AI_VALIDATION_MARKER*</li>
+</ul>
+<p>测试覆盖：</p>
+<ul>
+<li>允许只读 proof。</li>
+<li>阻断破坏/持久化行为。</li>
+<li>默认阻断 metadata 地址。</li>
+<li>显式授权 loopback 允许访问。</li>
+</ul>
+<hr>
+<h2 id="10-模型运行时分析">10. 模型运行时分析</h2>
+<p>实现位置：<code>backend/internal/service/model_runtime_service.go</code></p>
+<h3 id="10-1-支持能力">10.1 支持能力</h3>
+<p>ModelRuntimeService 支持：</p>
+<ul>
+<li>PlanIteration：为当前 Intent 生成迭代计划。</li>
+<li>SuggestEvidenceIntent：为 Contract 缺字段生成补证据 Intent。</li>
+<li>GenerateReportNarrative：为报告生成更自然的摘要与 Finding 叙述。</li>
+<li>DeepCodeAudit：对代码片段做深度审计。</li>
+<li>AnalyzeSecurityGraph：读取黑板图做安全图推理。</li>
+<li>FallbackIterationPlan：模型失败时回退 deterministic plan。</li>
+<li>IterationCallMetadata：记录模型 provider/model/intentType。</li>
+</ul>
+<h3 id="10-2-provider-支持">10.2 Provider 支持</h3>
+<p>当前真实支持：</p>
+<ul>
+<li><code>openai</code></li>
+<li><code>openai-compatible</code></li>
+</ul>
+<p>前端 Settings 页面虽然提供 Anthropic Compatible、Local Gateway 等选项，但后端会返回 unsupported model provider。这是一个前后端能力不一致点。</p>
+<h3 id="10-3-wire-api">10.3 Wire API</h3>
+<p>支持：</p>
+<ul>
+<li>Responses API：<code>/responses</code></li>
+<li>Chat Completions API：<code>/chat/completions</code></li>
+</ul>
+<p>Responses API 请求结构：</p>
+<ul>
+<li>model</li>
+<li>input system/user</li>
+<li>store false 可选</li>
+<li>reasoning effort 可选</li>
+</ul>
+<p>Chat Completions 请求结构：</p>
+<ul>
+<li>model</li>
+<li>messages</li>
+<li>response_format json_object</li>
+</ul>
+<h3 id="10-4-prompt-设计">10.4 Prompt 设计</h3>
+<p>模型 Prompt 分为几类：</p>
+<ul>
+<li>Planner Prompt：返回 thought_summary/planned_action，禁止泄露 chain-of-thought。</li>
+<li>Evidence Intent Prompt：返回 title/objective/intent_type。</li>
+<li>Deep Code Audit Prompt：要求从 source -&gt; propagation -&gt; sink 建图，输出完整 finding schema。</li>
+<li>Security Graph Prompt：读取黑板节点、边、代码片段，输出 facts/findings/next_intents/stop_reason。</li>
+<li>Report Narrative Prompt：生成中文专业报告叙述，并根据 Finding 状态避免强确认措辞。</li>
+</ul>
+<p>Prompt 设计亮点：</p>
+<ul>
+<li>明确“工具只是 sensors，模型才是 brain”。</li>
+<li>强制 JSON 输出。</li>
+<li>要求证据 ID 必须来自 packet。</li>
+<li>对代码审计要求 entrypoint、controlled_input、propagation_path、sink、proof plan。</li>
+<li>对报告叙述有 guardrail，不允许未验证时写“已确认/成功利用/getshell”等强措辞。</li>
+</ul>
+<h3 id="10-5-解析与容错">10.5 解析与容错</h3>
+<p>解析函数支持：</p>
+<ul>
+<li>直接 JSON。</li>
+<li>从包含 Markdown fence 或前后文本的响应中截取 <code>{...}</code>。</li>
+</ul>
+<p>测试覆盖：</p>
+<ul>
+<li>parsePlannerOutput。</li>
+<li>joinAPIURL。</li>
+<li>parseEvidenceIntentOutput。</li>
+<li>enforceFindingNarrativeGuardrail。</li>
+<li>delivery evidence 判断。</li>
+</ul>
+<p>改进建议：</p>
+<ul>
+<li>使用 JSON schema / structured output 能提升稳定性。</li>
+<li>DeepCodeAudit 和 AnalyzeSecurityGraph 超时硬编码 140s，与全局 ModelTimeout 的关系略复杂。</li>
+<li><code>codeAuditReasoningEffort</code> 会把 high/xhigh 降为 low，这可能是为了速度，但与配置期望可能不一致，应在文档或前端提示。</li>
+<li>Prompt 中中文/英文混合，长期可维护性可通过模板文件或版本号管理。</li>
+</ul>
+<hr>
+<h2 id="11-agent-orchestrator-深度分析">11. Agent Orchestrator 深度分析</h2>
+<p>实现位置：<code>backend/internal/service/agent_orchestrator.go</code></p>
+<p>这是项目最大、最复杂、最关键的模块。</p>
+<h3 id="11-1-主要职责">11.1 主要职责</h3>
+<p>AgentOrchestrator 负责：</p>
+<ul>
+<li>启动任务执行。</li>
+<li>控制 Agent loop。</li>
+<li>Claim intent。</li>
+<li>构建上下文。</li>
+<li>调用模型规划。</li>
+<li>根据 intent 类型调工具。</li>
+<li>将 ToolRun/Evidence 写入黑板图。</li>
+<li>从 Evidence 生成 Finding。</li>
+<li>调用 Contract 检查。</li>
+<li>在需要时触发 graph reasoning。</li>
+<li>生成最终报告。</li>
+<li>更新任务进度与状态。</li>
+</ul>
+<h3 id="11-2-代码审计路径">11.2 代码审计路径</h3>
+<p><code>runCodeAuditIntent</code>：</p>
+<p>1. 检查 extracted source 是否存在。 2. 更新任务进度为“正在执行代码智能检索”。 3. 执行 <code>code_search</code>。 4. 基于 code_search Evidence 选择优先级最高的 slice target。 5. 对每个 target 执行 <code>code_slice</code>。 6. 返回所有 ToolRunOutcome。</p>
+<p>优先级策略：</p>
+<ul>
+<li>高优先级：eval/system/exec、SQL、unique check、file upload、unserialize 等。</li>
+<li>路径加权：ERP/API/controller/service 等。</li>
+<li>低价值路径降权：public/static/assets/jsutil/bundle/echarts/jspdf/mui 等。</li>
+</ul>
+<p>随后 <code>createOrUpdateFindings</code> 对代码审计任务：</p>
+<p>1. 加载 evidence items。 2. 调用模型构建代码审计 Finding candidates。 3. 如果模型没有返回 candidates，不创建 Finding，只记录 no model finding 事件。 4. 对候选 Finding 做 Upsert。 5. 执行 Contract Check。</p>
+<p>这说明代码审计结论强依赖模型 source/sink reasoning，而不是直接由 regex 命中生成漏洞。</p>
+<h3 id="11-3-渗透验证路径">11.3 渗透验证路径</h3>
+<p><code>runPentestIntent</code>：</p>
+<p>1. 找出 URL/domain target。 2. 对每个 target，根据 intent 类型执行 recon 或 validate。</p>
+<p>Recon：</p>
+<p>1. 执行 pentest_probe quick_http。 2. 执行 pentest_probe service_fingerprint。 3. 执行 pentest_probe web_crawl。 4. 执行 http_request baseline。 5. 用 baseline body 执行 http_surface。 6. 从 surface 中生成 validation candidates。 7. 对 candidates 执行 marker validation。</p>
+<p>Validation：</p>
+<p>1. 构造 marker。 2. 对 baseline URL 做 baseline request。 3. 将 marker 放到 query 或 form 参数。 4. 执行 validation request。 5. 执行 response_diff。</p>
+<p>Finding 生成：</p>
+<ul>
+<li>优先使用模型对 pentest facts 进行图推理。</li>
+<li>如果模型没有返回，但存在 response_diff 信号，则生成 pentest_candidate。</li>
+<li>当 response_diff 显示 marker reflected/status changed/body length changed，validationStatus 可变为 dynamically_validated。</li>
+</ul>
+<h3 id="11-4-graph-reasoning">11.4 Graph Reasoning</h3>
+<p><code>reasonOverSecurityGraph</code>：</p>
+<p>1. 从黑板加载最多 80 个高重要性 active nodes。 2. 加载最多 120 条边。 3. 对代码审计附带最多 36 个 snippets。 4. 构造 SecurityGraphAuditPacket。 5. 调用模型 AnalyzeSecurityGraph。 6. 将模型输出 facts 写入黑板。 7. 将模型输出 next intents 写入 AIIntent。 8. 将 findings 转换为候选 Finding。</p>
+<p>这个设计是项目未来扩展的核心：固定工具链只是第一层，真正持续探索依赖黑板图和模型。</p>
+<h3 id="11-5-关键风险">11.5 关键风险</h3>
+<ul>
+<li>模块过大：AgentOrchestrator 约 2300 行，职责过多，后续维护压力较高。</li>
+<li>一些路径特化明显，例如 ERP、SatRDA、upload-labs 相关优先级和排除逻辑，说明项目已针对特定样本调优，但泛化能力需要继续验证。</li>
+<li>没有事务边界：一次迭代中 ToolRun、Evidence、Blackboard、Finding、Contract 多步写入，失败后可能部分落库。</li>
+<li>任务并发控制较弱：API goroutine 执行，缺少真实 worker lease/队列/锁。</li>
+</ul>
+<hr>
+<h2 id="12-contract-与报告交付分析">12. Contract 与报告交付分析</h2>
+<h3 id="12-1-contract-检查">12.1 Contract 检查</h3>
+<p>实现位置：<code>backend/internal/service/contract_service.go</code></p>
+<p>Contract 的作用是确保 Finding 不只是“猜测”，而是包含报告交付所需字段。</p>
+<p>如果缺字段：</p>
+<ul>
+<li>Finding.Status = <code>contract_incomplete</code></li>
+<li>Finding.ValidationStatus = <code>contract_incomplete</code></li>
+<li>Finding.ContractStatus = <code>incomplete</code></li>
+<li>写入 ContractCheckResult</li>
+<li>写入黑板 hint</li>
+<li>生成补证据 intent</li>
+</ul>
+<p>如果字段完整且动态验证通过：</p>
+<ul>
+<li>Finding.Status = <code>dynamically_validated</code></li>
+</ul>
+<p>这套机制是项目的亮点。它避免了安全工具常见问题：发现大量疑似结果但无法交付。</p>
+<h3 id="12-2-报告生成">12.2 报告生成</h3>
+<p>实现位置：<code>backend/internal/service/report_service.go</code></p>
+<p>Generate 流程：</p>
+<p>1. 加载 task/findings/evidence/toolRuns/contractChecks snapshot。 2. 生成 deterministic narrative。 3. 如果模型可用，生成 enriched narrative。 4. 构建 reportView。 5. 渲染 Markdown。 6. 渲染 HTML。 7. 写入 Artifact Store。 8. 创建 AIReport。</p>
+<p>报告内容包括：</p>
+<ul>
+<li>执行摘要。</li>
+<li>测试范围与授权边界。</li>
+<li>漏洞发现。</li>
+<li>漏洞定性与风险评估。</li>
+<li>漏洞描述。</li>
+<li>攻击向量。</li>
+<li>代码证据。</li>
+<li>数据流分析。</li>
+<li>实际可利用性分析。</li>
+<li>技术框架分析。</li>
+<li>调用栈与 Mermaid 图。</li>
+<li>漏洞利用证明。</li>
+<li>根源分析与修复建议。</li>
+<li>复测方法。</li>
+<li>Contract 检查摘要。</li>
+<li>限制说明。</li>
+</ul>
+<p>报告证据筛选：</p>
+<ul>
+<li>过滤 runtime_log/tool_output 等不适合正文堆叠的内容。</li>
+<li>代码证据优先 focused code slice。</li>
+<li>过滤 upload-labs-env、Apache、PHP、min.js、jquery 等低价值环境文件。</li>
+<li>command_output 只有 PoC context 才进入交付证据。</li>
+</ul>
+<p>评价：</p>
+<p>报告生成非常完整，已经明显超过“demo 报告”的程度。它特别注意报告措辞，不会在 Contract 不完整时使用强确认语言。</p>
+<p>改进建议：</p>
+<ul>
+<li>PDF/Word 导出尚未完成。</li>
+<li>EvidencePack 字段还未生成完整证据包。</li>
+<li>报告 CSS 与 HTML 渲染在 Go 文件中硬编码，长期可以拆模板。</li>
+<li>报告中大量字段依赖模型输出质量，建议为关键字段设置更严格的 schema 校验。</li>
+</ul>
+<hr>
+<h2 id="13-前端架构分析">13. 前端架构分析</h2>
+<h3 id="13-1-前端整体结构">13.1 前端整体结构</h3>
+<p>前端入口：</p>
+<ul>
+<li><code>frontend/src/main.ts</code></li>
+<li><code>frontend/src/App.vue</code></li>
+<li><code>frontend/src/router/index.ts</code></li>
+</ul>
+<p>路由：</p>
+<ul>
+<li><code>/</code> 工作台</li>
+<li><code>/tasks/new</code> 创建任务</li>
+<li><code>/tasks</code> 任务中心</li>
+<li><code>/tasks/:id</code> 任务详情</li>
+<li><code>/findings</code> 漏洞中心</li>
+<li><code>/reports</code> 报告中心</li>
+<li><code>/settings</code> 系统设置</li>
+</ul>
+<p>API client：</p>
+<ul>
+<li><code>frontend/src/api/client.ts</code></li>
+</ul>
+<p>状态管理：</p>
+<ul>
+<li><code>frontend/src/stores/platform.ts</code></li>
+</ul>
+<h3 id="13-2-api-client">13.2 API Client</h3>
+<p>前端 API baseURL：</p>
+<pre><code class="language-ts">import.meta.env.VITE_API_BASE_URL || '/api/v1'</code></pre>
+<p>封装能力：</p>
+<ul>
+<li>overview</li>
+<li>list/create/update model configs</li>
+<li>list/create/get/start/archive task</li>
+<li>upload zip</li>
+<li>review finding</li>
+</ul>
+<p>类型定义基本覆盖后端返回结构。</p>
+<p>风险：</p>
+<ul>
+<li><code>TaskDetail</code> interface 缺少 <code>toolCatalog</code> 字段，后端实际返回了该字段。</li>
+<li>前端没有统一 axios error interceptor。</li>
+<li>API 超时 30 秒，对启动任务没问题，但对直接等待长请求不适合；目前长任务是异步启动，所以还可以。</li>
+</ul>
+<h3 id="13-3-dashboard">13.3 Dashboard</h3>
+<p>展示：</p>
+<ul>
+<li>任务总数。</li>
+<li>正在执行。</li>
+<li>合同未闭环。</li>
+<li>高风险发现。</li>
+<li>最近任务。</li>
+<li>Runner health。</li>
+</ul>
+<p>Backend Overview 的 runnerHealth 是静态值：</p>
+<ul>
+<li>codeAudit ready</li>
+<li>browser planned</li>
+<li>pentest ready</li>
+<li>sandbox ready</li>
+</ul>
+<p>这不是实时健康检测。生产化应改为真实 Runner 镜像/Docker/MinIO/DB 连通性检测。</p>
+<h3 id="13-4-task-wizard">13.4 Task Wizard</h3>
+<p>支持创建：</p>
+<ul>
+<li>code_audit</li>
+<li>pentest</li>
+</ul>
+<p>UI 虽然后端支持 hybrid，但前端卡片只提供 code_audit/pentest，没有 hybrid 入口。</p>
+<p>代码审计任务：</p>
+<ul>
+<li>创建时不上传 ZIP。</li>
+<li>创建后跳到任务详情页上传。</li>
+</ul>
+<p>渗透任务：</p>
+<ul>
+<li>要求至少一个 target。</li>
+<li>创建后跳到详情页启动。</li>
+</ul>
+<p>支持配置：</p>
+<ul>
+<li>Authorization Level 0-3。</li>
+<li>allowReadOnlyCommands。</li>
+<li>allowChainExploration。</li>
+<li>ModelConfig。</li>
+</ul>
+<p>改进建议：</p>
+<ul>
+<li>code_audit 的“代码包说明/仓库信息”当前被拆成 targetText，但后端 targets 对 code_audit 不强制，这些信息可能丢失。建议写入 objective 或新增 repo metadata 字段。</li>
+<li>hybrid 没有 UI 入口。</li>
+</ul>
+<h3 id="13-5-task-list">13.5 Task List</h3>
+<p>功能：</p>
+<ul>
+<li>状态筛选。</li>
+<li>类型筛选。</li>
+<li>关键词筛选。</li>
+<li>显示测试任务。</li>
+<li>显示已归档。</li>
+<li>批量开始。</li>
+<li>批量归档。</li>
+<li>单任务归档。</li>
+<li>每 5 秒刷新。</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>终止按钮 disabled，取消任务能力未实现。</li>
+<li>过滤在前端完成，任务多时需要后端分页/过滤。</li>
+<li>开始 failed 任务时，对 code_audit 如果 ZIP 缺失会返回后端错误。</li>
+</ul>
+<h3 id="13-6-task-detail">13.6 Task Detail</h3>
+<p>这是前端最核心页面。</p>
+<p>展示：</p>
+<ul>
+<li>任务标题/目标。</li>
+<li>next step hint。</li>
+<li>ZIP 上传。</li>
+<li>开始执行。</li>
+<li>当前阶段。</li>
+<li>关键证据数。</li>
+<li>Finding 数。</li>
+<li>ToolRun 数。</li>
+<li>执行进度。</li>
+<li>漏洞结果卡片。</li>
+<li>报告产物。</li>
+<li>复现交付说明。</li>
+<li>执行时间线。</li>
+<li>Intent 队列。</li>
+<li>Contract 检查。</li>
+<li>高级观察：ToolRun/Evidence/Blackboard。</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>把用户视角和审计链路区分得比较好。</li>
+<li>默认突出 Finding 与报告，内部证据放在高级观察。</li>
+<li>running 状态会自动轮询。</li>
+</ul>
+<p>风险与问题：</p>
+<ul>
+<li><code>keyEvidenceForFinding</code> 与 <code>evidenceTypeLabel</code> 当前定义后未被模板使用，可能是历史遗留。</li>
+<li><code>artifactUrl(ref)</code> 对 <code>minio://</code> 的 replace 实际不会移除 <code>minio://</code>，生成 <code>/artifacts/minio://bucket/key</code>。这与后端 artifact 路由的兼容逻辑匹配，但 URL 里包含 scheme 字符串，不够优雅。</li>
+<li>Evidence 原始链接直接使用 <code>item.artifactUrl</code>，这依赖后端 PublicURL 配置正确。</li>
+</ul>
+<h3 id="13-7-finding-center">13.7 Finding Center</h3>
+<p>功能：</p>
+<ul>
+<li>聚合近期任务 Finding。</li>
+<li>按验证状态、Contract 状态、关键词过滤。</li>
+<li>指标：总数、动态验证、合同未闭环、高风险。</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>只加载 <code>store.tasks.slice(0, 12)</code> 的任务详情。</li>
+<li>没有独立后端 Finding 聚合接口。</li>
+<li>没有跳转回任务详情或报告的操作。</li>
+</ul>
+<h3 id="13-8-report-center">13.8 Report Center</h3>
+<p>功能：</p>
+<ul>
+<li>聚合近期任务报告。</li>
+<li>打开 HTML/Markdown。</li>
+<li>下载 HTML/Markdown。</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>只加载 <code>store.tasks.slice(0, 8)</code> 的任务详情。</li>
+<li>没有全局报告分页接口。</li>
+</ul>
+<h3 id="13-9-settings">13.9 Settings</h3>
+<p>功能：</p>
+<ul>
+<li>模型配置 CRUD。</li>
+<li>配置 Provider、Base URL、Model、API Key Ref。</li>
+<li>配置 reviewModel、reasoning effort、wireApi、networkAccess、context window、auto compact token limit。</li>
+<li>配置 disable response storage、requires OpenAI auth 等开关。</li>
+</ul>
+<p>前后端不一致：</p>
+<ul>
+<li>前端展示 Anthropic Compatible、Local Gateway。</li>
+<li>后端当前只支持 OpenAI/OpenAI Compatible。</li>
+</ul>
+<hr>
+<h2 id="14-部署与运行分析">14. 部署与运行分析</h2>
+<h3 id="14-1-docker-compose">14.1 Docker Compose</h3>
+<p>Compose 服务：</p>
+<ul>
+<li>postgres</li>
+<li>redis</li>
+<li>minio</li>
+<li>backend</li>
+<li>agent-worker</li>
+<li>frontend</li>
+</ul>
+<p>backend volumes：</p>
+<ul>
+<li><code>./workspace:/app/workspace</code></li>
+<li><code>./runner-images:/app/runner-images:ro</code></li>
+<li><code>/var/run/docker.sock:/var/run/docker.sock</code></li>
+</ul>
+<p>agent-worker volumes 同 backend。</p>
+<p>frontend 使用 Nginx：</p>
+<ul>
+<li><code>/</code> 静态文件。</li>
+<li><code>/api/</code> 代理 backend。</li>
+<li><code>/artifacts/</code> 代理 backend。</li>
+<li><code>client_max_body_size 512m</code>，支持大 ZIP 上传。</li>
+</ul>
+<h3 id="14-2-当前运行状态">14.2 当前运行状态</h3>
+<p>本次 <code>docker compose ps</code> 显示：</p>
+<ul>
+<li>backend 正在运行且 healthy。</li>
+<li>frontend 正在运行。</li>
+<li>postgres 正在运行且 healthy。</li>
+<li>redis 正在运行。</li>
+<li>minio 正在运行。</li>
+<li>agent-worker 正在运行。</li>
+</ul>
+<p>端口映射符合 <code>.env.example</code> 的预期：</p>
+<ul>
+<li>frontend 13110</li>
+<li>backend 18190</li>
+<li>minio 19110/19111</li>
+<li>postgres 25440</li>
+<li>redis 16400</li>
+</ul>
+<h3 id="14-3-runner-镜像">14.3 Runner 镜像</h3>
+<p>Runner Dockerfile：</p>
+<ul>
+<li>browser：Playwright noble 基础镜像，仅预留。</li>
+<li>code-audit：Alpine + git/ripgrep/python3/node/npm/go/php/jq/tree/ctags。</li>
+<li>pentest：<code>ai-security/kali-tools:latest</code>。</li>
+<li>report：Alpine + pandoc/python3。</li>
+<li>sandbox：Alpine + bash/python3/nodejs/go/php/openjdk17-jre。</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>report runner 镜像存在，但报告生成当前在 Go 服务内完成，未走 report runner。</li>
+<li>browser runner 镜像存在，但未接入主链路。</li>
+</ul>
+<hr>
+<h2 id="15-artifact-与-workspace-分析">15. Artifact 与 workspace 分析</h2>
+<h3 id="15-1-artifact-store">15.1 Artifact Store</h3>
+<p>抽象接口：</p>
+<ul>
+<li>PutText</li>
+<li>PutBytes</li>
+<li>ReadText</li>
+<li>PublicURL</li>
+</ul>
+<p>支持：</p>
+<ul>
+<li>LocalStore</li>
+<li>MinIOStore</li>
+</ul>
+<p>MinIO ref 格式：</p>
+<pre><code class="language-text">minio://bucket/objectKey</code></pre>
+<p>Local ref 格式：</p>
+<pre><code class="language-text">local://relative/path</code></pre>
+<p>Artifact API 会根据 ref 读取对象，并按扩展名设置 content-type。</p>
+<h3 id="15-2-当前-workspace-状态">15.2 当前 workspace 状态</h3>
+<p>当前 workspace：</p>
+<ul>
+<li>约 949 MB。</li>
+<li>包含 53 个 task 目录。</li>
+<li><code>workspace/artifacts</code> 下有 89 个文件。</li>
+<li>历史产物包括 evidence、toolruns stdout/stderr、report md/html。</li>
+</ul>
+<p>这表明项目已经被多次运行验证过，而且报告产物真实落盘。</p>
+<p>建议：</p>
+<ul>
+<li>workspace 历史输入可能包含客户代码或敏感样本，不建议纳入版本控制。</li>
+<li>增加清理策略，例如按任务归档后清理 input，保留 evidence/report。</li>
+<li>增加 artifact retention 配置。</li>
+<li>增加 workspace 空间使用监控。</li>
+</ul>
+<hr>
+<h2 id="16-测试与验收分析">16. 测试与验收分析</h2>
+<h3 id="16-1-单元测试">16.1 单元测试</h3>
+<p>当前测试文件：</p>
+<ul>
+<li><code>backend/internal/runner/workspace_test.go</code></li>
+<li><code>backend/internal/safety/policy_test.go</code></li>
+<li><code>backend/internal/service/model_runtime_service_test.go</code></li>
+</ul>
+<p>覆盖内容：</p>
+<ul>
+<li>ZIP 解压阻断 traversal。</li>
+<li>ZIP 总大小限制。</li>
+<li>SafePolicy 允许只读 proof。</li>
+<li>SafePolicy 阻断破坏和持久化命令。</li>
+<li>SafePolicy 默认阻断 metadata。</li>
+<li>SafePolicy 显式授权 loopback。</li>
+<li>模型 JSON 解析。</li>
+<li>API URL 拼接。</li>
+<li>Finding narrative guardrail。</li>
+<li>报告 evidence 筛选。</li>
+</ul>
+<p>本次执行：</p>
+<pre><code class="language-bash">cd backend &amp;&amp; go test ./...</code></pre>
+<p>结果通过。</p>
+<h3 id="16-2-前端构建验证">16.2 前端构建验证</h3>
+<p>本次执行：</p>
+<pre><code class="language-bash">cd frontend &amp;&amp; npm run build</code></pre>
+<p>结果通过。</p>
+<p>唯一警告：</p>
+<ul>
+<li>Rollup 对 <code>@vueuse/core</code> 中某些 <code>/* #__PURE__ */</code> 注释位置无法解释，会移除注释。该警告来自第三方依赖，不影响构建成功。</li>
+</ul>
+<h3 id="16-3-smoke-脚本">16.3 Smoke 脚本</h3>
+<p>脚本：<code>scripts/smoke-first-stage.sh</code></p>
+<p>验证内容：</p>
+<p>代码审计：</p>
+<ul>
+<li>创建测试任务。</li>
+<li>创建并上传 smoke ZIP。</li>
+<li>启动任务。</li>
+<li>等待 completed。</li>
+<li>断言多个 ToolRun。</li>
+<li>断言 Evidence。</li>
+<li>断言 Contract passed。</li>
+<li>断言 dynamically_validated finding。</li>
+<li>断言 code_search/sandbox_exec 有真实 containerId。</li>
+<li>断言 Evidence/Report 存入 MinIO。</li>
+</ul>
+<p>渗透验证：</p>
+<ul>
+<li>创建 pentest 测试任务。</li>
+<li>目标为 <code>http://host.docker.internal:18190/healthz</code>。</li>
+<li>启动任务。</li>
+<li>断言 http_request、response_diff、Evidence、Contract、Finding、MinIO。</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>Smoke 脚本假设 backend 已运行。</li>
+<li>Smoke 脚本使用 jq、curl、zip。</li>
+<li>默认执行结束会归档测试任务。</li>
+</ul>
+<p>本次没有运行 smoke 脚本，因为它会创建新任务并触发 Runner 容器执行；但已有服务正在运行，脚本本身逻辑完整。</p>
+<hr>
+<h2 id="17-安全性评估">17. 安全性评估</h2>
+<h3 id="17-1-已有安全设计">17.1 已有安全设计</h3>
+<p>项目已经具备较多安全意识：</p>
+<ul>
+<li>授权范围 SafePolicy。</li>
+<li>Target 默认阻断内网、metadata、loopback，除非显式授权。</li>
+<li>Payload/Command 阻断破坏、持久化、反弹 shell。</li>
+<li>只读命令 proof 需 Level 1+。</li>
+<li>ZIP 解压防 Zip Slip。</li>
+<li>ZIP 文件数/大小限制。</li>
+<li>Runner 容器隔离执行。</li>
+<li>code-audit Runner 无网络。</li>
+<li>输入源码只读挂载。</li>
+<li>Evidence 脱敏。</li>
+<li>Finding 报告措辞 guardrail。</li>
+<li>Contract 不完整时不强确认。</li>
+<li>服务启动时 running task fail-closed。</li>
+</ul>
+<h3 id="17-2-高优先级安全风险">17.2 高优先级安全风险</h3>
+<h4 id="风险-1-缺少认证与授权">风险 1：缺少认证与授权</h4>
+<p>当前所有 API 都没有认证。任何能访问后端的人都可以：</p>
+<ul>
+<li>创建任务。</li>
+<li>上传 ZIP。</li>
+<li>启动 Runner。</li>
+<li>访问 artifact。</li>
+<li>查看 evidence。</li>
+<li>修改模型配置。</li>
+<li>归档任务。</li>
+<li>审核 Finding。</li>
+</ul>
+<p>这是生产上线前必须补齐的能力。</p>
+<p>建议：</p>
+<ul>
+<li>加入登录认证。</li>
+<li>API 加 JWT/session 中间件。</li>
+<li>Artifact API 做任务级授权校验。</li>
+<li>引入用户、角色、工作区权限。</li>
+<li>区分管理员、审计员、只读查看者。</li>
+</ul>
+<h4 id="风险-2-docker-socket-挂载权限过大">风险 2：Docker socket 挂载权限过大</h4>
+<p>backend 和 agent-worker 都挂载 <code>/var/run/docker.sock</code>。拥有 Docker socket 基本等于拥有宿主机 root 等级能力。</p>
+<p>建议：</p>
+<ul>
+<li>生产环境将 Runner 平面隔离到专用机器。</li>
+<li>API 服务不直接挂 Docker socket，通过受限 Runner service 调度。</li>
+<li>使用 rootless Docker、gVisor、Kata、Firecracker 或 Kubernetes Job + PSP/PSA 策略。</li>
+<li>禁止 fallback local exec。</li>
+<li>对 Runner 镜像做签名与固定 digest。</li>
+</ul>
+<h4 id="风险-3-artifact-访问缺少权限校验">风险 3：Artifact 访问缺少权限校验</h4>
+<p><code>GET /artifacts/*filepath</code> 可读取 MinIO/local 产物。虽然需要知道 ref，但 ref 会出现在 API 返回里，缺少鉴权时风险很大。</p>
+<p>建议：</p>
+<ul>
+<li>Artifact 下载走授权校验。</li>
+<li>对 report 可生成短期签名 URL。</li>
+<li>Evidence 原始材料默认只允许管理员/任务拥有者访问。</li>
+</ul>
+<h4 id="风险-4-默认弱凭据">风险 4：默认弱凭据</h4>
+<p>Compose 中存在默认：</p>
+<ul>
+<li>PostgreSQL 用户密码：shenji/shenji。</li>
+<li>MinIO 用户密码：minioadmin/minioadmin。</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>生产环境启动时强制校验默认密码不可用。</li>
+<li><code>.env.example</code> 明确标注仅开发使用。</li>
+<li>密钥通过 secret manager 注入。</li>
+</ul>
+<h3 id="17-3-中优先级安全风险">17.3 中优先级安全风险</h3>
+<ul>
+<li>SafePolicy 不能处理所有 DNS rebinding 与跳转场景。</li>
+<li>pentest runner bridge 网络没有容器级 egress allowlist。</li>
+<li>前端 Settings 允许保存 API key ref，若用户填明文会进数据库。</li>
+<li>Model Base URL 可配置，存在服务端主动请求外部地址的 SSRF/数据外发风险，需要管理员权限与 allowlist。</li>
+<li>Report HTML 直接展示由模型生成的内容，虽然使用 html.EscapeString 较多，但需要持续审计所有插入点。</li>
+</ul>
+<hr>
+<h2 id="18-工程质量评估">18. 工程质量评估</h2>
+<h3 id="18-1-优点">18.1 优点</h3>
+<p>1. 领域模型完整 Task、Intent、ToolRun、Evidence、Finding、Contract、Report、AuditEvent 都有独立表，结构清晰。</p>
+<p>2. 执行链路可追溯 每个工具执行都有输入、输出、容器、状态、stdout/stderr、证据引用。</p>
+<p>3. 安全意识强 SafePolicy、ZIP 安全解压、Runner 隔离、证据脱敏、报告措辞 guardrail 都已实现。</p>
+<p>4. 模型失败可回退 不会因为模型不可用就打断第一阶段闭环。</p>
+<p>5. 报告能力超出 MVP Markdown/HTML 报告结构完整，且强调可复现材料。</p>
+<p>6. 前端产品闭环完整 从任务创建、上传、启动、查看详情、报告下载到模型设置都有界面。</p>
+<h3 id="18-2-主要工程问题">18.2 主要工程问题</h3>
+<p>1. Orchestrator 过大 单文件约 2300 行，包含流程控制、代码审计、渗透验证、模型推理、Finding 生成、Evidence 选择等大量职责。</p>
+<p>2. 缺少事务 多步落库操作失败可能留下部分状态。</p>
+<p>3. Worker 未真正工作 当前 Agent 执行在 API goroutine 中。</p>
+<p>4. 缺少认证授权 生产不可接受。</p>
+<p>5. 测试覆盖不足 现有测试偏基础设施，缺少 API/service/tool/report 主要路径测试。</p>
+<p>6. 前后端能力不一致 后端支持 hybrid，前端没有入口；前端 provider 选项多于后端支持。</p>
+<p>7. 聚合页不具备分页 Findings/Reports 只聚合前 12/8 个任务。</p>
+<p>8. 部分配置与代码硬编码 例如 runner health 静态、特定项目路径优先级、报告模板硬编码在 Go 文件中。</p>
+<hr>
+<h2 id="19-性能与可扩展性评估">19. 性能与可扩展性评估</h2>
+<h3 id="19-1-当前性能特点">19.1 当前性能特点</h3>
+<ul>
+<li>任务是异步 goroutine 执行。</li>
+<li>每个工具调用创建一个容器。</li>
+<li>code_search 可限制 maxHits。</li>
+<li>code_slice 可限制 snippet 数。</li>
+<li>模型深度审计按 batch 执行。</li>
+<li>黑板图输入限制 nodes/edges/snippets 数量，避免 prompt 过大。</li>
+</ul>
+<h3 id="19-2-潜在瓶颈">19.2 潜在瓶颈</h3>
+<ul>
+<li>每个工具执行构建/启动容器，冷启动较重。</li>
+<li>如果 Runner 镜像不存在，执行时动态构建，首次任务耗时长。</li>
+<li>Agent 在 API 进程内执行，任务多时影响 API 服务稳定。</li>
+<li>Findings/Reports 前端聚合通过逐个拉任务详情，任务多时会产生 N+1 请求。</li>
+<li>ReportService 每次生成重新读取所有 evidence/toolRuns，数据量大时会变慢。</li>
+<li>GORM AutoMigrate 每次启动执行，生产环境不推荐。</li>
+</ul>
+<h3 id="19-3-扩展建议">19.3 扩展建议</h3>
+<ul>
+<li>引入任务队列：Redis Stream、PostgreSQL advisory lock、NATS 或 RabbitMQ。</li>
+<li>Agent Worker 真正消费任务。</li>
+<li>Runner service 独立部署。</li>
+<li>为 list findings/reports 提供后端分页接口。</li>
+<li>Artifact 元数据分页。</li>
+<li>黑板图查询增加索引与分页。</li>
+<li>Runner 镜像预构建，不在请求路径构建。</li>
+<li>对大型 ZIP 做异步上传/解压进度。</li>
+</ul>
+<hr>
+<h2 id="20-生产化差距清单">20. 生产化差距清单</h2>
+<p>上线前必须补：</p>
+<p>1. 用户认证与权限控制。 2. Artifact 权限校验。 3. Docker socket 风险隔离。 4. Secret 管理和默认弱密码治理。 5. 真实 worker/队列/锁。 6. 数据库迁移工具替代 AutoMigrate。 7. API 输入校验和错误规范化。 8. 审计日志不可抵赖与操作人记录。 9. Runner 网络 egress allowlist。 10. 任务取消/超时/清理机制。</p>
+<p>上线前强烈建议补：</p>
+<p>1. 后端分页与过滤接口。 2. Findings/Reports 全局查询接口。 3. Browser runner 接入。 4. PDF/Word/evidence pack 导出。 5. 更完整的端到端测试。 6. 模型输出 schema 校验。 7. OpenAPI 文档。 8. 观测指标：任务耗时、Runner 成功率、模型延迟、artifact 大小。 9. workspace retention。 10. 代码审计策略配置化。</p>
+<hr>
+<h2 id="21-推荐迭代路线图">21. 推荐迭代路线图</h2>
+<h3 id="21-1-第一优先级-生产安全底座">21.1 第一优先级：生产安全底座</h3>
+<p>目标：让平台从本地演示变成可控内网服务。</p>
+<p>任务：</p>
+<ul>
+<li>增加认证中间件。</li>
+<li>增加用户/角色/工作区模型。</li>
+<li>Artifact API 增加任务权限校验。</li>
+<li>禁止未认证访问模型配置。</li>
+<li>默认弱口令启动校验。</li>
+<li>生产环境禁用 fallback local exec。</li>
+<li>记录 CreatedBy/Actor 为真实用户。</li>
+</ul>
+<h3 id="21-2-第二优先级-任务调度架构">21.2 第二优先级：任务调度架构</h3>
+<p>目标：把 API 与 Agent 执行解耦。</p>
+<p>任务：</p>
+<ul>
+<li>引入任务队列。</li>
+<li>Agent Worker 消费 pending/running task。</li>
+<li>使用 lease/lock 防止重复执行。</li>
+<li>支持取消任务。</li>
+<li>支持任务重试策略。</li>
+<li>支持 Worker 心跳与真实健康检查。</li>
+</ul>
+<h3 id="21-3-第三优先级-runner-安全与能力">21.3 第三优先级：Runner 安全与能力</h3>
+<p>目标：让工具执行平面安全可扩展。</p>
+<p>任务：</p>
+<ul>
+<li>Runner service 独立部署。</li>
+<li>镜像固定 digest 与签名。</li>
+<li>网络 egress allowlist。</li>
+<li>Browser runner 接入。</li>
+<li>Report runner 接入 PDF/Word。</li>
+<li>Runner 资源限制配置化。</li>
+</ul>
+<h3 id="21-4-第四优先级-报告交付增强">21.4 第四优先级：报告交付增强</h3>
+<p>目标：提高客户交付质量。</p>
+<p>任务：</p>
+<ul>
+<li>PDF 导出。</li>
+<li>Word 导出。</li>
+<li>Evidence pack zip。</li>
+<li>报告编号、目录、页眉页脚。</li>
+<li>报告模板拆分。</li>
+<li>支持多语言模板。</li>
+<li>支持人工 review 后再出正式版。</li>
+</ul>
+<h3 id="21-5-第五优先级-体验与运营">21.5 第五优先级：体验与运营</h3>
+<p>目标：让团队长期使用顺手。</p>
+<p>任务：</p>
+<ul>
+<li>Findings 全局分页接口。</li>
+<li>Reports 全局分页接口。</li>
+<li>任务详情中 Evidence/ToolRun 分页与搜索。</li>
+<li>模型调用成本/耗时统计。</li>
+<li>Runner health 真实探测。</li>
+<li>workspace 清理 UI。</li>
+<li>smoke 任务独立视图。</li>
+</ul>
+<hr>
+<h2 id="22-重点文件速查">22. 重点文件速查</h2>
+<p>后端入口：</p>
+<ul>
+<li><code>backend/cmd/api/main.go</code></li>
+<li><code>backend/cmd/worker/main.go</code></li>
+</ul>
+<p>API：</p>
+<ul>
+<li><code>backend/internal/api/router.go</code></li>
+<li><code>backend/internal/api/handler.go</code></li>
+</ul>
+<p>配置与数据库：</p>
+<ul>
+<li><code>backend/internal/config/config.go</code></li>
+<li><code>backend/internal/database/database.go</code></li>
+<li><code>backend/internal/model/models.go</code></li>
+<li><code>backend/internal/model/constants.go</code></li>
+</ul>
+<p>核心服务：</p>
+<ul>
+<li><code>backend/internal/service/task_service.go</code></li>
+<li><code>backend/internal/service/agent_orchestrator.go</code></li>
+<li><code>backend/internal/service/model_runtime_service.go</code></li>
+<li><code>backend/internal/service/contract_service.go</code></li>
+<li><code>backend/internal/service/report_service.go</code></li>
+<li><code>backend/internal/service/toolrun_service.go</code></li>
+<li><code>backend/internal/service/evidence_service.go</code></li>
+<li><code>backend/internal/service/blackboard_service.go</code></li>
+<li><code>backend/internal/service/context_builder.go</code></li>
+</ul>
+<p>Runner 与安全：</p>
+<ul>
+<li><code>backend/internal/runner/manager.go</code></li>
+<li><code>backend/internal/runner/docker_client.go</code></li>
+<li><code>backend/internal/runner/workspace.go</code></li>
+<li><code>backend/internal/safety/policy.go</code></li>
+<li><code>backend/internal/safety/redactor.go</code></li>
+</ul>
+<p>工具：</p>
+<ul>
+<li><code>backend/internal/tools/code_search.go</code></li>
+<li><code>backend/internal/tools/code_slice.go</code></li>
+<li><code>backend/internal/tools/pentest_probe.go</code></li>
+<li><code>backend/internal/tools/http_request.go</code></li>
+<li><code>backend/internal/tools/http_surface.go</code></li>
+<li><code>backend/internal/tools/response_diff.go</code></li>
+<li><code>backend/internal/tools/sandbox_exec.go</code></li>
+</ul>
+<p>前端：</p>
+<ul>
+<li><code>frontend/src/api/client.ts</code></li>
+<li><code>frontend/src/router/index.ts</code></li>
+<li><code>frontend/src/stores/platform.ts</code></li>
+<li><code>frontend/src/views/DashboardView.vue</code></li>
+<li><code>frontend/src/views/TaskWizardView.vue</code></li>
+<li><code>frontend/src/views/TaskListView.vue</code></li>
+<li><code>frontend/src/views/TaskDetailView.vue</code></li>
+<li><code>frontend/src/views/FindingCenterView.vue</code></li>
+<li><code>frontend/src/views/ReportCenterView.vue</code></li>
+<li><code>frontend/src/views/SettingsView.vue</code></li>
+</ul>
+<p>部署：</p>
+<ul>
+<li><code>docker-compose.yml</code></li>
+<li><code>.env.example</code></li>
+<li><code>backend/Dockerfile</code></li>
+<li><code>frontend/Dockerfile</code></li>
+<li><code>frontend/nginx.conf</code></li>
+<li><code>runner-images/*/Dockerfile</code></li>
+</ul>
+<p>验收：</p>
+<ul>
+<li><code>scripts/smoke-first-stage.sh</code></li>
+<li><code>scripts/archive-smoke-tasks.sh</code></li>
+</ul>
+<hr>
+<h2 id="23-本次验证记录">23. 本次验证记录</h2>
+<p>已执行：</p>
+<pre><code class="language-bash">cd backend &amp;&amp; go test ./...</code></pre>
+<p>结果：通过。</p>
+<p>已执行：</p>
+<pre><code class="language-bash">cd frontend &amp;&amp; npm run build</code></pre>
+<p>结果：通过。</p>
+<p>构建警告：</p>
+<ul>
+<li><code>@vueuse/core</code> 中 PURE 注释位置 Rollup 无法解释，构建会移除注释。这是第三方依赖警告，不影响构建产物生成。</li>
+</ul>
+<p>已执行：</p>
+<pre><code class="language-bash">docker compose ps</code></pre>
+<p>结果：</p>
+<ul>
+<li>backend up 且 healthy。</li>
+<li>frontend up。</li>
+<li>postgres up 且 healthy。</li>
+<li>redis up。</li>
+<li>minio up。</li>
+<li>agent-worker up。</li>
+</ul>
+<hr>
+<h2 id="24-结论">24. 结论</h2>
+<p>Rabbit 项目当前已经具备一个安全验证平台第一阶段最重要的东西：真实闭环。它不是只做了页面，也不是只做了工具调用，而是把任务、授权、工具、证据、图推理、漏洞发现、Contract、报告和审计事件连接起来了。这个方向是正确的，而且代码里已经能看出非常强的产品意识：不把工具输出直接包装成漏洞，不用置信度替代证据，不在报告里过度确认，没有证据就生成补证据 intent。</p>
+<p>如果只看“本地演示/第一阶段验收”，项目已经相当完整。 如果看“生产上线/多用户使用”，还需要补认证授权、队列 Worker、Runner 隔离、迁移体系、分页接口、测试覆盖和交付格式。</p>
+<p>最建议下一步做法：</p>
+<p>1. 先补认证授权和 Artifact 权限，避免平台自身成为高风险入口。 2. 把 agent-worker 做成真实任务消费者，API 不再直接跑 Agent。 3. 把 Runner 执行平面从后端进程中解耦，降低 Docker socket 风险。 4. 补全 Browser runner、PDF/Word/evidence pack，让报告交付闭环更完整。 5. 将 Orchestrator 拆分为 code audit executor、pentest executor、graph reasoner、finding builder，降低长期维护成本。</p>
+<p>总体评价：这是一个方向清晰、闭环完整、工程意识较强的 AI 安全验证平台雏形。它已经有“系统”的骨架和血管，下一阶段重点应该从“跑通”转向“安全、稳定、可维护、可运营”。</p>
+</main></body></html>

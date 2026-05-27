@@ -1,0 +1,59 @@
+=== SQLi-LABS Initial Reconnaissance ===
+Target: http://154.8.192.137:60000/sqli-labs/
+Timestamp: 2026-05-19
+
+=== HTTP Headers ===
+HTTP/1.1 200 OK
+Server: Apache/2.4.29 (Ubuntu)
+Content-Type: text/html
+Content-Length: 7933
+
+=== Application Identification ===
+Application: SQLi-LABS (SQL Injection Training Labs)
+Purpose: Educational platform for learning SQL injection techniques
+
+=== Database Schema (from setup-db.php) ===
+Database: SECURITY
+Tables:
+- USERS
+- EMAILS
+- UAGENTS
+- REFERERS
+
+=== Available Lessons (Page-1 Basic Challenges) ===
+Less-1:  GET - Error based - Single quotes - String
+Less-2:  GET - Error based - Integer based
+Less-3:  GET - Error based - Single quotes with twist
+Less-4:  GET - Error based - Double Quotes - String
+Less-5:  GET - Double Injection - Single Quotes - String
+Less-6:  GET - Double Injection - Double Quotes - String
+Less-7:  GET - Dump into outfile - String
+Less-8:  GET - Blind - Boolean Based - Single Quotes
+Less-9:  GET - Blind - Time based - Single Quotes
+Less-10: GET - Blind - Time based - Double Quotes
+Less-11: POST - Error Based - Single quotes - String
+Less-12: POST - Error Based - Double quotes - String
+Less-13: POST - Double Injection - Single quotes - String
+Less-14: POST - Double Injection - Single quotes - String
+Less-15: POST - Blind - Boolean/Time Based - Single Quotes
+Less-16: POST - Blind - Boolean/Time Based - Double Quotes
+Less-17: POST - Update Query - Error Based - String
+Less-18: POST - Header Injection - Uagent field
+Less-19: POST - Header Injection - Referer field
+Less-20: POST - Cookie injections
+Less-21: POST - Dump into outfile - String
+Less-22: (Additional challenges)
+
+=== Additional Pages ===
+Page-2: Advanced Injections (index-1.html)
+Page-3: Stacked Injections (index-2.html)
+Page-4: Challenges (index-3.html)
+
+=== Setup Endpoint ===
+URL: sql-connections/setup-db.php
+Status: Database setup/reset successful
+
+=== Less-1 Test Access ===
+URL: Less-1/?id=1
+Response: Title "Less-1 **Error Based- String**"
+Note: Database setup may be required before lessons are fully functional

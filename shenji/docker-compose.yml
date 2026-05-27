@@ -1,0 +1,108 @@
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-docker.io/library/postgres:16-alpine}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shenji
+      POSTGRES_USER: shenji
+      POSTGRES_PASSWORD: shenji
+    ports:
+      - "${POSTGRES_PORT:-15432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shenji -d shenji"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: ${REDIS_IMAGE:-docker.io/library/redis:7-alpine}
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-16379}:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  minio:
+    image: ${MINIO_IMAGE:-docker.io/minio/minio:RELEASE.2025-01-20T14-49-07Z}
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "${MINIO_PORT:-19000}:9000"
+      - "${MINIO_CONSOLE_PORT:-19001}:9001"
+    volumes:
+      - minio_data:/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        GO_BASE_IMAGE: ${GO_BASE_IMAGE:-docker.io/library/golang:1.25-alpine}
+        ALPINE_BASE_IMAGE: ${ALPINE_BASE_IMAGE:-docker.io/library/alpine:3.21}
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${HOST_BACKEND_PORT:-18080}:${BACKEND_PORT:-18080}"
+    volumes:
+      - ./workspace:/app/workspace
+      - ./runner-images:/app/runner-images:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:${BACKEND_PORT:-18080}/healthz >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  agent-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        GO_BASE_IMAGE: ${GO_BASE_IMAGE:-docker.io/library/golang:1.25-alpine}
+        ALPINE_BASE_IMAGE: ${ALPINE_BASE_IMAGE:-docker.io/library/alpine:3.21}
+    command: ["/app/worker"]
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./workspace:/app/workspace
+      - ./runner-images:/app/runner-images:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NODE_BASE_IMAGE: ${NODE_BASE_IMAGE:-docker.io/library/node:25-alpine}
+        NGINX_BASE_IMAGE: ${NGINX_BASE_IMAGE:-docker.io/library/nginx:1.27-alpine}
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-13000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

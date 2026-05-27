@@ -1,0 +1,471 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return facts/evidence only. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-19T01:51:17.136039173Z",
+  "graph": {
+    "task": {
+      "id": 80,
+      "workspaceId": 80,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "q2",
+      "taskType": "pentest",
+      "status": "running",
+      "objective": "发现系统的高危漏洞",
+      "scopeJson": {
+        "targets": [
+          "http://154.8.192.137:60000/sqli-labs/"
+        ],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [
+          "http://154.8.192.137:60000/sqli-labs/"
+        ],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": 1,
+      "isTestTask": false,
+      "archived": false,
+      "progressStage": "探索: 启动授权安全验证",
+      "progressPercent": 32,
+      "startedAt": "2026-05-19T01:50:42.317379Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-19T01:50:18.960672Z",
+      "UpdatedAt": "2026-05-19T01:50:42.334922Z"
+    },
+    "intent": {
+      "id": 541,
+      "taskId": 80,
+      "parentNodeId": null,
+      "intentType": "recon",
+      "title": "启动授权安全验证",
+      "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+      "constraintsJson": {
+        "policy": "authorized-scope-only",
+        "branch_value": {
+          "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-19T01:50:42.331907629Z",
+          "risk_value": 0.82,
+          "final_score": 0.6024,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.84,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.6200000000000001,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.79,
+          "capability_unlock_score": 0.76,
+          "matched_environment_refs": null,
+          "environment_alignment_boost": 0
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 305,
+        "expected_evidence": "first-layer authorized observations and evidence",
+        "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+        "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+        "validation_method": "bootstrap_surface_observation",
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "expected_capability": "internal_service_access"
+      },
+      "requiredEvidence": [
+        "baseline_evidence",
+        "scope_statement",
+        "safety_statement"
+      ],
+      "priorityScore": 0.6024,
+      "status": "running",
+      "claimedBy": "worker:1:glm-5",
+      "claimExpiresAt": "2026-05-19T01:57:42.336809671Z",
+      "createdBy": "system",
+      "createdReason": "initial task bootstrap",
+      "startedAt": "2026-05-19T01:50:42.336809671Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-19T01:50:18.978657Z",
+      "UpdatedAt": "2026-05-19T01:50:42.336809671Z"
+    },
+    "keyFacts": [
+      {
+        "id": 12769,
+        "taskId": 80,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 541,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 80,
+          "CreatedAt": "2026-05-19T01:50:18.978657299Z",
+          "UpdatedAt": "2026-05-19T01:50:18.97865734Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 305,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "internal_service_access"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "c9e26139d5d8da926a52237088406170d0473595c87f0c855e9ce211271ca614",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "541",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.980283Z",
+        "lastSeenAt": "2026-05-19T01:50:18.980283Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.980795Z",
+        "UpdatedAt": "2026-05-19T01:50:18.980795Z"
+      },
+      {
+        "id": 12766,
+        "taskId": 80,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "发现系统的高危漏洞",
+        "contentJson": {
+          "objective": "发现系统的高危漏洞"
+        },
+        "dedupKey": "54e122cd06bc050adf76020f2359cec3d08d94d0536709fb8918001c22ebec1d",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.968902Z",
+        "lastSeenAt": "2026-05-19T01:50:18.968902Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.969223Z",
+        "UpdatedAt": "2026-05-19T01:50:18.969223Z"
+      },
+      {
+        "id": 12765,
+        "taskId": 80,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [
+            "http://154.8.192.137:60000/sqli-labs/"
+          ],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "d8d8a345f21888342b1fd9f822542698b176f283c0f44779ee017040224af271",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.967411Z",
+        "lastSeenAt": "2026-05-19T01:50:18.967411Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.968052Z",
+        "UpdatedAt": "2026-05-19T01:50:18.968052Z"
+      },
+      {
+        "id": 12767,
+        "taskId": 80,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for pentest",
+        "summary": "发现系统的高危漏洞",
+        "contentJson": {
+          "id": 20,
+          "mode": "web_pentest",
+          "name": "Hypothesis-driven coverage objective for pentest",
+          "taskId": 80,
+          "goalType": "coverage",
+          "createdAt": "2026-05-19T01:50:18.970407132Z",
+          "updatedAt": "2026-05-19T01:50:18.970407132Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "发现系统的高危漏洞",
+          "normalizedGoal": "发现系统的高危漏洞",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "e7ce52a1638117709394c41e8f7c2875ad3a623c402a05050a4bfacefe330b11",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-20",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.971559Z",
+        "lastSeenAt": "2026-05-19T01:50:18.971559Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.971936Z",
+        "UpdatedAt": "2026-05-19T01:50:18.971936Z"
+      },
+      {
+        "id": 12768,
+        "taskId": 80,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 305,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 80,
+          "createdAt": "2026-05-19T01:50:18.975359007Z",
+          "updatedAt": "2026-05-19T01:50:18.975359007Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:12765"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "68db0ed018443ea060b3799c47b28bc829cf94547448f02a54a1606155d007fd",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "305",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.976209Z",
+        "lastSeenAt": "2026-05-19T01:50:18.98148Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-19T01:50:18.976511Z",
+        "UpdatedAt": "2026-05-19T01:50:18.981857Z"
+      }
+    ],
+    "recentEvidence": [],
+    "openFindings": [],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Collect first-layer facts and evidence from the authorized task origin."
+  },
+  "intent": {
+    "id": 541,
+    "taskId": 80,
+    "parentNodeId": null,
+    "intentType": "recon",
+    "title": "启动授权安全验证",
+    "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+    "constraintsJson": {
+      "policy": "authorized-scope-only",
+      "branch_value": {
+        "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-19T01:50:42.331907629Z",
+        "risk_value": 0.82,
+        "final_score": 0.6024,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.84,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.6200000000000001,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.79,
+        "capability_unlock_score": 0.76,
+        "matched_environment_refs": null,
+        "environment_alignment_boost": 0
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 305,
+      "expected_evidence": "first-layer authorized observations and evidence",
+      "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+      "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+      "validation_method": "bootstrap_surface_observation",
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "expected_capability": "internal_service_access"
+    },
+    "requiredEvidence": [
+      "baseline_evidence",
+      "scope_statement",
+      "safety_statement"
+    ],
+    "priorityScore": 0.6024,
+    "status": "running",
+    "claimedBy": "worker:1:glm-5",
+    "claimExpiresAt": "2026-05-19T01:57:42.336809671Z",
+    "createdBy": "system",
+    "createdReason": "initial task bootstrap",
+    "startedAt": "2026-05-19T01:50:42.336809671Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-19T01:50:18.978657Z",
+    "UpdatedAt": "2026-05-19T01:50:42.336809671Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "ls",
+      "find"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [
+      "http://154.8.192.137:60000/sqli-labs/"
+    ],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 80,
+    "objective": "发现系统的高危漏洞",
+    "scope": {
+      "targets": [
+        "http://154.8.192.137:60000/sqli-labs/"
+      ],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "pentest"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:1:glm-5",
+    "max_running": 4,
+    "model": "glm-5",
+    "model_config": 1,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "target": "http://154.8.192.137:60000/sqli-labs/",
+  "main_entry": {
+    "url": "http://154.8.192.137:60000/sqli-labs/",
+    "status": 200,
+    "headers": {
+      "Date": "Fri, 22 May 2026 08:33:41 GMT",
+      "Server": "Apache/2.4.29 (Ubuntu)",
+      "Last-Modified": "Wed, 11 Mar 2026 09:38:50 GMT",
+      "ETag": "\"1efd-64cbc673ede80\"",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "7933",
+      "Vary": "Accept-Encoding",
+      "Connection": "close",
+      "Content-Type": "text/html"
+    },
+    "title": "SQL Injections",
+    "redirect_chain": [],
+    "error": null
+  },
+  "entries": [
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Last-Modified": "Wed, 11 Mar 2026 09:38:50 GMT",
+        "ETag": "\"1efd-64cbc673ede80\"",
+        "Accept-Ranges": "bytes",
+        "Content-Length": "7933",
+        "Vary": "Accept-Encoding",
+        "Connection": "close",
+        "Content-Type": "text/html"
+      },
+      "title": "SQL Injections",
+      "redirect_chain": [],
+      "error": null
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/index.php",
+      "status": 404,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Content-Length": "299",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=iso-8859-1"
+      },
+      "title": "",
+      "redirect_chain": [],
+      "error": "HTTP Error 404: Not Found",
+      "path": "index.php"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-1/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "691",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-1 **Error Based- String**",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-1/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-1/index.php",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "691",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-1 **Error Based- String**",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-1/index.php"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-2/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "691",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-2 **Error Based- Intiger**",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-2/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-3/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "696",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-3 Error Based- String (with Twist)",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-3/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-4/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "689",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-4 Error Based- DoubleQuotes String",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-4/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-5/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "692",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-5 Double Query- Single Quotes- String",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-5/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-6/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "690",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-6 Double Query- Double Quotes- String",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-6/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-7/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "676",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-7 Dump into Outfile",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-7/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-8/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "694",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-8 Blind- Boolian- Single Quotes- String",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-8/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-9/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "695",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-9 Blind- Time based- Single Quotes- String",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-9/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/Less-10/",
+      "status": 200,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Vary": "Accept-Encoding",
+        "Content-Length": "697",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=UTF-8"
+      },
+      "title": "Less-10 Blind- Time based- Double Quotes- String",
+      "redirect_chain": [],
+      "error": null,
+      "path": "Less-10/"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/login.php",
+      "status": 404,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Content-Length": "299",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=iso-8859-1"
+      },
+      "title": "",
+      "redirect_chain": [],
+      "error": "HTTP Error 404: Not Found",
+      "path": "login.php"
+    },
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/admin/",
+      "status": 404,
+      "headers": {
+        "Date": "Fri, 22 May 2026 08:33:41 GMT",
+        "Server": "Apache/2.4.29 (Ubuntu)",
+        "Content-Length": "296",
+        "Connection": "close",
+        "Content-Type": "text/html; charset=iso-8859-1"
+      },
+      "title": "",
+      "redirect_chain": [],
+      "error": "HTTP Error 404: Not Found",
+      "path": "admin/"
+    }
+  ],
+  "server_fingerprint": "Apache/2.4.29 (Ubuntu)",
+  "powered_by": "",
+  "auth_indicators": [
+    {
+      "url": "http://154.8.192.137:60000/sqli-labs/login.php",
+      "type": "url_login"
+    }
+  ],
+  "status_summary": {
+    "http://154.8.192.137:60000/sqli-labs/": 200,
+    "http://154.8.192.137:60000/sqli-labs/index.php": 404,
+    "http://154.8.192.137:60000/sqli-labs/Less-1/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-1/index.php": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-2/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-3/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-4/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-5/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-6/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-7/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-8/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-9/": 200,
+    "http://154.8.192.137:60000/sqli-labs/Less-10/": 200,
+    "http://154.8.192.137:60000/sqli-labs/login.php": 404,
+    "http://154.8.192.137:60000/sqli-labs/admin/": 404,
+    "http://154.8.192.137:60000/sqli-labs/phpinfo.php": 404
+  }
+}

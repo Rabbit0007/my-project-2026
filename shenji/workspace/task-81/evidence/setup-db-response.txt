@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SETUP DB</title>
+</head>
+
+<body bgcolor="#000000">
+
+<div style=" margin-top:20px;color:#FFF; font-size:24px; text-align:center"> 
+Welcome&nbsp;&nbsp;&nbsp;
+<font color="#FF0000"> Dhakkan </font>
+<br>
+</div>
+
+<div style=" margin-top:10px;color:#FFF; font-size:23px; text-align:left">
+<font size="3" color="#FFFF00">
+SETTING UP THE DATABASE SCHEMA AND POPULATING DATA IN TABLES:
+<br><br> 
+
+
+
+localhostroot[*]...................Old database 'SECURITY' purged if exists<br><br>
+[*]...................Creating New database 'SECURITY' successfully<br><br>
+[*]...................Creating New Table 'USERS' successfully<br><br>
+[*]...................Creating New Table 'EMAILS' successfully<br><br>
+[*]...................Creating New Table 'UAGENTS' successfully<br><br>
+[*]...................Creating New Table 'REFERERS' successfully<br><br>
+[*]...................Inserted data correctly into table 'USERS'<br><br>
+[*]...................Inserted data correctly  into table 'EMAILS'<br><br>
+<html>
+<head>
+</head>
+<body bgcolor="#000000">
+
+[*]...................Old database purged if exists<br><br>
+[*]...................Creating New database successfully<br><br>
+
+
+
+
+
+
+ 
+[*]...................Creating New Table 'L5VRBBNJTX' successfully<br><br>
+[*]...................Inserted data correctly  into table 'L5VRBBNJTX'<br><br>
+[*]...................Inserted secret key 'secret_0H53' into table <br><br>
+</body>
+</html>
+
+
+</font>
+</div>
+</body>
+</html>

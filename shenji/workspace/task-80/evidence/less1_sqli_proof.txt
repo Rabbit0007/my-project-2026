@@ -1,0 +1,35 @@
+HTTP/1.1 200 OK
+Date: Tue, 19 May 2026 02:01:00 GMT
+Server: Apache/2.4.29 (Ubuntu)
+Vary: Accept-Encoding
+Content-Length: 830
+Content-Type: text/html; charset=UTF-8
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Less-1 **Error Based- String**</title>
+</head>
+
+<body bgcolor="#000000">
+<div style=" margin-top:70px;color:#FFF; font-size:23px; text-align:center">Welcome&nbsp;&nbsp;&nbsp;<font color="#FF0000"> Dhakkan </font><br>
+<font size="3" color="#FFFF00">
+
+
+
+
+
+
+
+ 
+<font color= "#FFFF00">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''1'' LIMIT 0,1' at line 1</font></font> </div></br></br></br><center>
+<img src="../images/Less-1.jpg" /></center>
+</body>
+</html>
+
+
+
+
+
+ 

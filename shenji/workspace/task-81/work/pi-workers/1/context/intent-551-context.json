@@ -1,0 +1,1468 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return facts/evidence only. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-22T08:31:16.434324218Z",
+  "graph": {
+    "task": {
+      "id": 81,
+      "workspaceId": 81,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "q0",
+      "taskType": "pentest",
+      "status": "running",
+      "objective": "发现系统存在的高危漏洞",
+      "scopeJson": {
+        "targets": [
+          "http://154.8.192.137:60000/sqli-labs/"
+        ],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [
+          "http://154.8.192.137:60000/sqli-labs/"
+        ],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 2,
+      "workerModelConfigId": 1,
+      "isTestTask": false,
+      "archived": false,
+      "progressStage": "探索: Validate hypothesis: Web入口与认证边界枚举",
+      "progressPercent": 36,
+      "startedAt": "2026-05-22T08:21:05.511853Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-22T08:21:02.871233Z",
+      "UpdatedAt": "2026-05-22T08:31:02.284788Z"
+    },
+    "intent": {
+      "id": 551,
+      "taskId": 81,
+      "parentNodeId": null,
+      "intentType": "recon",
+      "title": "Validate hypothesis: Web入口与认证边界枚举",
+      "objective": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+      "constraintsJson": {
+        "source": "iteration_planner",
+        "evidenceIds": [],
+        "branch_value": {
+          "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-22T08:31:02.280810086Z",
+          "risk_value": 0.82,
+          "final_score": 0.6040000000000001,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.84,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.64,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.79,
+          "capability_unlock_score": 0.76,
+          "matched_environment_refs": null,
+          "environment_alignment_boost": 0
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 315,
+        "parentIntentId": 547,
+        "expected_evidence": "evidence that validates or refutes: Web入口与认证边界枚举",
+        "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+        "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+        "validation_method": "planner_suggested_followup",
+        "expected_capability": "internal_service_access",
+        "environment_context_snapshot": {
+          "updated_at": "2026-05-22T08:26:08Z",
+          "updated_from": "toolrun-2937",
+          "runtime_environment": {
+            "python": "plausible"
+          }
+        }
+      },
+      "requiredEvidence": [
+        "url",
+        "http_status",
+        "response_headers",
+        "page_title_or_app_marker",
+        "redirect_chain",
+        "authentication_indicator",
+        "server_or_framework_fingerprint"
+      ],
+      "priorityScore": 0.6040000000000001,
+      "status": "running",
+      "claimedBy": "worker:1:glm-5",
+      "claimExpiresAt": "2026-05-22T08:38:02.286034294Z",
+      "createdBy": "model-planner",
+      "createdReason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+      "startedAt": "2026-05-22T08:31:02.286034294Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-22T08:31:02.26519Z",
+      "UpdatedAt": "2026-05-22T08:31:02.286034294Z"
+    },
+    "keyFacts": [
+      {
+        "id": 12802,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 546,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:21:02.90458092Z",
+          "UpdatedAt": "2026-05-22T08:21:02.904580961Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 310,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "internal_service_access"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "19007b5671c7405ed897eb6f8aad673d2c4afae392acbaa9addd37d7351a0d43",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "546",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:21:02.908423Z",
+        "lastSeenAt": "2026-05-22T08:21:05.527949Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:21:02.908782Z",
+        "UpdatedAt": "2026-05-22T08:21:05.528203Z"
+      },
+      {
+        "id": 12799,
+        "taskId": 81,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "发现系统存在的高危漏洞",
+        "contentJson": {
+          "objective": "发现系统存在的高危漏洞"
+        },
+        "dedupKey": "dc6e137bc2dbb52432af9ee1bd5890086b3908cfe4c50089e397663ce10ad967",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:21:02.888358Z",
+        "lastSeenAt": "2026-05-22T08:21:02.888358Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:21:02.888726Z",
+        "UpdatedAt": "2026-05-22T08:21:02.888726Z"
+      },
+      {
+        "id": 12798,
+        "taskId": 81,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [
+            "http://154.8.192.137:60000/sqli-labs/"
+          ],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "75292b09fe8480e3c80d5fbdeb1d20075b3f0b1295e48e2e9e6d62a183527971",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:21:02.880933Z",
+        "lastSeenAt": "2026-05-22T08:21:02.880933Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:21:02.882858Z",
+        "UpdatedAt": "2026-05-22T08:21:02.882858Z"
+      },
+      {
+        "id": 12800,
+        "taskId": 81,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for pentest",
+        "summary": "发现系统存在的高危漏洞",
+        "contentJson": {
+          "id": 21,
+          "mode": "web_pentest",
+          "name": "Hypothesis-driven coverage objective for pentest",
+          "taskId": 81,
+          "goalType": "coverage",
+          "createdAt": "2026-05-22T08:21:02.890155961Z",
+          "updatedAt": "2026-05-22T08:21:02.890155961Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "发现系统存在的高危漏洞",
+          "normalizedGoal": "发现系统存在的高危漏洞",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "c9259ac64caf1a4998642f5c4d638ea4e0b5e1ee30d10f5d0301e42fdc66c2da",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-21",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:21:02.891672Z",
+        "lastSeenAt": "2026-05-22T08:21:02.891672Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:21:02.891996Z",
+        "UpdatedAt": "2026-05-22T08:21:02.891996Z"
+      },
+      {
+        "id": 12803,
+        "taskId": 81,
+        "nodeType": "environment_model",
+        "title": "Environment model",
+        "summary": "runtime_environment: python=plausible",
+        "contentJson": {
+          "id": 17,
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:26:08.595763922Z",
+          "modelJson": {
+            "updated_at": "2026-05-22T08:26:08Z",
+            "updated_from": "toolrun-2937",
+            "runtime_environment": {
+              "python": "plausible"
+            }
+          },
+          "updatedAt": "2026-05-22T08:26:08.595763922Z",
+          "updatedFrom": "toolrun-2937"
+        },
+        "dedupKey": "44a14889e63a6f438ac916560f6a7ce2f011da4e1623f333bd0587b4efe8e9e1",
+        "importanceScore": 0.88,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "toolrun-2937",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.59671Z",
+        "lastSeenAt": "2026-05-22T08:26:08.59671Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:26:08.597262Z",
+        "UpdatedAt": "2026-05-22T08:26:08.597262Z"
+      },
+      {
+        "id": 12808,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: 授权范围资产与服务枚举",
+        "summary": "确认授权目标的可访问资产、开放端口、服务类型与版本线索，建立后续验证的事实基础。",
+        "contentJson": {
+          "id": 547,
+          "title": "Validate hypothesis: 授权范围资产与服务枚举",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:26:08.610797672Z",
+          "UpdatedAt": "2026-05-22T08:26:08.610797756Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "确认授权目标的可访问资产、开放端口、服务类型与版本线索，建立后续验证的事实基础。",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 311,
+            "expected_evidence": "evidence that validates or refutes: 授权范围资产与服务枚举",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-22T08:26:08Z",
+              "updated_from": "toolrun-2937",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "84295413b57ffe6323c91f1aa963217a58f0241933875e79430701823d2836dd",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "547",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.61241Z",
+        "lastSeenAt": "2026-05-22T08:26:08.63584Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-22T08:26:08.612784Z",
+        "UpdatedAt": "2026-05-22T08:26:08.635938Z"
+      },
+      {
+        "id": 12801,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 310,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:21:02.89912367Z",
+          "updatedAt": "2026-05-22T08:21:02.89912367Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:12798"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "470d0a762bcb100413acbcab2d4e68a4b55c6618f925e990f1da6489d36bc310",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "310",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:21:02.900522Z",
+        "lastSeenAt": "2026-05-22T08:26:08.60678Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-22T08:21:02.900741Z",
+        "UpdatedAt": "2026-05-22T08:26:08.606918Z"
+      },
+      {
+        "id": 12820,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "关键安全响应头与基础暴露面检查",
+        "summary": "非破坏性检查Web响应中的关键安全头、Cookie属性和公开目录/默认页面线索，判断是否存在需要进一步验证的配置类风险。",
+        "contentJson": {
+          "id": 316,
+          "title": "关键安全响应头与基础暴露面检查",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:31:02.268715044Z",
+          "updatedAt": "2026-05-22T08:31:02.268715044Z",
+          "description": "非破坏性检查Web响应中的关键安全头、Cookie属性和公开目录/默认页面线索，判断是否存在需要进一步验证的配置类风险。",
+          "validatedAt": null,
+          "targetEntity": "非破坏性检查Web响应中的关键安全头、Cookie属性和公开目录/默认页面线索，判断是否存在需要进一步验证的配置类风险。",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:547",
+            "blackboard_node:12808"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "2f4355ee0b3b91c042eea9ef066ec1717dcf0d1fbb5849291ffd998f90c74af6",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "316",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.268976Z",
+        "lastSeenAt": "2026-05-22T08:31:02.27074Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:31:02.269307Z",
+        "UpdatedAt": "2026-05-22T08:31:02.270853Z"
+      },
+      {
+        "id": 12818,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "Web入口与认证边界枚举",
+        "summary": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+        "contentJson": {
+          "id": 315,
+          "title": "Web入口与认证边界枚举",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:31:02.263900294Z",
+          "updatedAt": "2026-05-22T08:31:02.263900294Z",
+          "description": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+          "validatedAt": null,
+          "targetEntity": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:547",
+            "blackboard_node:12808"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "247fe2bd19b1383b99bf6342282b77d84f07fd36ab8c9a3530fc3ae5206bee57",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "315",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.264147Z",
+        "lastSeenAt": "2026-05-22T08:31:02.26589Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:31:02.264316Z",
+        "UpdatedAt": "2026-05-22T08:31:02.265994Z"
+      },
+      {
+        "id": 12816,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "HTTPS TLS与证书配置证据采集",
+        "summary": "在授权范围内验证HTTPS服务的TLS版本、证书主体、SAN、有效期、签发者与基础加密套件配置，识别后续是否需要进行弱加密或证书风险验证。",
+        "contentJson": {
+          "id": 314,
+          "title": "HTTPS TLS与证书配置证据采集",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:31:02.256638127Z",
+          "updatedAt": "2026-05-22T08:31:02.256638127Z",
+          "description": "在授权范围内验证HTTPS服务的TLS版本、证书主体、SAN、有效期、签发者与基础加密套件配置，识别后续是否需要进行弱加密或证书风险验证。",
+          "validatedAt": null,
+          "targetEntity": "在授权范围内验证HTTPS服务的TLS版本、证书主体、SAN、有效期、签发者与基础加密套件配置，识别后续是否需要进行弱加密或证书风险验证。",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:547",
+            "blackboard_node:12808"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "6001a43198e653245d68915bd9c7b9f740f5841c77f5278cd7bcc8c29a660ca6",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "314",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.258732Z",
+        "lastSeenAt": "2026-05-22T08:31:02.261215Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:31:02.258954Z",
+        "UpdatedAt": "2026-05-22T08:31:02.261352Z"
+      },
+      {
+        "id": 12807,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "授权范围资产与服务枚举",
+        "summary": "确认授权目标的可访问资产、开放端口、服务类型与版本线索，建立后续验证的事实基础。",
+        "contentJson": {
+          "id": 311,
+          "title": "授权范围资产与服务枚举",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:26:08.608906756Z",
+          "updatedAt": "2026-05-22T08:26:08.608906756Z",
+          "description": "确认授权目标的可访问资产、开放端口、服务类型与版本线索，建立后续验证的事实基础。",
+          "validatedAt": null,
+          "targetEntity": "确认授权目标的可访问资产、开放端口、服务类型与版本线索，建立后续验证的事实基础。",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:546",
+            "blackboard_node:12802"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "04a451affe11b90977fc86a43ab215046b0e2dcc73da78328ec53f72956f74a0",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "311",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.609213Z",
+        "lastSeenAt": "2026-05-22T08:31:02.25401Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-22T08:26:08.609388Z",
+        "UpdatedAt": "2026-05-22T08:31:02.25416Z"
+      },
+      {
+        "id": 12811,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "TLS与证书配置观察",
+        "summary": "在非破坏性条件下收集HTTPS服务的TLS版本、证书主体、有效期、SAN与基础加密配置证据。",
+        "contentJson": {
+          "id": 313,
+          "title": "TLS与证书配置观察",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:26:08.620397464Z",
+          "updatedAt": "2026-05-22T08:26:08.620397464Z",
+          "description": "在非破坏性条件下收集HTTPS服务的TLS版本、证书主体、有效期、SAN与基础加密配置证据。",
+          "validatedAt": null,
+          "targetEntity": "在非破坏性条件下收集HTTPS服务的TLS版本、证书主体、有效期、SAN与基础加密配置证据。",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:546",
+            "blackboard_node:12802"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "8c9b2e813ab31ab83afdaf7d41c97ee58cbcbd6d907bb1d56cb87fc3129b104c",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "313",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.620684Z",
+        "lastSeenAt": "2026-05-22T08:26:08.622806Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:26:08.621018Z",
+        "UpdatedAt": "2026-05-22T08:26:08.622949Z"
+      },
+      {
+        "id": 12809,
+        "taskId": 81,
+        "nodeType": "hypothesis",
+        "title": "Web入口与安全响应头基线采集",
+        "summary": "识别授权范围内Web应用入口、状态码、重定向链、认证边界及关键安全响应头缺失情况。",
+        "contentJson": {
+          "id": 312,
+          "title": "Web入口与安全响应头基线采集",
+          "status": "pending",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:26:08.615127922Z",
+          "updatedAt": "2026-05-22T08:26:08.615127922Z",
+          "description": "识别授权范围内Web应用入口、状态码、重定向链、认证边界及关键安全响应头缺失情况。",
+          "validatedAt": null,
+          "targetEntity": "识别授权范围内Web应用入口、状态码、重定向链、认证边界及关键安全响应头缺失情况。",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:546",
+            "blackboard_node:12802"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "b1132fecb5b3239abb6cd6b7b2fac448d9c83c9ff48f653de6b51584fced7056",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "312",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.615474Z",
+        "lastSeenAt": "2026-05-22T08:26:08.61763Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:26:08.615804Z",
+        "UpdatedAt": "2026-05-22T08:26:08.617749Z"
+      },
+      {
+        "id": 12821,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: 关键安全响应头与基础暴露面检查",
+        "summary": "非破坏性检查Web响应中的关键安全头、Cookie属性和公开目录/默认页面线索，判断是否存在需要进一步验证的配置类风险。",
+        "contentJson": {
+          "id": 552,
+          "title": "Validate hypothesis: 关键安全响应头与基础暴露面检查",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:31:02.270088086Z",
+          "UpdatedAt": "2026-05-22T08:31:02.270088127Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "非破坏性检查Web响应中的关键安全头、Cookie属性和公开目录/默认页面线索，判断是否存在需要进一步验证的配置类风险。",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "behavior_probe",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 316,
+            "expected_evidence": "evidence that validates or refutes: 关键安全响应头与基础暴露面检查",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-22T08:26:08Z",
+              "updated_from": "toolrun-2937",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "5c751ce7d572be8a3e2ff726f5d2affbbc85e23f148b3d791b813e828811eb47",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "552",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.271038Z",
+        "lastSeenAt": "2026-05-22T08:31:02.272619Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:31:02.271371Z",
+        "UpdatedAt": "2026-05-22T08:31:02.272735Z"
+      },
+      {
+        "id": 12819,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Web入口与认证边界枚举",
+        "summary": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+        "contentJson": {
+          "id": 551,
+          "title": "Validate hypothesis: Web入口与认证边界枚举",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:31:02.265190252Z",
+          "UpdatedAt": "2026-05-22T08:31:02.265190294Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 315,
+            "expected_evidence": "evidence that validates or refutes: Web入口与认证边界枚举",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-22T08:26:08Z",
+              "updated_from": "toolrun-2937",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "fc7b905dc7f232470f8f1fc00df18f57b6a6226012bc9297b57c6b47c0a04184",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "551",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.266201Z",
+        "lastSeenAt": "2026-05-22T08:31:02.267577Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:31:02.266454Z",
+        "UpdatedAt": "2026-05-22T08:31:02.267713Z"
+      },
+      {
+        "id": 12817,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: HTTPS TLS与证书配置证据采集",
+        "summary": "在授权范围内验证HTTPS服务的TLS版本、证书主体、SAN、有效期、签发者与基础加密套件配置，识别后续是否需要进行弱加密或证书风险验证。",
+        "contentJson": {
+          "id": 550,
+          "title": "Validate hypothesis: HTTPS TLS与证书配置证据采集",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:31:02.260168544Z",
+          "UpdatedAt": "2026-05-22T08:31:02.260168586Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "在授权范围内验证HTTPS服务的TLS版本、证书主体、SAN、有效期、签发者与基础加密套件配置，识别后续是否需要进行弱加密或证书风险验证。",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 314,
+            "expected_evidence": "evidence that validates or refutes: HTTPS TLS与证书配置证据采集",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-22T08:26:08Z",
+              "updated_from": "toolrun-2937",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "dd3b8938c03bc3e7018cdfdd511eea610042bfed25b423c9adb685468a2d523e",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "550",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.261567Z",
+        "lastSeenAt": "2026-05-22T08:31:02.262925Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:31:02.261691Z",
+        "UpdatedAt": "2026-05-22T08:31:02.263047Z"
+      },
+      {
+        "id": 12815,
+        "taskId": 81,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: 授权范围资产与服务枚举",
+        "summary": "Pi worker returned invalid exploration output",
+        "contentJson": {
+          "id": 122,
+          "title": "Unverified: 授权范围资产与服务枚举",
+          "detail": "Pi worker returned invalid exploration output",
+          "reason": "inconclusive_evidence",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:31:02.252149669Z",
+          "evidenceRefs": [],
+          "hypothesisId": 311,
+          "observationRefs": [
+            "planner_intent:546",
+            "blackboard_node:12802"
+          ],
+          "blockedByIntentId": 547
+        },
+        "dedupKey": "b15bf9d1eb3b701f385b17af74840bc7b315518d21810dfa5b6ce5e11c023966",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "122",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.253392Z",
+        "lastSeenAt": "2026-05-22T08:31:02.253392Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:31:02.253632Z",
+        "UpdatedAt": "2026-05-22T08:31:02.253632Z"
+      },
+      {
+        "id": 12812,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: TLS与证书配置观察",
+        "summary": "在非破坏性条件下收集HTTPS服务的TLS版本、证书主体、有效期、SAN与基础加密配置证据。",
+        "contentJson": {
+          "id": 549,
+          "title": "Validate hypothesis: TLS与证书配置观察",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:26:08.622067922Z",
+          "UpdatedAt": "2026-05-22T08:26:08.622067964Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "在非破坏性条件下收集HTTPS服务的TLS版本、证书主体、有效期、SAN与基础加密配置证据。",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 313,
+            "expected_evidence": "evidence that validates or refutes: TLS与证书配置观察",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-22T08:26:08Z",
+              "updated_from": "toolrun-2937",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "cc723644d89d056b91cbdf2717c64ebc9482f344282351ec1b93b29ef61dda82",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "549",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.623761Z",
+        "lastSeenAt": "2026-05-22T08:26:08.626792Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:26:08.62556Z",
+        "UpdatedAt": "2026-05-22T08:26:08.626904Z"
+      },
+      {
+        "id": 12810,
+        "taskId": 81,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Web入口与安全响应头基线采集",
+        "summary": "识别授权范围内Web应用入口、状态码、重定向链、认证边界及关键安全响应头缺失情况。",
+        "contentJson": {
+          "id": 548,
+          "title": "Validate hypothesis: Web入口与安全响应头基线采集",
+          "status": "pending",
+          "taskId": 81,
+          "CreatedAt": "2026-05-22T08:26:08.616823797Z",
+          "UpdatedAt": "2026-05-22T08:26:08.616823839Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "识别授权范围内Web应用入口、状态码、重定向链、认证边界及关键安全响应头缺失情况。",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 312,
+            "expected_evidence": "evidence that validates or refutes: Web入口与安全响应头基线采集",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-22T08:26:08Z",
+              "updated_from": "toolrun-2937",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "9d9ab7b73241e971590fcbe41dcdd5aade61cd1997889e9a4d01aed015dfc32e",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "548",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.618167Z",
+        "lastSeenAt": "2026-05-22T08:26:08.61952Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-22T08:26:08.618478Z",
+        "UpdatedAt": "2026-05-22T08:26:08.619675Z"
+      },
+      {
+        "id": 12806,
+        "taskId": 81,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: Authorized task surface can yield security-relevant observations",
+        "summary": "Pi worker returned invalid exploration output",
+        "contentJson": {
+          "id": 121,
+          "title": "Unverified: Authorized task surface can yield security-relevant observations",
+          "detail": "Pi worker returned invalid exploration output",
+          "reason": "inconclusive_evidence",
+          "taskId": 81,
+          "createdAt": "2026-05-22T08:26:08.604820172Z",
+          "evidenceRefs": [],
+          "hypothesisId": 310,
+          "observationRefs": [
+            "node:12798"
+          ],
+          "blockedByIntentId": 546
+        },
+        "dedupKey": "c1b78fba3c5dbb2376493aececcfd2ea59d02842dce711fbb1319a3420eae201",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "121",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.606133Z",
+        "lastSeenAt": "2026-05-22T08:26:08.606133Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:26:08.606491Z",
+        "UpdatedAt": "2026-05-22T08:26:08.606491Z"
+      },
+      {
+        "id": 12813,
+        "taskId": 81,
+        "nodeType": "fact",
+        "title": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "contentJson": {
+          "id": 2938,
+          "status": "failed",
+          "taskId": 81,
+          "exitCode": null,
+          "intentId": 547,
+          "toolName": "pi_worker",
+          "CreatedAt": "2026-05-22T08:26:33.160937795Z",
+          "imageName": "rabbit-pi-worker-kali:local",
+          "inputJson": {
+            "model": "glm-5",
+            "tools": [
+              "read",
+              "write",
+              "edit",
+              "bash",
+              "grep",
+              "ls",
+              "find"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+              "tool_responsibilities": [
+                "Perform bounded observation or validation actions.",
+                "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                "Produce raw observations suitable for Evidence normalization."
+              ],
+              "brain_responsibilities": [
+                "Read graph state and decide which Hypothesis or Intent should exist next.",
+                "Score and budget branch expansion before execution.",
+                "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+              ],
+              "worker_responsibilities": [
+                "Claim and execute exactly one current Intent.",
+                "Use controlled tools to observe or validate only within authorized scope.",
+                "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                "Stop at fact production; Rabbit Brain performs graph judgment."
+              ],
+              "delivery_responsibilities": [
+                "Generate Findings only from evidence-backed validated paths.",
+                "Use Contract as report quality gate, not as exploration planner.",
+                "Render reports after graph exploration produces sufficient facts."
+              ],
+              "forbidden_worker_decisions": [
+                "Do not decide that the goal is complete.",
+                "Do not mark a Hypothesis as validated or refuted.",
+                "Do not create or confirm Findings.",
+                "Do not run Contract checks or report formatting.",
+                "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+              ]
+            },
+            "modelId": 1,
+            "runtime": "kali_worker_container",
+            "intentId": 547,
+            "snapshot": "/workspace/work/pi-workers/1/context/intent-547-context.json",
+            "workerId": "worker:1:glm-5",
+            "intentType": "recon",
+            "containerImage": "rabbit-pi-worker-kali:local"
+          },
+          "startedAt": "2026-05-22T08:26:33.160937795Z",
+          "stderrRef": "minio://rabbit-artifacts/task-81/toolruns/2938-stderr.txt",
+          "stdoutRef": "minio://rabbit-artifacts/task-81/toolruns/2938-stdout.txt",
+          "finishedAt": "2026-05-22T08:31:02.103665711Z",
+          "runnerType": "worker_agent",
+          "blockReason": "worker next intent suggestion 0 uses unsupported intent type \"validation\"",
+          "containerId": "122c048deb6ed4e51ead133a685e161f19e1ca531dfdc13cb127ff51f610ea30",
+          "iterationId": 349,
+          "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-81/toolruns/2938-worker-context.json"
+          },
+          "networkPolicy": "bridge",
+          "workspacePath": "/app/workspace/task-81/work/pi-workers/1",
+          "commandPreview": "sh -lc exec env PI_CODING_AGENT_DIR='/workspace/work/pi-workers/1' pi --no-extensions --no-skills --no-prompt-templates --no-themes --no-context-files --tools 'read,write,edit,bash,grep,ls,find' --provider rabbit --model 'glm-5' --mode json --session-dir '/workspace/work/pi-workers/1/sessions' --no-session -p \"$RABBIT_PI_PROMPT\"",
+          "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:1:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+          },
+          "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [
+              "http://154.8.192.137:60000/sqli-labs/"
+            ],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+          }
+        },
+        "dedupKey": "dbc25319cbbe39d4fa7c1a25321e6504413e866116aa48119c87445693b57bad",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "2938",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.245946Z",
+        "lastSeenAt": "2026-05-22T08:31:02.245946Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:31:02.246383Z",
+        "UpdatedAt": "2026-05-22T08:31:02.246383Z"
+      },
+      {
+        "id": 12804,
+        "taskId": 81,
+        "nodeType": "fact",
+        "title": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "contentJson": {
+          "id": 2937,
+          "status": "failed",
+          "taskId": 81,
+          "exitCode": null,
+          "intentId": 546,
+          "toolName": "pi_worker",
+          "CreatedAt": "2026-05-22T08:21:17.063947551Z",
+          "imageName": "rabbit-pi-worker-kali:local",
+          "inputJson": {
+            "model": "glm-5",
+            "tools": [
+              "read",
+              "write",
+              "edit",
+              "bash",
+              "grep",
+              "ls",
+              "find"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+              "tool_responsibilities": [
+                "Perform bounded observation or validation actions.",
+                "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                "Produce raw observations suitable for Evidence normalization."
+              ],
+              "brain_responsibilities": [
+                "Read graph state and decide which Hypothesis or Intent should exist next.",
+                "Score and budget branch expansion before execution.",
+                "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+              ],
+              "worker_responsibilities": [
+                "Claim and execute exactly one current Intent.",
+                "Use controlled tools to observe or validate only within authorized scope.",
+                "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                "Stop at fact production; Rabbit Brain performs graph judgment."
+              ],
+              "delivery_responsibilities": [
+                "Generate Findings only from evidence-backed validated paths.",
+                "Use Contract as report quality gate, not as exploration planner.",
+                "Render reports after graph exploration produces sufficient facts."
+              ],
+              "forbidden_worker_decisions": [
+                "Do not decide that the goal is complete.",
+                "Do not mark a Hypothesis as validated or refuted.",
+                "Do not create or confirm Findings.",
+                "Do not run Contract checks or report formatting.",
+                "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+              ]
+            },
+            "modelId": 1,
+            "runtime": "kali_worker_container",
+            "intentId": 546,
+            "snapshot": "/workspace/work/pi-workers/1/context/intent-546-context.json",
+            "workerId": "worker:1:glm-5",
+            "intentType": "recon",
+            "containerImage": "rabbit-pi-worker-kali:local"
+          },
+          "startedAt": "2026-05-22T08:21:17.063947551Z",
+          "stderrRef": "minio://rabbit-artifacts/task-81/toolruns/2937-stderr.txt",
+          "stdoutRef": "minio://rabbit-artifacts/task-81/toolruns/2937-stdout.txt",
+          "finishedAt": "2026-05-22T08:26:08.400624714Z",
+          "runnerType": "worker_agent",
+          "blockReason": "worker capability candidate 0 must include capability_type, target, and proof_summary",
+          "containerId": "122c048deb6ed4e51ead133a685e161f19e1ca531dfdc13cb127ff51f610ea30",
+          "iterationId": 348,
+          "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-81/toolruns/2937-worker-context.json"
+          },
+          "networkPolicy": "bridge",
+          "workspacePath": "/app/workspace/task-81/work/pi-workers/1",
+          "commandPreview": "sh -lc exec env PI_CODING_AGENT_DIR='/workspace/work/pi-workers/1' pi --no-extensions --no-skills --no-prompt-templates --no-themes --no-context-files --tools 'read,write,edit,bash,grep,ls,find' --provider rabbit --model 'glm-5' --mode json --session-dir '/workspace/work/pi-workers/1/sessions' --no-session -p \"$RABBIT_PI_PROMPT\"",
+          "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:1:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+          },
+          "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [
+              "http://154.8.192.137:60000/sqli-labs/"
+            ],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+          }
+        },
+        "dedupKey": "0dec78a8c11f64840d50b77268f8ebd2d1533c8e5d66d3d30b23b07dc02a4149",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "2937",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.597949Z",
+        "lastSeenAt": "2026-05-22T08:26:08.597949Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:26:08.598348Z",
+        "UpdatedAt": "2026-05-22T08:26:08.598348Z"
+      },
+      {
+        "id": 12814,
+        "taskId": 81,
+        "nodeType": "tested_path",
+        "title": "Tested path: Validate hypothesis: 授权范围资产与服务枚举",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "contentJson": {
+          "tools": [
+            "pi_worker"
+          ],
+          "reason": "",
+          "intentId": 547,
+          "statuses": [
+            "failed"
+          ],
+          "intentType": "recon",
+          "validationFailed": false
+        },
+        "dedupKey": "b8bacb9199e604e664833e97411ebd4c4071c48c8d3a5fdd0564a6e0365f2561",
+        "importanceScore": 0.66,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "intent-547",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:31:02.250611Z",
+        "lastSeenAt": "2026-05-22T08:31:02.250611Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:31:02.250958Z",
+        "UpdatedAt": "2026-05-22T08:31:02.250958Z"
+      },
+      {
+        "id": 12805,
+        "taskId": 81,
+        "nodeType": "tested_path",
+        "title": "Tested path: 启动授权安全验证",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "contentJson": {
+          "tools": [
+            "pi_worker"
+          ],
+          "reason": "",
+          "intentId": 546,
+          "statuses": [
+            "failed"
+          ],
+          "intentType": "recon",
+          "validationFailed": false
+        },
+        "dedupKey": "0d799441a4c0e3a10322caa74d60ee0c7846a8dbfb23d8a190c2485181c8954f",
+        "importanceScore": 0.66,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "intent-546",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-22T08:26:08.603134Z",
+        "lastSeenAt": "2026-05-22T08:26:08.603134Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-22T08:26:08.6036Z",
+        "UpdatedAt": "2026-05-22T08:26:08.6036Z"
+      }
+    ],
+    "recentEvidence": [],
+    "openFindings": [],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: 识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+    "failedToolRuns": [
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-81/work/pi-workers/1",
+        "error": "worker next intent suggestion 0 uses unsupported intent type \"validation\""
+      },
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-81/work/pi-workers/1",
+        "error": "worker capability candidate 0 must include capability_type, target, and proof_summary"
+      }
+    ]
+  },
+  "intent": {
+    "id": 551,
+    "taskId": 81,
+    "parentNodeId": null,
+    "intentType": "recon",
+    "title": "Validate hypothesis: Web入口与认证边界枚举",
+    "objective": "识别授权范围内Web应用入口、状态码、标题、重定向链、登录或认证边界、暴露的应用框架/服务器线索，为后续高危Web漏洞验证选择入口。",
+    "constraintsJson": {
+      "source": "iteration_planner",
+      "evidenceIds": [],
+      "branch_value": {
+        "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-22T08:31:02.280810086Z",
+        "risk_value": 0.82,
+        "final_score": 0.6040000000000001,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.84,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.64,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.79,
+        "capability_unlock_score": 0.76,
+        "matched_environment_refs": null,
+        "environment_alignment_boost": 0
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 315,
+      "parentIntentId": 547,
+      "expected_evidence": "evidence that validates or refutes: Web入口与认证边界枚举",
+      "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+      "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+      "validation_method": "planner_suggested_followup",
+      "expected_capability": "internal_service_access",
+      "environment_context_snapshot": {
+        "updated_at": "2026-05-22T08:26:08Z",
+        "updated_from": "toolrun-2937",
+        "runtime_environment": {
+          "python": "plausible"
+        }
+      }
+    },
+    "requiredEvidence": [
+      "url",
+      "http_status",
+      "response_headers",
+      "page_title_or_app_marker",
+      "redirect_chain",
+      "authentication_indicator",
+      "server_or_framework_fingerprint"
+    ],
+    "priorityScore": 0.6040000000000001,
+    "status": "running",
+    "claimedBy": "worker:1:glm-5",
+    "claimExpiresAt": "2026-05-22T08:38:02.286034294Z",
+    "createdBy": "model-planner",
+    "createdReason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+    "startedAt": "2026-05-22T08:31:02.286034294Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-22T08:31:02.26519Z",
+    "UpdatedAt": "2026-05-22T08:31:02.286034294Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "ls",
+      "find"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [
+      "http://154.8.192.137:60000/sqli-labs/"
+    ],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 81,
+    "objective": "发现系统存在的高危漏洞",
+    "scope": {
+      "targets": [
+        "http://154.8.192.137:60000/sqli-labs/"
+      ],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "pentest"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:1:glm-5",
+    "max_running": 4,
+    "model": "glm-5",
+    "model_config": 1,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

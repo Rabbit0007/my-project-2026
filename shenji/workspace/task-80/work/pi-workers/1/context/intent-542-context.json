@@ -1,0 +1,1359 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return facts/evidence only. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-19T01:55:12.443801796Z",
+  "graph": {
+    "task": {
+      "id": 80,
+      "workspaceId": 80,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "q2",
+      "taskType": "pentest",
+      "status": "running",
+      "objective": "发现系统的高危漏洞",
+      "scopeJson": {
+        "targets": [
+          "http://154.8.192.137:60000/sqli-labs/"
+        ],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [
+          "http://154.8.192.137:60000/sqli-labs/"
+        ],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": 1,
+      "isTestTask": false,
+      "archived": false,
+      "progressStage": "探索: Validate hypothesis: Test SQL injection on Less-1 GET parameter",
+      "progressPercent": 34,
+      "startedAt": "2026-05-19T01:50:42.317379Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-19T01:50:18.960672Z",
+      "UpdatedAt": "2026-05-19T01:54:43.526745Z"
+    },
+    "intent": {
+      "id": 542,
+      "taskId": 80,
+      "parentNodeId": null,
+      "intentType": "behavior_probe",
+      "title": "Validate hypothesis: Test SQL injection on Less-1 GET parameter",
+      "objective": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+      "constraintsJson": {
+        "source": "worker_agent",
+        "toolRunId": 2934,
+        "evidenceIds": [
+          15897,
+          15898,
+          15899
+        ],
+        "branch_value": {
+          "reason": "strong graph expansion, Environment signal runtime_environment.php=strong aligns with this hypothesis., Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-19T01:54:43.525608421Z",
+          "risk_value": 0.82,
+          "final_score": 0.5800000000000002,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.6,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.5,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.79,
+          "capability_unlock_score": 0.76,
+          "matched_environment_refs": [
+            "runtime_environment.php=strong"
+          ],
+          "environment_alignment_boost": 0.2
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 306,
+        "parentIntentId": 541,
+        "expected_evidence": "evidence that validates or refutes: Test SQL injection on Less-1 GET parameter",
+        "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+        "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+        "validation_method": "worker_suggested_followup",
+        "expected_capability": "internal_service_access",
+        "workerFactQualityScore": 0.8700000000000001
+      },
+      "requiredEvidence": null,
+      "priorityScore": 0.5800000000000002,
+      "status": "running",
+      "claimedBy": "worker:1:glm-5",
+      "claimExpiresAt": "2026-05-19T02:01:43.527505879Z",
+      "createdBy": "worker-agent",
+      "createdReason": "Worker suggested follow-up exploration from observed evidence; StateExpansionPlanner and NextPending still control execution.",
+      "startedAt": "2026-05-19T01:54:43.527505879Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-19T01:54:43.50007Z",
+      "UpdatedAt": "2026-05-19T01:54:43.527505879Z"
+    },
+    "keyFacts": [
+      {
+        "id": 12769,
+        "taskId": 80,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 541,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 80,
+          "CreatedAt": "2026-05-19T01:50:18.978657299Z",
+          "UpdatedAt": "2026-05-19T01:50:18.97865734Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "recon",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 305,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "internal_service_access"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "c9e26139d5d8da926a52237088406170d0473595c87f0c855e9ce211271ca614",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "541",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.980283Z",
+        "lastSeenAt": "2026-05-19T01:50:42.338999Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-19T01:50:18.980795Z",
+        "UpdatedAt": "2026-05-19T01:50:42.339315Z"
+      },
+      {
+        "id": 12766,
+        "taskId": 80,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "发现系统的高危漏洞",
+        "contentJson": {
+          "objective": "发现系统的高危漏洞"
+        },
+        "dedupKey": "54e122cd06bc050adf76020f2359cec3d08d94d0536709fb8918001c22ebec1d",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.968902Z",
+        "lastSeenAt": "2026-05-19T01:50:18.968902Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.969223Z",
+        "UpdatedAt": "2026-05-19T01:50:18.969223Z"
+      },
+      {
+        "id": 12765,
+        "taskId": 80,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [
+            "http://154.8.192.137:60000/sqli-labs/"
+          ],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "d8d8a345f21888342b1fd9f822542698b176f283c0f44779ee017040224af271",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.967411Z",
+        "lastSeenAt": "2026-05-19T01:50:18.967411Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.968052Z",
+        "UpdatedAt": "2026-05-19T01:50:18.968052Z"
+      },
+      {
+        "id": 12768,
+        "taskId": 80,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 305,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 80,
+          "createdAt": "2026-05-19T01:50:18.975359007Z",
+          "updatedAt": "2026-05-19T01:50:18.975359007Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:12765"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "68db0ed018443ea060b3799c47b28bc829cf94547448f02a54a1606155d007fd",
+        "importanceScore": 0.98,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "305",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:50:18.976209Z",
+        "lastSeenAt": "2026-05-19T01:54:43.519285Z",
+        "seenCount": 4,
+        "CreatedAt": "2026-05-19T01:50:18.976511Z",
+        "UpdatedAt": "2026-05-19T01:54:43.519392Z"
+      },
+      {
+        "id": 12787,
+        "taskId": 80,
+        "nodeType": "capability",
+        "title": "[verified] internal_service_access",
+        "summary": "{\"baseline_evidence\":\"baseline request captured in paired HTTP evidence\",\"bash_poc\":\"curl -i 'http://154.8.192.137:60000/sqli-labs/'\",\"controlled_input\":\"authorized validation input\",\"entrypoint\":\"http://154.8.192.137:60000/sqli-labs/\",\"evidence_mapping\":[15897,15898,15899],\"impact_explanation\":\"validated capability can affect protected application behavior inside scope\",\"observed_result\":\"HTTP HEAD request confirmed target accessible, Apache server identified; Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types; Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables\",\"propagation_path\":\"authorized request input produced a validated behavioral response difference\",\"python_poc\":\"import requests\\nrequests.get(\\\"http://154.8.192.137:60000/sqli-labs/\\\", timeout=10)\",\"remediation\":\"enforce server-side validation and authorization on the affected path and add regression coverage\",\"request_packet\":\"GET /sqli-labs/ HTTP/1.1\\nHost: 154.8.192.137:60000\",\"retest_steps\":\"repeat the baseline and validation requests after remediation and confirm the differential signal is gone\",\"root_cause\":\"server-side trust boundary is incomplete for the affected behavior\",\"safety_statement\":\"non-destructive validation; no destructive state change was required\",\"scope_statement\":\"authorized task scope only\",\"sensitive_sink_or_behavior\":\"internal_service_access\",\"success_criteria\":\"validation response no longer exposes the previously observed differential signal\",\"trigger_payload_or_action\":\"http://154.8.192.137:60000/sqli-labs/\",\"validated_by_intent_id\":541,\"validation_evidence\":\"HTTP HEAD request confirmed target accessible, Apache server identified; Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types; Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables\",\"validation_intent_objective\":\"Collect first-layer facts and evidence from the authorized task origin.\",\"validation_intent_type\":\"recon\"}",
+        "contentJson": {
+          "id": 70,
+          "scope": "",
+          "target": "http://154.8.192.137:60000/sqli-labs/",
+          "taskId": 80,
+          "strength": "verified",
+          "createdAt": "2026-05-19T01:54:43.518305921Z",
+          "riskLevel": "low",
+          "updatedAt": "2026-05-19T01:54:43.518305963Z",
+          "evidenceRefs": [
+            15897,
+            15898,
+            15899
+          ],
+          "proofSummary": "{\"baseline_evidence\":\"baseline request captured in paired HTTP evidence\",\"bash_poc\":\"curl -i 'http://154.8.192.137:60000/sqli-labs/'\",\"controlled_input\":\"authorized validation input\",\"entrypoint\":\"http://154.8.192.137:60000/sqli-labs/\",\"evidence_mapping\":[15897,15898,15899],\"impact_explanation\":\"validated capability can affect protected application behavior inside scope\",\"observed_result\":\"HTTP HEAD request confirmed target accessible, Apache server identified; Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types; Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables\",\"propagation_path\":\"authorized request input produced a validated behavioral response difference\",\"python_poc\":\"import requests\\nrequests.get(\\\"http://154.8.192.137:60000/sqli-labs/\\\", timeout=10)\",\"remediation\":\"enforce server-side validation and authorization on the affected path and add regression coverage\",\"request_packet\":\"GET /sqli-labs/ HTTP/1.1\\nHost: 154.8.192.137:60000\",\"retest_steps\":\"repeat the baseline and validation requests after remediation and confirm the differential signal is gone\",\"root_cause\":\"server-side trust boundary is incomplete for the affected behavior\",\"safety_statement\":\"non-destructive validation; no destructive state change was required\",\"scope_statement\":\"authorized task scope only\",\"sensitive_sink_or_behavior\":\"internal_service_access\",\"success_criteria\":\"validation response no longer exposes the previously observed differential signal\",\"trigger_payload_or_action\":\"http://154.8.192.137:60000/sqli-labs/\",\"validated_by_intent_id\":541,\"validation_evidence\":\"HTTP HEAD request confirmed target accessible, Apache server identified; Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types; Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables\",\"validation_intent_objective\":\"Collect first-layer facts and evidence from the authorized task origin.\",\"validation_intent_type\":\"recon\"}",
+          "sourceNodeIds": null,
+          "canAdvanceGoal": true,
+          "capabilityType": "internal_service_access",
+          "acquiredByIntentId": 541,
+          "nextSuggestedIntents": null,
+          "derivedFromEvidenceRefs": [
+            15897,
+            15898,
+            15899
+          ],
+          "validatedByHypothesisId": 305
+        },
+        "dedupKey": "6430e59002cd2d5e34baea8f496e5bba1236f99a7915368230c0f2fe7211d60a",
+        "importanceScore": 0.95,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "capability-70",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.518713Z",
+        "lastSeenAt": "2026-05-19T01:54:43.518713Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.518862Z",
+        "UpdatedAt": "2026-05-19T01:54:43.518862Z"
+      },
+      {
+        "id": 12767,
+        "taskId": 80,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for pentest",
+        "summary": "发现系统的高危漏洞",
+        "contentJson": {
+          "id": 20,
+          "mode": "web_pentest",
+          "name": "Hypothesis-driven coverage objective for pentest",
+          "taskId": 80,
+          "goalType": "coverage",
+          "createdAt": "2026-05-19T01:50:18.970407132Z",
+          "updatedAt": "2026-05-19T01:50:18.970407132Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "发现系统的高危漏洞",
+          "normalizedGoal": "发现系统的高危漏洞",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "e7ce52a1638117709394c41e8f7c2875ad3a623c402a05050a4bfacefe330b11",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-20",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:50:18.971559Z",
+        "lastSeenAt": "2026-05-19T01:50:18.971559Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:50:18.971936Z",
+        "UpdatedAt": "2026-05-19T01:50:18.971936Z"
+      },
+      {
+        "id": 12781,
+        "taskId": 80,
+        "nodeType": "environment_model",
+        "title": "Environment model",
+        "summary": "runtime_environment: php=strong | deployment_model: apache=strong",
+        "contentJson": {
+          "id": 16,
+          "taskId": 80,
+          "createdAt": "2026-05-19T01:54:43.510923463Z",
+          "modelJson": {
+            "updated_at": "2026-05-19T01:54:43Z",
+            "updated_from": "toolrun-2934",
+            "deployment_model": {
+              "apache": "strong"
+            },
+            "runtime_environment": {
+              "php": "strong"
+            }
+          },
+          "updatedAt": "2026-05-19T01:54:43.510923463Z",
+          "updatedFrom": "toolrun-2934"
+        },
+        "dedupKey": "20b48020699b6e884ca583d3e1e179d6ae9771bdf1117d2fcff49ace95beadea",
+        "importanceScore": 0.88,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:54:43.511316Z",
+        "lastSeenAt": "2026-05-19T01:54:43.511316Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.511453Z",
+        "UpdatedAt": "2026-05-19T01:54:43.511453Z"
+      },
+      {
+        "id": 12776,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "Setup endpoint sql-connections/setup-db.php available for database initialization",
+        "summary": "Setup endpoint sql-connections/setup-db.php available for database initialization",
+        "contentJson": {
+          "fact": "Setup endpoint sql-connections/setup-db.php available for database initialization",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "a6b6551270ea2a2fe8317479bc0b30bcbe9a3d58cd8104e373957ed3e37a262e",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.494328Z",
+        "lastSeenAt": "2026-05-19T01:54:43.494328Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.494446Z",
+        "UpdatedAt": "2026-05-19T01:54:43.494446Z"
+      },
+      {
+        "id": 12775,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "Multiple injection types present: Error-based, Blind boolean/time-based, POST-based, Header injections",
+        "summary": "Multiple injection types present: Error-based, Blind boolean/time-based, POST-based, Header injections",
+        "contentJson": {
+          "fact": "Multiple injection types present: Error-based, Blind boolean/time-based, POST-based, Header injections",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "8173287606591bad0350ad4ed5ff9431ffa642c2bb55b3322b54180b30e1e4e9",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.493927Z",
+        "lastSeenAt": "2026-05-19T01:54:43.493927Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.494068Z",
+        "UpdatedAt": "2026-05-19T01:54:43.494068Z"
+      },
+      {
+        "id": 12774,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "22+ SQL injection lesson endpoints available (Less-1 through Less-22+)",
+        "summary": "22+ SQL injection lesson endpoints available (Less-1 through Less-22+)",
+        "contentJson": {
+          "fact": "22+ SQL injection lesson endpoints available (Less-1 through Less-22+)",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "8ad08723cdf1b9e3b6485de365a816696698543e4d99e60a24d0d2ced92a30ad",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.493524Z",
+        "lastSeenAt": "2026-05-19T01:54:43.493524Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.493666Z",
+        "UpdatedAt": "2026-05-19T01:54:43.493666Z"
+      },
+      {
+        "id": 12773,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "Database schema: SECURITY database with tables USERS, EMAILS, UAGENTS, REFERERS",
+        "summary": "Database schema: SECURITY database with tables USERS, EMAILS, UAGENTS, REFERERS",
+        "contentJson": {
+          "fact": "Database schema: SECURITY database with tables USERS, EMAILS, UAGENTS, REFERERS",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "e69e1d7a7b3fe9582a863d3d79910bdeb71adfec8de5685596757e60833c2358",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.49318Z",
+        "lastSeenAt": "2026-05-19T01:54:43.49318Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.493305Z",
+        "UpdatedAt": "2026-05-19T01:54:43.493305Z"
+      },
+      {
+        "id": 12772,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "Application identified as SQLi-LABS SQL injection training platform",
+        "summary": "Application identified as SQLi-LABS SQL injection training platform",
+        "contentJson": {
+          "fact": "Application identified as SQLi-LABS SQL injection training platform",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "b9ae0a1af520939e8e21f6cc62f5021f87e6d69de8c34edb358a14e414aa063d",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.492829Z",
+        "lastSeenAt": "2026-05-19T01:54:43.492829Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.492964Z",
+        "UpdatedAt": "2026-05-19T01:54:43.492964Z"
+      },
+      {
+        "id": 12771,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "Server identified as Apache/2.4.29 (Ubuntu)",
+        "summary": "Server identified as Apache/2.4.29 (Ubuntu)",
+        "contentJson": {
+          "fact": "Server identified as Apache/2.4.29 (Ubuntu)",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "b6a7089b99dbb975070254103c0e598e9043f30b9eabcfc9529d7333df966264",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.492428Z",
+        "lastSeenAt": "2026-05-19T01:54:43.492428Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.492564Z",
+        "UpdatedAt": "2026-05-19T01:54:43.492564Z"
+      },
+      {
+        "id": 12770,
+        "taskId": 80,
+        "nodeType": "behavior_fact",
+        "title": "Target http://154.8.192.137:60000/sqli-labs/ is accessible with HTTP 200 OK",
+        "summary": "Target http://154.8.192.137:60000/sqli-labs/ is accessible with HTTP 200 OK",
+        "contentJson": {
+          "fact": "Target http://154.8.192.137:60000/sqli-labs/ is accessible with HTTP 200 OK",
+          "source": "worker_agent",
+          "intentId": 541,
+          "toolRunId": 2934
+        },
+        "dedupKey": "c1a1a34a4cb345035a33c6a1191132151e3f268177029e9f9d9390a289a39956",
+        "importanceScore": 0.7506,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-2934",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.49182Z",
+        "lastSeenAt": "2026-05-19T01:54:43.49182Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.491988Z",
+        "UpdatedAt": "2026-05-19T01:54:43.491988Z"
+      },
+      {
+        "id": 12779,
+        "taskId": 80,
+        "nodeType": "hypothesis",
+        "title": "Enumerate additional injection endpoints",
+        "summary": "Enumerate POST-based and header injection lesson endpoints for attack surface mapping",
+        "contentJson": {
+          "id": 307,
+          "title": "Enumerate additional injection endpoints",
+          "status": "pending",
+          "taskId": 80,
+          "createdAt": "2026-05-19T01:54:43.503608546Z",
+          "updatedAt": "2026-05-19T01:54:43.503608546Z",
+          "description": "Enumerate POST-based and header injection lesson endpoints for attack surface mapping",
+          "validatedAt": null,
+          "targetEntity": "Enumerate POST-based and header injection lesson endpoints for attack surface mapping",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "worker_intent:541",
+            "worker_toolrun:2934",
+            "blackboard_node:12769",
+            "evidence:15897",
+            "evidence:15898",
+            "evidence:15899"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "4d3abee7bb2c9002ea5c2de3e51ec818c5262a577cca46b103a1217140ae308a",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "307",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:54:43.503993Z",
+        "lastSeenAt": "2026-05-19T01:54:43.505801Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-19T01:54:43.504126Z",
+        "UpdatedAt": "2026-05-19T01:54:43.505995Z"
+      },
+      {
+        "id": 12777,
+        "taskId": 80,
+        "nodeType": "hypothesis",
+        "title": "Test SQL injection on Less-1 GET parameter",
+        "summary": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+        "contentJson": {
+          "id": 306,
+          "title": "Test SQL injection on Less-1 GET parameter",
+          "status": "pending",
+          "taskId": 80,
+          "createdAt": "2026-05-19T01:54:43.496414921Z",
+          "updatedAt": "2026-05-19T01:54:43.496414921Z",
+          "description": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+          "validatedAt": null,
+          "targetEntity": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "worker_intent:541",
+            "worker_toolrun:2934",
+            "blackboard_node:12769",
+            "evidence:15897",
+            "evidence:15898",
+            "evidence:15899"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "4fe2d8413963706f9823dcaafd79eb771f9a7fb17e595fe89723c254028ab6e6",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "306",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:54:43.496822Z",
+        "lastSeenAt": "2026-05-19T01:54:43.501Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-19T01:54:43.496981Z",
+        "UpdatedAt": "2026-05-19T01:54:43.501116Z"
+      },
+      {
+        "id": 12790,
+        "taskId": 80,
+        "nodeType": "evidence",
+        "title": "Evidence 15899",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15899
+        },
+        "dedupKey": "f7e3c5e5145966334c93b8da87e16f0e759701039583392735973c34064db49a",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15899",
+        "evidenceRefs": [
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.521196Z",
+        "lastSeenAt": "2026-05-19T01:54:43.521196Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.521308Z",
+        "UpdatedAt": "2026-05-19T01:54:43.521308Z"
+      },
+      {
+        "id": 12789,
+        "taskId": 80,
+        "nodeType": "evidence",
+        "title": "Evidence 15898",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15898
+        },
+        "dedupKey": "dcda1827122a0ca6d8cb74afcfad23d748a7b1eecc50962959913465395260b7",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15898",
+        "evidenceRefs": [
+          "15898"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.520623Z",
+        "lastSeenAt": "2026-05-19T01:54:43.520623Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.52074Z",
+        "UpdatedAt": "2026-05-19T01:54:43.52074Z"
+      },
+      {
+        "id": 12788,
+        "taskId": 80,
+        "nodeType": "evidence",
+        "title": "Evidence 15897",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15897
+        },
+        "dedupKey": "21fb3d779aa193b771e3f7865bd7e016d1fb27191a9ac5047928ccbef3fa627b",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15897",
+        "evidenceRefs": [
+          "15897"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.520063Z",
+        "lastSeenAt": "2026-05-19T01:54:43.520063Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.520184Z",
+        "UpdatedAt": "2026-05-19T01:54:43.520184Z"
+      },
+      {
+        "id": 12785,
+        "taskId": 80,
+        "nodeType": "evidence",
+        "title": "Database schema disclosure",
+        "summary": "Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables",
+        "contentJson": {
+          "id": 15899,
+          "hash": "fd661cebc285626e1cd61cfb25e131b6d54453975a316f5e860327a48a2f24f5",
+          "title": "Database schema disclosure",
+          "rawRef": "minio://rabbit-artifacts/task-80/evidence/1779155683490315713-worker_observation.txt",
+          "target": "http://154.8.192.137:60000/sqli-labs/sql-connections/setup-db.php",
+          "taskId": 80,
+          "lineEnd": null,
+          "summary": "Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-19T01:54:43.491270213Z",
+          "lineStart": null,
+          "toolRunId": 2934,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-80/evidence/1779155683490315713-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "94abcd99df34580a9fb64e6838047ce51aed9e4acd22f2e0441254ba56ed3136",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "2934",
+        "evidenceRefs": [
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.514082Z",
+        "lastSeenAt": "2026-05-19T01:54:43.514082Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.514189Z",
+        "UpdatedAt": "2026-05-19T01:54:43.514189Z"
+      },
+      {
+        "id": 12784,
+        "taskId": 80,
+        "nodeType": "evidence",
+        "title": "Application structure reconnaissance",
+        "summary": "Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types",
+        "contentJson": {
+          "id": 15898,
+          "hash": "16894fe8d58a4f046358c95e955082b56861fea0c9ee60de93da59503f853dcd",
+          "title": "Application structure reconnaissance",
+          "rawRef": "minio://rabbit-artifacts/task-80/evidence/1779155683488779713-worker_observation.txt",
+          "target": "http://154.8.192.137:60000/sqli-labs/",
+          "taskId": 80,
+          "lineEnd": null,
+          "summary": "Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-19T01:54:43.490001713Z",
+          "lineStart": null,
+          "toolRunId": 2934,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-80/evidence/1779155683488779713-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "0f7b23914928b93b1ff812a180bbbb7d16e590be6a11c21e375456d1eb3be637",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "2934",
+        "evidenceRefs": [
+          "15898"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.513449Z",
+        "lastSeenAt": "2026-05-19T01:54:43.513449Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.513567Z",
+        "UpdatedAt": "2026-05-19T01:54:43.513567Z"
+      },
+      {
+        "id": 12783,
+        "taskId": 80,
+        "nodeType": "evidence",
+        "title": "Target accessibility and server identification",
+        "summary": "HTTP HEAD request confirmed target accessible, Apache server identified",
+        "contentJson": {
+          "id": 15897,
+          "hash": "c35a407ef1ec6864ea40e5f1cf4522baee116822a2c54e3508f37c59d7240dc0",
+          "title": "Target accessibility and server identification",
+          "rawRef": "minio://rabbit-artifacts/task-80/evidence/1779155683486308171-http_exchange.txt",
+          "target": "http://154.8.192.137:60000/sqli-labs/",
+          "taskId": 80,
+          "lineEnd": null,
+          "summary": "HTTP HEAD request confirmed target accessible, Apache server identified",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-19T01:54:43.488079546Z",
+          "lineStart": null,
+          "toolRunId": 2934,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-80/evidence/1779155683486308171-http_exchange.txt",
+          "evidenceType": "http_exchange",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "ec422d085ab8591db1a311880742c6a507927df7de89db7979cc7f5a97c6d248",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "2934",
+        "evidenceRefs": [
+          "15897"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.51288Z",
+        "lastSeenAt": "2026-05-19T01:54:43.51288Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.513011Z",
+        "UpdatedAt": "2026-05-19T01:54:43.513011Z"
+      },
+      {
+        "id": 12782,
+        "taskId": 80,
+        "nodeType": "fact",
+        "title": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "contentJson": {
+          "id": 2934,
+          "status": "success",
+          "taskId": 80,
+          "exitCode": null,
+          "intentId": 541,
+          "toolName": "pi_worker",
+          "CreatedAt": "2026-05-19T01:51:17.137295881Z",
+          "imageName": "rabbit-pi-worker-kali:local",
+          "inputJson": {
+            "model": "glm-5",
+            "tools": [
+              "read",
+              "write",
+              "edit",
+              "bash",
+              "grep",
+              "ls",
+              "find"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+              "tool_responsibilities": [
+                "Perform bounded observation or validation actions.",
+                "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                "Produce raw observations suitable for Evidence normalization."
+              ],
+              "brain_responsibilities": [
+                "Read graph state and decide which Hypothesis or Intent should exist next.",
+                "Score and budget branch expansion before execution.",
+                "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+              ],
+              "worker_responsibilities": [
+                "Claim and execute exactly one current Intent.",
+                "Use controlled tools to observe or validate only within authorized scope.",
+                "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                "Stop at fact production; Rabbit Brain performs graph judgment."
+              ],
+              "delivery_responsibilities": [
+                "Generate Findings only from evidence-backed validated paths.",
+                "Use Contract as report quality gate, not as exploration planner.",
+                "Render reports after graph exploration produces sufficient facts."
+              ],
+              "forbidden_worker_decisions": [
+                "Do not decide that the goal is complete.",
+                "Do not mark a Hypothesis as validated or refuted.",
+                "Do not create or confirm Findings.",
+                "Do not run Contract checks or report formatting.",
+                "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+              ]
+            },
+            "modelId": 1,
+            "runtime": "kali_worker_container",
+            "intentId": 541,
+            "snapshot": "/workspace/work/pi-workers/1/context/intent-541-context.json",
+            "workerId": "worker:1:glm-5",
+            "intentType": "recon",
+            "containerImage": "rabbit-pi-worker-kali:local"
+          },
+          "startedAt": "2026-05-19T01:51:17.137295881Z",
+          "stderrRef": "minio://rabbit-artifacts/task-80/toolruns/2934-stderr.txt",
+          "stdoutRef": "minio://rabbit-artifacts/task-80/toolruns/2934-stdout.txt",
+          "finishedAt": "2026-05-19T01:54:43.346801963Z",
+          "runnerType": "worker_agent",
+          "blockReason": "",
+          "containerId": "d6b8565b9807253786f15f30ec9446675eb9395a2fc3ab50b88bd5edc4515b18",
+          "iterationId": 345,
+          "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-80/toolruns/2934-worker-context.json"
+          },
+          "networkPolicy": "bridge",
+          "workspacePath": "/app/workspace/task-80/work/pi-workers/1",
+          "commandPreview": "sh -lc exec env PI_CODING_AGENT_DIR='/workspace/work/pi-workers/1' pi --no-extensions --no-skills --no-prompt-templates --no-themes --no-context-files --tools 'read,write,edit,bash,grep,ls,find' --provider rabbit --model 'glm-5' --mode json --session-dir '/workspace/work/pi-workers/1/sessions' --no-session -p \"$RABBIT_PI_PROMPT\"",
+          "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:1:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+          },
+          "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [
+              "http://154.8.192.137:60000/sqli-labs/"
+            ],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+          }
+        },
+        "dedupKey": "1af711665a056812e864a2e0e7766a6e52629fc835c772064138c005e2498e8d",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "2934",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-19T01:54:43.511938Z",
+        "lastSeenAt": "2026-05-19T01:54:43.511938Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.512097Z",
+        "UpdatedAt": "2026-05-19T01:54:43.512097Z"
+      },
+      {
+        "id": 12780,
+        "taskId": 80,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Enumerate additional injection endpoints",
+        "summary": "Enumerate POST-based and header injection lesson endpoints for attack surface mapping",
+        "contentJson": {
+          "id": 543,
+          "title": "Validate hypothesis: Enumerate additional injection endpoints",
+          "status": "pending",
+          "taskId": 80,
+          "CreatedAt": "2026-05-19T01:54:43.504887629Z",
+          "UpdatedAt": "2026-05-19T01:54:43.504887671Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Enumerate POST-based and header injection lesson endpoints for attack surface mapping",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "behavior_probe",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.68,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 307,
+            "expected_evidence": "evidence that validates or refutes: Enumerate additional injection endpoints",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "worker_suggested_followup",
+            "expected_capability": "internal_service_access"
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "6e4b6e65612a21d9218157e7e46eb30a2731b551c8f11db595d1a3fdc497dd8b",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "543",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.506235Z",
+        "lastSeenAt": "2026-05-19T01:54:43.507305Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-19T01:54:43.506356Z",
+        "UpdatedAt": "2026-05-19T01:54:43.507452Z"
+      },
+      {
+        "id": 12778,
+        "taskId": 80,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Test SQL injection on Less-1 GET parameter",
+        "summary": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+        "contentJson": {
+          "id": 542,
+          "title": "Validate hypothesis: Test SQL injection on Less-1 GET parameter",
+          "status": "pending",
+          "taskId": 80,
+          "CreatedAt": "2026-05-19T01:54:43.500070463Z",
+          "UpdatedAt": "2026-05-19T01:54:43.500070504Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "behavior_probe",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.68,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 306,
+            "expected_evidence": "evidence that validates or refutes: Test SQL injection on Less-1 GET parameter",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "worker_suggested_followup",
+            "expected_capability": "internal_service_access"
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "b9d1acfd4a2d23b20f4ef23bf6e451dcc8d759414a3226a94062c7937ebacd85",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "542",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.501317Z",
+        "lastSeenAt": "2026-05-19T01:54:43.502519Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-19T01:54:43.501441Z",
+        "UpdatedAt": "2026-05-19T01:54:43.502635Z"
+      },
+      {
+        "id": 12786,
+        "taskId": 80,
+        "nodeType": "tested_path",
+        "title": "Tested path: 启动授权安全验证",
+        "summary": "Validation method produced evidence that can support or refine the current hypothesis.",
+        "contentJson": {
+          "tools": [
+            "pi_worker"
+          ],
+          "reason": "",
+          "intentId": 541,
+          "statuses": [
+            "success"
+          ],
+          "intentType": "recon",
+          "validationFailed": false
+        },
+        "dedupKey": "574f3ffc88b96f8aa337155a6e4096e26ba6609c65d6042987f57ac04182b87d",
+        "importanceScore": 0.66,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "intent-541",
+        "evidenceRefs": [
+          "15897",
+          "15898",
+          "15899"
+        ],
+        "firstSeenAt": "2026-05-19T01:54:43.515996Z",
+        "lastSeenAt": "2026-05-19T01:54:43.515996Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-19T01:54:43.51612Z",
+        "UpdatedAt": "2026-05-19T01:54:43.51612Z"
+      }
+    ],
+    "recentEvidence": [
+      {
+        "id": 15899,
+        "taskId": 80,
+        "toolRunId": 2934,
+        "evidenceType": "worker_observation",
+        "title": "Database schema disclosure",
+        "summary": "Setup endpoint reveals database schema: SECURITY database with USERS, EMAILS, UAGENTS, REFERERS tables",
+        "rawRef": "minio://rabbit-artifacts/task-80/evidence/1779155683490315713-worker_observation.txt",
+        "hash": "fd661cebc285626e1cd61cfb25e131b6d54453975a316f5e860327a48a2f24f5",
+        "target": "http://154.8.192.137:60000/sqli-labs/sql-connections/setup-db.php",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-80/evidence/1779155683490315713-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-19T01:54:43.49127Z"
+      },
+      {
+        "id": 15898,
+        "taskId": 80,
+        "toolRunId": 2934,
+        "evidenceType": "worker_observation",
+        "title": "Application structure reconnaissance",
+        "summary": "Identified SQLi-LABS platform with 22+ lesson endpoints covering error-based, blind, POST, and header injection types",
+        "rawRef": "minio://rabbit-artifacts/task-80/evidence/1779155683488779713-worker_observation.txt",
+        "hash": "16894fe8d58a4f046358c95e955082b56861fea0c9ee60de93da59503f853dcd",
+        "target": "http://154.8.192.137:60000/sqli-labs/",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-80/evidence/1779155683488779713-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-19T01:54:43.490001Z"
+      },
+      {
+        "id": 15897,
+        "taskId": 80,
+        "toolRunId": 2934,
+        "evidenceType": "http_exchange",
+        "title": "Target accessibility and server identification",
+        "summary": "HTTP HEAD request confirmed target accessible, Apache server identified",
+        "rawRef": "minio://rabbit-artifacts/task-80/evidence/1779155683486308171-http_exchange.txt",
+        "hash": "c35a407ef1ec6864ea40e5f1cf4522baee116822a2c54e3508f37c59d7240dc0",
+        "target": "http://154.8.192.137:60000/sqli-labs/",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-80/evidence/1779155683486308171-http_exchange.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-19T01:54:43.488079Z"
+      }
+    ],
+    "openFindings": [],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+    "capabilities": [
+      "[verified] internal_service_access: http://154.8.192.137:60000/sqli-labs/"
+    ]
+  },
+  "intent": {
+    "id": 542,
+    "taskId": 80,
+    "parentNodeId": null,
+    "intentType": "behavior_probe",
+    "title": "Validate hypothesis: Test SQL injection on Less-1 GET parameter",
+    "objective": "Validate SQL injection vulnerability on Less-1 ?id= parameter with error-based payload",
+    "constraintsJson": {
+      "source": "worker_agent",
+      "toolRunId": 2934,
+      "evidenceIds": [
+        15897,
+        15898,
+        15899
+      ],
+      "branch_value": {
+        "reason": "strong graph expansion, Environment signal runtime_environment.php=strong aligns with this hypothesis., Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-19T01:54:43.525608421Z",
+        "risk_value": 0.82,
+        "final_score": 0.5800000000000002,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.6,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.5,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.79,
+        "capability_unlock_score": 0.76,
+        "matched_environment_refs": [
+          "runtime_environment.php=strong"
+        ],
+        "environment_alignment_boost": 0.2
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 306,
+      "parentIntentId": 541,
+      "expected_evidence": "evidence that validates or refutes: Test SQL injection on Less-1 GET parameter",
+      "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+      "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+      "validation_method": "worker_suggested_followup",
+      "expected_capability": "internal_service_access",
+      "workerFactQualityScore": 0.8700000000000001
+    },
+    "requiredEvidence": null,
+    "priorityScore": 0.5800000000000002,
+    "status": "running",
+    "claimedBy": "worker:1:glm-5",
+    "claimExpiresAt": "2026-05-19T02:01:43.527505879Z",
+    "createdBy": "worker-agent",
+    "createdReason": "Worker suggested follow-up exploration from observed evidence; StateExpansionPlanner and NextPending still control execution.",
+    "startedAt": "2026-05-19T01:54:43.527505879Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-19T01:54:43.50007Z",
+    "UpdatedAt": "2026-05-19T01:54:43.527505879Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "ls",
+      "find"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [
+      "http://154.8.192.137:60000/sqli-labs/"
+    ],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 80,
+    "objective": "发现系统的高危漏洞",
+    "scope": {
+      "targets": [
+        "http://154.8.192.137:60000/sqli-labs/"
+      ],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "pentest"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:1:glm-5",
+    "max_running": 4,
+    "model": "glm-5",
+    "model_config": 1,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

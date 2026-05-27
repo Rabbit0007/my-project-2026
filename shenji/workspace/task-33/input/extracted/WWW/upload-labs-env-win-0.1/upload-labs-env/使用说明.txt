@@ -1,0 +1,7 @@
+一、使用：
+第一次运行或者每次改变靶机环境的目录时，都要运行一下modify_path.bat文件之后，再运行phpStudy.exe启动环境。
+
+二、注意：
+1.本环境为绿色环境，解压即可运行。
+2.modify_path.bat作用在于修改phpStudy.ini,httpd.conf,php.ini三个配置文件中的路径为最新的路径。
+3.如果环境无法运行，请参考phpStudy的文档manual.chm。
