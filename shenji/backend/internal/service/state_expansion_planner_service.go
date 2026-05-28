@@ -313,7 +313,8 @@ func coverageGainScore(h model.AIHypothesisNode, items []model.AICoverageItem, g
 	}
 	target := strings.ToLower(h.TargetEntity + " " + h.Title)
 	for _, item := range items {
-		if item.Status == "tested" || item.Status == "validated" || item.Status == "negative" {
+		switch item.Status {
+		case "tested", "validated", "negative", model.CoverageStatusResolvedVerified, model.CoverageStatusResolvedRefuted, model.CoverageStatusBlocked, model.CoverageStatusInconclusive, model.CoverageStatusOutOfScope:
 			continue
 		}
 		if strings.Contains(target, strings.ToLower(item.Name)) || strings.Contains(target, strings.ToLower(item.TargetRef)) {

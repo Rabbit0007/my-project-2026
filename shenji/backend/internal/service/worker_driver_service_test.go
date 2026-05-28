@@ -197,8 +197,15 @@ func TestIngestWorkerGraphOutputKeepsWorkerAsEvidenceProducer(t *testing.T) {
 		t.Fatalf("removed ProofPacket intent must not be created, got %d", removedIntentCount)
 	}
 	var next model.AIIntent
-	if err := db.Where("task_id = ? AND intent_type = ? AND created_by = ?", taskID, model.IntentIDORProbe, "worker-agent").First(&next).Error; err != nil {
-		t.Fatalf("expected ordinary next intent from worker evidence: %v", err)
+	if err := db.Where("task_id = ? AND intent_type = ? AND created_by = ?", taskID, model.IntentInspectGuard, "worker-agent").First(&next).Error; err != nil {
+		t.Fatalf("expected normalized generic next intent from worker evidence: %v", err)
+	}
+	var constraints map[string]any
+	if err := json.Unmarshal(next.ConstraintsJSON, &constraints); err != nil {
+		t.Fatalf("unmarshal next intent constraints: %v", err)
+	}
+	if constraints["legacy_intent"] != model.IntentIDORProbe || constraints["classification_hint"] != "idor" {
+		t.Fatalf("expected legacy intent classification hint, got %+v", constraints)
 	}
 	if next.HypothesisID() == nil {
 		t.Fatalf("expected worker next intent to be hypothesis-backed for planner scoring")

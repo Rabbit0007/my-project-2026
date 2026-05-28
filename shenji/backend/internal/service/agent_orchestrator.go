@@ -198,6 +198,16 @@ func (o *AgentOrchestrator) runLoopIterations(ctx context.Context, task *model.A
 	for iterationNo := 1; iterationNo <= o.cfg.MaxIterations; iterationNo++ {
 		// === STEP 1: Check termination ===
 		if cairn.ShouldFinalizeWithNoProgressLimit(ctx, *task, iterationNo, o.cfg.MaxIterations, consecutiveNoProgress, o.noProgressFinalizeRounds()) {
+			summary := cairn.BuildGraphSummary(ctx, *task, iterationNo, o.cfg.MaxIterations)
+			cairn.EmitGraphSearchDiagnostic(ctx, GraphSearchLoopDiagnostic{
+				TaskID:        task.ID,
+				Iteration:     iterationNo,
+				Phase:         "promote",
+				GoalStatus:    summary.GoalState.Status,
+				CoverageState: &summary.CoverageState,
+				GoalState:     &summary.GoalState,
+				StopReason:    summary.GoalState.StopReason,
+			})
 			appendAuditEvent(ctx, o.db, &task.ID, "agent.cairn_finalize", "agent-runtime",
 				fmt.Sprintf("Cairn loop finalizing at iteration %d: promoting capabilities to findings.", iterationNo), nil)
 			// Promote verified capabilities to findings before report
@@ -273,6 +283,24 @@ func (o *AgentOrchestrator) runLoopIterations(ctx context.Context, task *model.A
 		if err := o.runSingleIteration(ctx, task, loop, intent, iterationNo, selectedWorker); err != nil {
 			return err
 		}
+		summary := cairn.BuildGraphSummary(ctx, *task, iterationNo, o.cfg.MaxIterations)
+		cairn.EmitGraphSearchDiagnostic(ctx, GraphSearchLoopDiagnostic{
+			TaskID:     task.ID,
+			Iteration:  iterationNo,
+			Phase:      "explore",
+			GoalStatus: summary.GoalState.Status,
+			SelectedIntent: &GraphIntentSummary{
+				ID:       intent.ID,
+				Kind:     intent.IntentType,
+				Goal:     firstNonEmpty(intent.Objective, intent.Title),
+				Reason:   intent.CreatedReason,
+				Priority: intent.PriorityScore,
+				Status:   intent.Status,
+			},
+			CoverageState: &summary.CoverageState,
+			GoalState:     &summary.GoalState,
+			StopReason:    summary.GoalState.StopReason,
+		})
 
 		// === STEP 5: Reflect — graph expansion, not finding count, drives continuation ===
 		currentExpansionCount := o.graphExpansionCount(ctx, task.ID)
@@ -841,7 +869,7 @@ func (o *AgentOrchestrator) createPlannerSuggestedIntent(ctx context.Context, ta
 	if NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor).intentMatchesNegativeFact(ctx, taskID, title, objective) {
 		return false
 	}
-	intentType, ok := workerSuggestedIntentType(suggestion.IntentType)
+	intentType, legacyMetadata, ok := workerSuggestedIntentType(suggestion.IntentType)
 	if !ok {
 		appendAuditEvent(ctx, o.db, &taskID, "planner.unsupported_intent_skipped", "model-runtime", "Planner suggested an unsupported runtime intent; skipped.", map[string]any{"parentIntentId": parent.ID, "intentType": suggestion.IntentType})
 		return false
@@ -872,6 +900,7 @@ func (o *AgentOrchestrator) createPlannerSuggestedIntent(ctx context.Context, ta
 	values["source"] = "iteration_planner"
 	values["parentIntentId"] = parent.ID
 	values["evidenceIds"] = evidenceIDs
+	values = mergeIntentMetadata(values, legacyMetadata)
 	intent.ConstraintsJSON = mustJSON(values)
 	intent.UpdatedAt = time.Now().UTC()
 	if err := o.db.WithContext(ctx).Save(&intent).Error; err != nil {
@@ -2617,7 +2646,7 @@ func (o *AgentOrchestrator) createGraphReasonedIntent(ctx context.Context, taskI
 	if title == "" || objective == "" {
 		return false
 	}
-	intentType, ok := workerSuggestedIntentType(suggestion.IntentType)
+	intentType, legacyMetadata, ok := workerSuggestedIntentType(suggestion.IntentType)
 	if !ok {
 		appendAuditEvent(ctx, o.db, &taskID, "graph_reasoner.unsupported_intent_skipped", "model-runtime", "Reasoner suggested an unsupported runtime intent; skipped.", map[string]any{"parentIntentId": safeIntentID(parent), "intentType": suggestion.IntentType})
 		return false
@@ -2662,6 +2691,7 @@ func (o *AgentOrchestrator) createGraphReasonedIntent(ctx context.Context, taskI
 	values["allowed_tools"] = suggestion.AllowedTools
 	values["risk_level"] = suggestion.RiskLevel
 	values["requiredEvidence"] = defaultRequiredEvidence(suggestion.RequiredEvidence)
+	values = mergeIntentMetadata(values, legacyMetadata)
 	intent.ConstraintsJSON = mustJSON(values)
 	intent.PriorityScore = priority
 	intent.UpdatedAt = time.Now().UTC()

@@ -19,7 +19,6 @@ type AgentContext struct {
 	Intent            *model.AIIntent          `json:"intent,omitempty"`
 	KeyFacts          []model.AIBlackboardNode `json:"keyFacts"`
 	RecentEvidence    []model.AIEvidence       `json:"recentEvidence"`
-	OpenFindings      []model.AIFinding        `json:"openFindings"`
 	AuthorizationView string                   `json:"authorizationView"`
 	RecommendedNext   string                   `json:"recommendedNext"`
 	// Enhanced fields for Cairn-style reasoning
@@ -65,10 +64,6 @@ func (b *ContextBuilder) Build(ctx context.Context, taskID uint, intent *model.A
 	}
 	var evidence []model.AIEvidence
 	if err := b.db.WithContext(ctx).Where("task_id = ?", taskID).Order("created_at desc").Limit(20).Find(&evidence).Error; err != nil {
-		return AgentContext{}, err
-	}
-	var findings []model.AIFinding
-	if err := b.db.WithContext(ctx).Where("task_id = ? AND status NOT IN ?", taskID, []string{model.FindingStatusFalsePositive, model.FindingStatusFixed}).Order("created_at desc").Limit(20).Find(&findings).Error; err != nil {
 		return AgentContext{}, err
 	}
 	policy := safePolicyFromTask(task)
@@ -125,7 +120,6 @@ func (b *ContextBuilder) Build(ctx context.Context, taskID uint, intent *model.A
 		Intent:            intent,
 		KeyFacts:          facts,
 		RecentEvidence:    evidence,
-		OpenFindings:      findings,
 		AuthorizationView: fmt.Sprintf("Non-destructive evidence proof policy, network policy %s", policy.NetworkPolicy),
 		RecommendedNext:   recommended,
 		MissingFields:     missingFields,

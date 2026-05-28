@@ -1257,7 +1257,7 @@ func compactStringListForModel(values []string) []string {
 }
 
 func buildPlannerPrompt(task model.AISecurityTask, intent *model.AIIntent, agentContext AgentContext) (string, string) {
-	systemPrompt := "You are Rabbit Security Validation Platform's Cairn-style graph reasoner. Respond with a single JSON object only. Keys: thought_summary, planned_action, next_intents. next_intents is optional and must contain 0-3 evidence-seeking follow-up intents with title, objective, intent_type, required_evidence. Prefer generic graph-search intent types such as inspect_dataflow, inspect_guard, validate_hypothesis, resolve_unknown, compare_behavior, expand_attack_surface, or run_tool. Vulnerability type is a result label, not the planning boundary. Do not reveal chain-of-thought. Do not create findings. Keep every suggestion inside the authorized scope and focused on facts that can be observed or validated."
+	systemPrompt := "You are Rabbit Security Validation Platform's coverage-oriented graph reasoner. Respond with a single JSON object only. Keys: thought_summary, planned_action, next_intents. next_intents is optional and must contain 0-3 evidence-seeking follow-up intents with title, objective, intent_type, required_evidence. Prefer generic graph-search intent types such as discover_entrypoints, enumerate_surfaces, inspect_dataflow, inspect_guard, inspect_auth_boundary, inspect_sink_reachability, validate_hypothesis, compare_behavior, resolve_unknown, verify_capability, expand_attack_surface, recheck_inconclusive_path, or run_tool. A verified capability is an output item, not a global stop condition. After a capability is verified, continue exploring unresolved high-priority surfaces unless budget is exhausted or coverage is sufficient. Do not generate intents only to complete a report or finding. Use coverage gain, evidence gap, novelty, and risk signal to prioritize intents. Vulnerability type is a result label, not the planning boundary. Do not reveal chain-of-thought. Do not create findings. Keep every suggestion inside the authorized scope and focused on facts that can be observed or validated."
 	intentType := ""
 	intentTitle := ""
 	intentObjective := ""
@@ -1306,13 +1306,17 @@ func buildEvidenceIntentPrompt(task model.AISecurityTask, finding model.AIFindin
 
 func buildSecurityGraphPrompt(task model.AISecurityTask, packet SecurityGraphAuditPacket) (string, string) {
 	systemPrompt := `You are the Reasoner in a Cairn-style security state-space search engine.
-Your job: read the current graph state, assess goal progress, and output 1-3 high-value structured Intents.
+Your job: read the current graph state, assess coverage progress, and output 1-3 high-value structured Intents.
 You do NOT execute tools. You only reason and plan.
 Rules:
 - Each Intent must cite the concrete graph nodes it comes from using source_node_ids.
 - source_node_ids may contain multiple node ids when facts combine into one exploration direction.
 - Each Intent must have a testable hypothesis, success/failure criteria, and allowed tools.
 - Do not emit findings directly. Emit Intents that will produce Evidence and Capabilities.
+- A verified capability is an output item, not a global stop condition.
+- Continue exploring unresolved high-priority surfaces unless budget is exhausted or coverage is sufficient.
+- Do not generate intents only to complete a report or finding.
+- Use coverage gain, evidence gap, novelty, and risk signal to prioritize intents.
 - Prioritize unexplored high-value paths over repeating failed ones.
 - For code audit: think cross-file (route→auth→model→sink), not single-file grep.
 - For pentest: think behavior probing (baseline vs variant), not CVE lookup.
@@ -1343,7 +1347,7 @@ Rules:
 
 	schema := `{
   "analysis_summary": "brief assessment of current state",
-  "goal_progress": "how close to goal",
+  "goal_progress": "coverage status, unresolved high-priority surfaces, and evidence gaps",
   "should_finalize": false,
   "finalize_reason": "",
   "selected_intents": [

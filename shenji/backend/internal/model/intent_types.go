@@ -5,14 +5,20 @@ const (
 	// Cairn-style graph search intents. These are capability-seeking
 	// exploration directions, not vulnerability-type scanners.
 	IntentBootstrapGraph      = "bootstrap_graph"
+	IntentDiscoverEntrypoints = "discover_entrypoints"
+	IntentEnumerateSurfaces   = "enumerate_surfaces"
 	IntentExploreEntrypoint   = "explore_entrypoint"
 	IntentInspectDataflow     = "inspect_dataflow"
 	IntentInspectGuard        = "inspect_guard"
+	IntentInspectAuthBoundary = "inspect_auth_boundary"
+	IntentInspectSinkReach    = "inspect_sink_reachability"
 	IntentValidateHypothesis  = "validate_hypothesis"
 	IntentRunTool             = "run_tool"
 	IntentResolveUnknown      = "resolve_unknown"
 	IntentCompareBehavior     = "compare_behavior"
 	IntentExpandAttackSurface = "expand_attack_surface"
+	IntentRecheckInconclusive = "recheck_inconclusive_path"
+	IntentVerifyCapability    = "verify_capability"
 	IntentPromoteCapability   = "promote_capability"
 
 	// Discovery intents

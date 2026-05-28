@@ -63,6 +63,19 @@ const (
 	UnverifiedReasonSafetyRestriction         = "safety_restriction"
 	UnverifiedReasonInconclusiveEvidence      = "inconclusive_evidence"
 	UnverifiedReasonMethodNotObservable       = "method_not_observable"
+
+	CoverageStatusUnexplored       = "unexplored"
+	CoverageStatusExploring        = "exploring"
+	CoverageStatusResolvedVerified = "resolved_verified"
+	CoverageStatusResolvedRefuted  = "resolved_refuted"
+	CoverageStatusBlocked          = "blocked"
+	CoverageStatusInconclusive     = "inconclusive"
+	CoverageStatusOutOfScope       = "out_of_scope"
+
+	CoveragePriorityCritical = "critical"
+	CoveragePriorityHigh     = "high"
+	CoveragePriorityMedium   = "medium"
+	CoveragePriorityLow      = "low"
 )
 
 type AIGoalProfile struct {

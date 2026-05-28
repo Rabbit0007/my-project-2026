@@ -1,0 +1,35 @@
+{
+  "goal": "Find evidence-backed security impact path",
+  "expected_capability": {
+    "summary": "User-controlled filename can influence server-side file write path",
+    "classification": {
+      "vulnerability_type": "Path Traversal",
+      "cwe": "CWE-22"
+    }
+  },
+  "expected_graph": {
+    "entrypoint_or_exposure": {
+      "file": "src/main/java/demo/FileController.java",
+      "match": "file.getOriginalFilename()"
+    },
+    "impact_sink_or_security_effect": {
+      "file": "src/main/java/demo/FileService.java",
+      "match": "Files.write(target"
+    },
+    "reachability_or_trigger_path": [
+      "FileController.upload",
+      "FileService.save"
+    ],
+    "guard_or_control_analysis": {
+      "expected": "missing canonical path check or base directory enforcement"
+    },
+    "required_evidence_relations": [
+      "entrypoint_or_exposure",
+      "impact_sink_or_security_effect",
+      "reachability_or_trigger_path",
+      "guard_or_control_analysis",
+      "validation_or_observed_signal",
+      "reproduction_or_recheck_path"
+    ]
+  }
+}

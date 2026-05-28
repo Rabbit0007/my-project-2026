@@ -20,9 +20,10 @@ import (
 )
 
 type workerAgentOutput struct {
-	Accepted bool            `json:"accepted"`
-	Reason   string          `json:"reason"`
-	Data     workerAgentData `json:"data"`
+	Accepted      bool            `json:"accepted"`
+	Reason        string          `json:"reason"`
+	Data          workerAgentData `json:"data"`
+	HasGraphDelta bool            `json:"-"`
 }
 
 func (o *workerAgentOutput) UnmarshalJSON(data []byte) error {
@@ -40,6 +41,7 @@ func (o *workerAgentOutput) UnmarshalJSON(data []byte) error {
 	o.Reason = raw.Reason
 	o.Data = raw.Data
 	if raw.GraphDelta.hasContent() {
+		o.HasGraphDelta = true
 		o.Data = raw.GraphDelta.toWorkerAgentData(raw.Data)
 	}
 	return nil
@@ -586,6 +588,7 @@ func (o *AgentOrchestrator) ingestWorkerGraphOutput(ctx context.Context, taskID 
 		if err := o.db.WithContext(ctx).Create(&nf).Error; err != nil {
 			return summary, err
 		}
+		_ = cairn.ApplyCoverageResolutionFromNegativeFact(ctx, nf)
 		node, _ := o.blackboard.UpsertNode(ctx, BlackboardNodeDraft{
 			TaskID:          taskID,
 			NodeType:        model.NodeNegativeFact,
@@ -687,7 +690,7 @@ func (o *AgentOrchestrator) createWorkerSuggestedIntent(ctx context.Context, tas
 	if NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor).intentMatchesNegativeFact(ctx, taskID, title, objective) {
 		return false, true
 	}
-	intentType, ok := workerSuggestedIntentType(suggestion.IntentType)
+	intentType, legacyMetadata, ok := workerSuggestedIntentType(suggestion.IntentType)
 	if !ok {
 		appendAuditEvent(ctx, o.db, &taskID, "worker_agent.unsupported_intent_skipped", "worker-runtime", "Worker suggested an unsupported intent type; skipped.", map[string]any{"parentIntentId": parentIntentID, "intentType": suggestion.IntentType})
 		return false, true
@@ -720,6 +723,7 @@ func (o *AgentOrchestrator) createWorkerSuggestedIntent(ctx context.Context, tas
 	values["toolRunId"] = toolRunID
 	values["evidenceIds"] = evidenceIDs
 	values["workerFactQualityScore"] = quality.Score
+	values = mergeIntentMetadata(values, legacyMetadata)
 	intent.ConstraintsJSON = mustJSON(values)
 	intent.UpdatedAt = time.Now().UTC()
 	if err := o.db.WithContext(ctx).Save(&intent).Error; err != nil {
@@ -983,6 +987,8 @@ Strict boundaries:
 - For port or service discovery, prefer targeted non-destructive checks with tight bounds such as --host-timeout, --max-retries 1, and version-light flags; if those bounds are insufficient, return an UnverifiedRisk instead of continuing.
 - Return facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or next_intent_suggestions only.
 - Do not create Findings, Reports, Contracts, or task completion decisions.
+- A verified capability is an output item, not a global stop condition; Rabbit will continue unresolved high-priority surface coverage after this worker turn.
+- Use GraphSummary.coverage_state and GraphSummary.goal_state to avoid duplicate dead paths and to explain whether the current surface is verified, refuted, blocked, or inconclusive.
 - Do not turn this into external CVE/PoC repository lookup or ProofPacket-style side probing.
 - Save long command output, scan output, request/response packets, or proof files under /workspace/evidence or /workspace/artifacts and reference the path in artifact_path.
 - If a path is refuted, return a NegativeFact. If scope, authentication, state, timeout, or tooling prevents a reliable conclusion, return an UnverifiedRisk. Do not invent results.
@@ -1191,6 +1197,9 @@ func validateWorkerAgentOutput(raw string, output workerAgentOutput) error {
 	if !output.Accepted {
 		return nil
 	}
+	if graphDeltaStrictModeEnabled() && !output.HasGraphDelta {
+		return fmt.Errorf("graph delta strict mode requires graph_delta output; legacy data-only worker output is not accepted")
+	}
 	if len(raw) > maxWorkerOutputTextLength {
 		return fmt.Errorf("worker output is too large; return compact facts and store large observations in artifacts")
 	}
@@ -1246,7 +1255,7 @@ func validateWorkerAgentOutput(raw string, output workerAgentOutput) error {
 	}
 	for i, suggestion := range output.Data.NextIntentSuggestions {
 		if strings.TrimSpace(suggestion.IntentType) != "" {
-			if _, ok := workerSuggestedIntentType(suggestion.IntentType); !ok {
+			if _, _, ok := workerSuggestedIntentType(suggestion.IntentType); !ok {
 				return fmt.Errorf("worker next intent suggestion %d uses unsupported intent type %q", i, suggestion.IntentType)
 			}
 		}
@@ -1258,6 +1267,11 @@ func validateWorkerAgentOutput(raw string, output workerAgentOutput) error {
 		}
 	}
 	return nil
+}
+
+func graphDeltaStrictModeEnabled() bool {
+	value := strings.ToLower(strings.TrimSpace(os.Getenv("GRAPH_DELTA_STRICT_MODE")))
+	return value == "true" || value == "1" || value == "yes" || value == "on"
 }
 
 func hasDisallowedWorkerDecisionText(value string) bool {
@@ -1431,15 +1445,9 @@ func (o *AgentOrchestrator) workerDeliveryProofSummary(ctx context.Context, task
 	return proof
 }
 
-func workerSuggestedIntentType(value string) (string, bool) {
+func workerSuggestedIntentType(value string) (string, map[string]any, bool) {
 	normalized := strings.ToLower(strings.TrimSpace(value))
-	if normalized == "" {
-		return model.IntentBehaviorProbe, true
-	}
-	if _, ok := runtimeIntentTypes[normalized]; ok {
-		return normalized, true
-	}
-	return "", false
+	return normalizeGraphSearchIntentType(normalized)
 }
 
 func workerHypothesisTypeForIntent(intentType string) string {

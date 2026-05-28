@@ -516,8 +516,15 @@ func TestPlannerNextIntentSuggestionsEnterGraphAsHypothesisBackedIntents(t *test
 	if err := db.Where("task_id = ? AND created_by = ?", taskID, "model-planner").First(&intent).Error; err != nil {
 		t.Fatalf("load planner intent: %v", err)
 	}
-	if intent.Status != model.IntentStatusPending || intent.IntentType != model.IntentIDORProbe || intent.HypothesisID() == nil {
-		t.Fatalf("expected pending hypothesis-backed IDOR intent, got %+v", intent)
+	if intent.Status != model.IntentStatusPending || intent.IntentType != model.IntentInspectGuard || intent.HypothesisID() == nil {
+		t.Fatalf("expected pending hypothesis-backed generic intent, got %+v", intent)
+	}
+	var constraints map[string]any
+	if err := json.Unmarshal(intent.ConstraintsJSON, &constraints); err != nil {
+		t.Fatalf("unmarshal planner intent constraints: %v", err)
+	}
+	if constraints["legacy_intent"] != model.IntentIDORProbe || constraints["classification_hint"] != "idor" {
+		t.Fatalf("expected planner intent to preserve legacy classification hint, got %+v", constraints)
 	}
 	next, err := NewIntentService(db).NextPending(ctx, taskID)
 	if err != nil {

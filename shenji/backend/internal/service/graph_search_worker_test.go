@@ -2,10 +2,14 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
 	"shenji/backend/internal/model"
+
+	"gorm.io/gorm"
 )
 
 func TestGraphSearchBootstrapCreatesFactsAndIntents(t *testing.T) {
@@ -126,6 +130,80 @@ func TestWorkerOutputAcceptsGraphDeltaPacket(t *testing.T) {
 	}
 }
 
+func TestGraphDeltaStrictModeRejectsLegacyDataOnlyOutput(t *testing.T) {
+	t.Setenv("GRAPH_DELTA_STRICT_MODE", "true")
+	raw := `{"accepted":true,"data":{"summary":"legacy","facts":["fact"],"evidence":[{"title":"e","summary":"s"}]}}`
+	parsed, err := parseWorkerAgentOutput(raw)
+	if err != nil {
+		t.Fatalf("parse legacy output: %v", err)
+	}
+	if err := validateWorkerAgentOutput(raw, parsed); err == nil {
+		t.Fatalf("expected strict mode to reject legacy data-only output")
+	}
+}
+
+func TestGraphDeltaStrictModeAcceptsGraphDeltaPacket(t *testing.T) {
+	t.Setenv("GRAPH_DELTA_STRICT_MODE", "true")
+	raw := `{"accepted":true,"graph_delta":{"new_facts":[{"summary":"observed source"}],"new_evidence":[{"title":"source","summary":"request input","raw":"request.getParameter","relation_type":"entrypoint_or_exposure"}],"diagnostics":["ok"]}}`
+	parsed, err := parseWorkerAgentOutput(raw)
+	if err != nil {
+		t.Fatalf("parse graph delta: %v", err)
+	}
+	if !parsed.HasGraphDelta {
+		t.Fatalf("expected HasGraphDelta")
+	}
+	if err := validateWorkerAgentOutput(raw, parsed); err != nil {
+		t.Fatalf("expected graph delta to validate in strict mode: %v", err)
+	}
+}
+
+func TestLegacyVulnIntentNormalizesToGenericIntentWithClassificationHint(t *testing.T) {
+	db := newRegressionTestDB(t)
+	ctx := context.Background()
+	loop := NewCairnLoop(db, NewBlackboardService(db), NewIntentService(db), nil, NewFindingService(db), nil, nil, nil, nil)
+	taskID := uint(8107)
+	loop.CreateIntentFromSuggestion(ctx, taskID, IntentSuggestion{
+		IntentType: model.IntentSQLiProbe,
+		Objective:  "Inspect request-controlled sorting reaching query construction.",
+		Priority:   90,
+	})
+	var intent model.AIIntent
+	if err := db.Where("task_id = ?", taskID).First(&intent).Error; err != nil {
+		t.Fatalf("expected normalized intent: %v", err)
+	}
+	if intent.IntentType != model.IntentInspectDataflow {
+		t.Fatalf("expected legacy SQLi intent to normalize to inspect_dataflow, got %s", intent.IntentType)
+	}
+	values := map[string]any{}
+	_ = json.Unmarshal(intent.ConstraintsJSON, &values)
+	if values["classification_hint"] != "sqli" || values["legacy_intent"] != model.IntentSQLiProbe {
+		t.Fatalf("expected classification hint metadata, got %+v", values)
+	}
+}
+
+func TestGraphSearchPrefersGenericIntentOverLegacyVulnIntent(t *testing.T) {
+	db := newRegressionTestDB(t)
+	ctx := context.Background()
+	service := NewIntentService(db)
+	taskID := uint(8108)
+	now := time.Now()
+	legacy := model.AIIntent{TaskID: taskID, IntentType: model.IntentSQLiProbe, Title: "legacy", Objective: "legacy", PriorityScore: 0.99, Status: model.IntentStatusPending, CreatedBy: "test", CreatedAt: now, UpdatedAt: now}
+	generic := model.AIIntent{TaskID: taskID, IntentType: model.IntentInspectGuard, Title: "generic", Objective: "generic", PriorityScore: 0.50, Status: model.IntentStatusPending, CreatedBy: "test", CreatedAt: now.Add(time.Second), UpdatedAt: now}
+	if err := db.Create(&legacy).Error; err != nil {
+		t.Fatalf("create legacy: %v", err)
+	}
+	if err := db.Create(&generic).Error; err != nil {
+		t.Fatalf("create generic: %v", err)
+	}
+	next, err := service.NextPending(ctx, taskID)
+	if err != nil {
+		t.Fatalf("next pending: %v", err)
+	}
+	if next == nil || next.IntentType != model.IntentInspectGuard {
+		t.Fatalf("expected generic intent to be preferred, got %+v", next)
+	}
+}
+
 func TestNegativeFactPreventsRepeatedDeadPath(t *testing.T) {
 	db := newRegressionTestDB(t)
 	ctx := context.Background()
@@ -176,6 +254,161 @@ func TestVerifiedCapabilityPromotionRequiresEvidence(t *testing.T) {
 	if findings != 0 {
 		t.Fatalf("finding must not be created without evidence-backed verified capability")
 	}
+}
+
+func TestPromotionGateRequiresStructuredEvidenceRelations(t *testing.T) {
+	db := newRegressionTestDB(t)
+	ctx := context.Background()
+	taskID := uint(8109)
+	loop := NewCairnLoop(db, NewBlackboardService(db), NewIntentService(db), nil, NewFindingService(db), nil, nil, nil, nil)
+	e1 := createGateEvidence(t, db, taskID, "entrypoint_or_exposure")
+	e2 := createGateEvidence(t, db, taskID, "impact_sink_or_security_effect")
+	cap, err := loop.WriteCapability(ctx, taskID, CapabilityDraft{
+		CapabilityType: model.CapFileWrite,
+		Target:         "partial relation path",
+		Strength:       model.StrengthVerified,
+		ProofSummary:   "{}",
+		EvidenceIDs:    []uint{e1.ID, e2.ID},
+		CanAdvanceGoal: true,
+	}, nil)
+	if err != nil {
+		t.Fatalf("write capability: %v", err)
+	}
+	gate := loop.EvaluateCapabilityPromotionGate(ctx, cap)
+	if gate.Allowed {
+		t.Fatalf("expected gate to reject missing structured relations: %+v", gate)
+	}
+	if len(gate.Missing) == 0 {
+		t.Fatalf("expected missing relation details")
+	}
+}
+
+func TestPromotionGateAcceptsStrongStaticProofWhenRuntimeUnavailable(t *testing.T) {
+	db := newRegressionTestDB(t)
+	ctx := context.Background()
+	taskID := uint(8110)
+	loop := NewCairnLoop(db, NewBlackboardService(db), NewIntentService(db), nil, NewFindingService(db), nil, nil, nil, nil)
+	ids := []uint{}
+	for _, relation := range []string{
+		"entrypoint_or_exposure",
+		"impact_sink_or_security_effect",
+		"reachability_or_trigger_path",
+		"guard_or_control_analysis",
+		"reproduction_or_recheck_path",
+		"strong_static_proof",
+	} {
+		item := createGateEvidence(t, db, taskID, relation)
+		ids = append(ids, item.ID)
+	}
+	cap, err := loop.WriteCapability(ctx, taskID, CapabilityDraft{
+		CapabilityType: model.CapCrossUserObjectAccess,
+		Target:         "strong static object access proof",
+		Strength:       model.StrengthObserved,
+		ProofSummary:   "{}",
+		EvidenceIDs:    ids,
+		CanAdvanceGoal: true,
+	}, nil)
+	if err != nil {
+		t.Fatalf("write capability: %v", err)
+	}
+	gate := loop.EvaluateCapabilityPromotionGate(ctx, cap)
+	if !gate.Allowed {
+		t.Fatalf("expected strong static proof to pass gate, missing=%v relations=%v", gate.Missing, gate.Relations)
+	}
+}
+
+func TestPromotionGateRejectsBootstrapOnlyCapability(t *testing.T) {
+	db := newRegressionTestDB(t)
+	ctx := context.Background()
+	taskID := uint(8111)
+	loop := NewCairnLoop(db, NewBlackboardService(db), NewIntentService(db), nil, NewFindingService(db), nil, nil, nil, nil)
+	ids := []uint{}
+	for _, relation := range []string{
+		"entrypoint_or_exposure",
+		"impact_sink_or_security_effect",
+		"reachability_or_trigger_path",
+		"guard_or_control_analysis",
+		"reproduction_or_recheck_path",
+		"validation_or_observed_signal",
+	} {
+		item := createGateEvidence(t, db, taskID, relation)
+		ids = append(ids, item.ID)
+	}
+	cap, err := loop.WriteCapability(ctx, taskID, CapabilityDraft{
+		CapabilityType: model.CapInternalServiceAccess,
+		Target:         "bootstrap source access",
+		Strength:       model.StrengthVerified,
+		ProofSummary:   string(mustJSON(completeDeliveryDetails("bootstrap", model.CapInternalServiceAccess, ids))),
+		EvidenceIDs:    ids,
+		CanAdvanceGoal: true,
+	}, nil)
+	if err != nil {
+		t.Fatalf("write capability: %v", err)
+	}
+	gate := loop.EvaluateCapabilityPromotionGate(ctx, cap)
+	if gate.Allowed {
+		t.Fatalf("expected bootstrap-only capability to be rejected: %+v", gate)
+	}
+}
+
+func TestGraphSearchLoopEmitsStructuredDiagnostics(t *testing.T) {
+	db := newRegressionTestDB(t)
+	ctx := context.Background()
+	taskID := uint(8112)
+	loop := NewCairnLoop(db, NewBlackboardService(db), NewIntentService(db), nil, NewFindingService(db), nil, nil, nil, nil)
+
+	loop.EmitGraphSearchDiagnostic(ctx, GraphSearchLoopDiagnostic{
+		TaskID:     taskID,
+		Iteration:  2,
+		Phase:      "explore",
+		GoalStatus: "not_satisfied",
+		SelectedIntent: &GraphIntentSummary{
+			ID:     77,
+			Kind:   model.IntentInspectDataflow,
+			Goal:   "Inspect source-to-effect path",
+			Reason: "generic graph search intent",
+		},
+		ToolsCalled:       []string{"code_search", "code_slice"},
+		GraphDeltaSummary: GraphDeltaSummary{NewFacts: 1, NewEvidence: 2, NewCapabilityCandidates: 1, NewIntents: 1},
+		PromotionGateResult: &CapabilityPromotionGate{
+			Allowed: false,
+			Missing: []string{"evidence_relation:guard_or_control_analysis"},
+		},
+		StopReason: "continue",
+	})
+
+	var event model.AIAuditEvent
+	if err := db.Where("task_id = ? AND event_type = ? AND summary = ?", taskID, "graph_search.loop_diagnostic", "explore").First(&event).Error; err != nil {
+		t.Fatalf("load diagnostic event: %v", err)
+	}
+	var payload GraphSearchLoopDiagnostic
+	if err := json.Unmarshal(event.Metadata, &payload); err != nil {
+		t.Fatalf("unmarshal diagnostic metadata: %v", err)
+	}
+	if payload.Phase != "explore" || payload.Iteration != 2 || len(payload.ToolsCalled) != 2 {
+		t.Fatalf("unexpected diagnostic payload: %+v", payload)
+	}
+	if payload.GraphDeltaSummary.NewEvidence != 2 || payload.PromotionGateResult == nil || payload.PromotionGateResult.Allowed {
+		t.Fatalf("diagnostic missing structured delta or gate result: %+v", payload)
+	}
+}
+
+func createGateEvidence(t *testing.T, db *gorm.DB, taskID uint, relation string) model.AIEvidence {
+	t.Helper()
+	item := model.AIEvidence{
+		TaskID:       taskID,
+		EvidenceType: "code_snippet",
+		Title:        relation,
+		Summary:      relation + " summary",
+		RawRef:       "local://" + relation,
+		Hash:         fmt.Sprintf("hash-%d-%s", taskID, relation),
+		RelationType: relation,
+		CreatedAt:    time.Now(),
+	}
+	if err := db.Create(&item).Error; err != nil {
+		t.Fatalf("create gate evidence: %v", err)
+	}
+	return item
 }
 
 func TestFindingOnlyPromotesFromVerifiedCapability(t *testing.T) {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="demo.UserMapper">
+  <select id="search" resultType="demo.UserRecord">
+    SELECT id, name
+    FROM users
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY ${orderBy}
+  </select>
+</mapper>

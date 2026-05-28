@@ -1,0 +1,35 @@
+{
+  "goal": "Find evidence-backed security impact path",
+  "expected_capability": {
+    "summary": "User-controlled object id reaches object read without owner or tenant guard",
+    "classification": {
+      "vulnerability_type": "Broken Access Control / IDOR",
+      "cwe": "CWE-639"
+    }
+  },
+  "expected_graph": {
+    "entrypoint_or_exposure": {
+      "file": "main.go",
+      "match": "c.Param(\"id\")"
+    },
+    "impact_sink_or_security_effect": {
+      "file": "store.go",
+      "match": "GetDocument(id)"
+    },
+    "reachability_or_trigger_path": [
+      "GET /documents/:id",
+      "GetDocument(id)"
+    ],
+    "guard_or_control_analysis": {
+      "expected": "missing owner/org/tenant authorization check before returning document"
+    },
+    "required_evidence_relations": [
+      "entrypoint_or_exposure",
+      "impact_sink_or_security_effect",
+      "reachability_or_trigger_path",
+      "guard_or_control_analysis",
+      "validation_or_observed_signal",
+      "reproduction_or_recheck_path"
+    ]
+  }
+}

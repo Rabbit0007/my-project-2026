@@ -28,14 +28,20 @@ var runtimeIntentTypes = map[string]struct{}{
 	"recon":                          {},
 	"validate":                       {},
 	model.IntentBootstrapGraph:       {},
+	model.IntentDiscoverEntrypoints:  {},
+	model.IntentEnumerateSurfaces:    {},
 	model.IntentExploreEntrypoint:    {},
 	model.IntentInspectDataflow:      {},
 	model.IntentInspectGuard:         {},
+	model.IntentInspectAuthBoundary:  {},
+	model.IntentInspectSinkReach:     {},
 	model.IntentValidateHypothesis:   {},
 	model.IntentRunTool:              {},
 	model.IntentResolveUnknown:       {},
 	model.IntentCompareBehavior:      {},
 	model.IntentExpandAttackSurface:  {},
+	model.IntentRecheckInconclusive:  {},
+	model.IntentVerifyCapability:     {},
 	model.IntentPromoteCapability:    {},
 	model.IntentSurfaceDiscovery:     {},
 	model.IntentFingerprintConfirm:   {},
@@ -73,12 +79,99 @@ var runtimeIntentTypes = map[string]struct{}{
 	model.IntentReportFinalize:       {},
 }
 
+var genericGraphIntentTypes = map[string]struct{}{
+	model.IntentBootstrapGraph:      {},
+	model.IntentDiscoverEntrypoints: {},
+	model.IntentEnumerateSurfaces:   {},
+	model.IntentExploreEntrypoint:   {},
+	model.IntentInspectDataflow:     {},
+	model.IntentInspectGuard:        {},
+	model.IntentInspectAuthBoundary: {},
+	model.IntentInspectSinkReach:    {},
+	model.IntentValidateHypothesis:  {},
+	model.IntentRunTool:             {},
+	model.IntentResolveUnknown:      {},
+	model.IntentCompareBehavior:     {},
+	model.IntentExpandAttackSurface: {},
+	model.IntentRecheckInconclusive: {},
+	model.IntentVerifyCapability:    {},
+	model.IntentPromoteCapability:   {},
+	model.IntentSurfaceDiscovery:    {},
+	model.IntentFingerprintConfirm:  {},
+	model.IntentJSAnalysis:          {},
+	model.IntentBehaviorProbe:       {},
+	model.IntentAuthProbe:           {},
+	model.IntentBusinessLogicProbe:  {},
+	model.IntentCapabilityExpand:    {},
+	model.IntentGoalAttempt:         {},
+}
+
+var legacyVulnIntentNormalization = map[string]struct {
+	Generic            string
+	ClassificationHint string
+}{
+	model.IntentSQLiProbe:            {Generic: model.IntentInspectDataflow, ClassificationHint: "sqli"},
+	model.IntentPathTraversalProbe:   {Generic: model.IntentInspectGuard, ClassificationHint: "path_traversal"},
+	model.IntentIDORProbe:            {Generic: model.IntentInspectGuard, ClassificationHint: "idor"},
+	model.IntentMassAssignmentProbe:  {Generic: model.IntentInspectGuard, ClassificationHint: "mass_assignment"},
+	model.IntentSSRFProbe:            {Generic: model.IntentInspectDataflow, ClassificationHint: "ssrf"},
+	model.IntentUploadProbe:          {Generic: model.IntentExploreEntrypoint, ClassificationHint: "upload"},
+	model.IntentXSSProbe:             {Generic: model.IntentCompareBehavior, ClassificationHint: "xss"},
+	model.IntentSSTIProbe:            {Generic: model.IntentInspectDataflow, ClassificationHint: "ssti"},
+	model.IntentCommandInjProbe:      {Generic: model.IntentInspectDataflow, ClassificationHint: "command_injection"},
+	model.IntentFilePathControl:      {Generic: model.IntentInspectGuard, ClassificationHint: "path_traversal"},
+	model.IntentSQLConstructTrace:    {Generic: model.IntentInspectDataflow, ClassificationHint: "sqli"},
+	model.IntentObjectOwnerCheck:     {Generic: model.IntentInspectGuard, ClassificationHint: "idor"},
+	model.IntentEntryToAuthzTrace:    {Generic: model.IntentInspectGuard, ClassificationHint: "authz"},
+	model.IntentRouteToSinkTrace:     {Generic: model.IntentInspectDataflow, ClassificationHint: "route_to_sink"},
+	model.IntentDataflowTrace:        {Generic: model.IntentInspectDataflow, ClassificationHint: "dataflow"},
+	model.IntentSSRFURLControl:       {Generic: model.IntentInspectDataflow, ClassificationHint: "ssrf"},
+	model.IntentUploadToExec:         {Generic: model.IntentInspectDataflow, ClassificationHint: "upload_to_exec"},
+	model.IntentTemplateRenderTrace:  {Generic: model.IntentInspectDataflow, ClassificationHint: "template_injection"},
+	model.IntentDeserializationTrace: {Generic: model.IntentInspectDataflow, ClassificationHint: "deserialization"},
+}
+
 func runtimeIntentTypeList() []string {
 	values := make([]string, 0, len(runtimeIntentTypes))
 	for value := range runtimeIntentTypes {
 		values = append(values, value)
 	}
 	return values
+}
+
+func genericIntentTypeList() []string {
+	values := make([]string, 0, len(genericGraphIntentTypes))
+	for value := range genericGraphIntentTypes {
+		values = append(values, value)
+	}
+	return values
+}
+
+func normalizeGraphSearchIntentType(intentType string) (string, map[string]any, bool) {
+	if intentType == "" {
+		return model.IntentResolveUnknown, nil, true
+	}
+	if normalized, ok := legacyVulnIntentNormalization[intentType]; ok {
+		return normalized.Generic, map[string]any{
+			"classification_hint": normalized.ClassificationHint,
+			"legacy_intent":       intentType,
+			"intent_role":         "classification_hint",
+		}, true
+	}
+	if _, ok := runtimeIntentTypes[intentType]; ok {
+		return intentType, nil, true
+	}
+	return "", nil, false
+}
+
+func mergeIntentMetadata(base map[string]any, metadata map[string]any) map[string]any {
+	if base == nil {
+		base = map[string]any{}
+	}
+	for key, value := range metadata {
+		base[key] = value
+	}
+	return base
 }
 
 func (s *IntentService) ListByTask(ctx context.Context, taskID uint) ([]model.AIIntent, error) {
@@ -93,6 +186,17 @@ func (s *IntentService) ListByTask(ctx context.Context, taskID uint) ([]model.AI
 func (s *IntentService) NextPending(ctx context.Context, taskID uint) (*model.AIIntent, error) {
 	var intent model.AIIntent
 	err := s.db.WithContext(ctx).
+		Where("task_id = ? AND status = ?", taskID, model.IntentStatusPending).
+		Where("intent_type IN ?", genericIntentTypeList()).
+		Order("priority_score desc, created_at asc").
+		First(&intent).Error
+	if err == nil {
+		return &intent, nil
+	}
+	if err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	err = s.db.WithContext(ctx).
 		Where("task_id = ? AND status = ?", taskID, model.IntentStatusPending).
 		Where("intent_type IN ?", runtimeIntentTypeList()).
 		Order("priority_score desc, created_at asc").

@@ -1,0 +1,45 @@
+{
+  "goal": "Find evidence-backed security impact path",
+  "expected_capability": {
+    "summary": "User-controlled sort field reaches raw query fragment",
+    "classification": {
+      "vulnerability_type": "SQL Injection",
+      "cwe": "CWE-89"
+    }
+  },
+  "expected_graph": {
+    "entrypoint_or_exposure": {
+      "file": "src/main/java/demo/UserController.java",
+      "match": "request.getParameter(\"orderBy\")"
+    },
+    "impact_sink_or_security_effect": {
+      "file": "src/main/resources/mapper/UserMapper.xml",
+      "match": "ORDER BY ${orderBy}"
+    },
+    "reachability_or_trigger_path": [
+      "UserController.search",
+      "UserService.search",
+      "UserMapper.search"
+    ],
+    "guard_or_control_analysis": {
+      "expected": "missing allowlist or parameter binding for orderBy"
+    },
+    "required_evidence_relations": [
+      "entrypoint_or_exposure",
+      "impact_sink_or_security_effect",
+      "reachability_or_trigger_path",
+      "guard_or_control_analysis",
+      "validation_or_observed_signal",
+      "reproduction_or_recheck_path"
+    ]
+  },
+  "additional_surfaces": [
+    {
+      "surface_type": "admin_flow",
+      "entrypoint": "GET /admin/export",
+      "file": "src/main/java/demo/AdminExportController.java",
+      "match": "request.getParameter(\"format\")",
+      "coverage_expectation": "remains unresolved after the raw query capability is verified"
+    }
+  ]
+}
