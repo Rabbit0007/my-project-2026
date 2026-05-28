@@ -50,3 +50,41 @@ func TestCairnCadenceConfigLoadsFromEnv(t *testing.T) {
 			cfg.ReasonNoOpPassBudget, cfg.NoProgressFinalizeRounds, cfg.PlannerNextIntentLimit)
 	}
 }
+
+func TestRuntimeToggleDefaults(t *testing.T) {
+	// No env set — should get safe defaults
+	cfg := Load()
+	if cfg.ClueDrivenPhase != 0 {
+		t.Errorf("ClueDrivenPhase default = %d, want 0", cfg.ClueDrivenPhase)
+	}
+	if cfg.PromotionGate != "legacy" {
+		t.Errorf("PromotionGate default = %q, want \"legacy\"", cfg.PromotionGate)
+	}
+	if cfg.FinalizeMode != "legacy" {
+		t.Errorf("FinalizeMode default = %q, want \"legacy\"", cfg.FinalizeMode)
+	}
+	if cfg.DeliveryWriteback != "off" {
+		t.Errorf("DeliveryWriteback default = %q, want \"off\"", cfg.DeliveryWriteback)
+	}
+}
+
+func TestRuntimeToggleFromEnv(t *testing.T) {
+	t.Setenv("RABBIT_CLUE_DRIVEN_PHASE", "3")
+	t.Setenv("RABBIT_PROMOTION_GATE", "clue_chain")
+	t.Setenv("RABBIT_FINALIZE_FALLBACK", "legacy")
+	t.Setenv("RABBIT_DELIVERY_WRITEBACK", "on")
+
+	cfg := Load()
+	if cfg.ClueDrivenPhase != 3 {
+		t.Errorf("ClueDrivenPhase = %d, want 3", cfg.ClueDrivenPhase)
+	}
+	if cfg.PromotionGate != "clue_chain" {
+		t.Errorf("PromotionGate = %q, want \"clue_chain\"", cfg.PromotionGate)
+	}
+	if cfg.FinalizeMode != "legacy" {
+		t.Errorf("FinalizeMode = %q, want \"legacy\"", cfg.FinalizeMode)
+	}
+	if cfg.DeliveryWriteback != "on" {
+		t.Errorf("DeliveryWriteback = %q, want \"on\"", cfg.DeliveryWriteback)
+	}
+}

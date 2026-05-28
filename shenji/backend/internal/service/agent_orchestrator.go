@@ -191,7 +191,7 @@ func (o *AgentOrchestrator) cleanupTaskWorkerContainer(taskID uint) {
 }
 
 func (o *AgentOrchestrator) runLoopIterations(ctx context.Context, task *model.AISecurityTask, loop *model.AIAgentLoop) error {
-	cairn := NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor)
+	cairn := NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor).WithPromotionGate(o.cfg.PromotionGate).WithFinalizeMode(o.cfg.FinalizeMode).WithClueDrivenPhase(o.cfg.ClueDrivenPhase)
 	consecutiveNoProgress := 0
 	lastExpansionCount := o.graphExpansionCount(ctx, task.ID)
 
@@ -1214,13 +1214,18 @@ func (o *AgentOrchestrator) runSingleIteration(ctx context.Context, task *model.
 		})
 		meta := currentIntent.ValidationMetadata()
 		if meta.ExpectedCapability != "" && len(supportingEvidenceIDs) > 0 && !toolBlocked && !toolFailed && !validationFailed {
-			cairn := NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor)
+			cairn := NewCairnLoop(o.db, o.blackboard, o.intents, o.toolRuns, o.findings, o.contracts, o.models, o.reports, o.compactor).WithPromotionGate(o.cfg.PromotionGate)
 			for _, group := range o.capabilityEvidenceGroups(ctx, meta.ExpectedCapability, supportingEvidenceIDs, currentIntent) {
+				proofSummary := fmt.Sprintf("Clue-chain validated capability %s at %s with %d evidence items via intent %d.", meta.ExpectedCapability, group.Target, len(group.EvidenceIDs), currentIntent.ID)
+				if o.cfg.PromotionGate == "legacy" {
+					// TODO(phase4): remove legacy promotion proof path
+					proofSummary = o.deliveryProofSummaryForCapability(ctx, *task, *currentIntent, meta.ExpectedCapability, group.EvidenceIDs)
+				}
 				_, _ = cairn.WriteCapability(ctx, task.ID, CapabilityDraft{
 					CapabilityType: meta.ExpectedCapability,
 					Target:         group.Target,
 					Strength:       model.StrengthVerified,
-					ProofSummary:   o.deliveryProofSummaryForCapability(ctx, *task, *currentIntent, meta.ExpectedCapability, group.EvidenceIDs),
+					ProofSummary:   proofSummary,
 					EvidenceIDs:    group.EvidenceIDs,
 					CanAdvanceGoal: true,
 				}, &currentIntent.ID)
@@ -1330,6 +1335,7 @@ func (o *AgentOrchestrator) runCodeAuditIntent(ctx context.Context, task *model.
 			CreatedAt:        time.Now().UTC(),
 			UpdatedAt:        time.Now().UTC(),
 		}
+		normalizeIntentBeforeCreate(&fileIntent, o.cfg.ClueDrivenPhase)
 		if err := o.db.WithContext(ctx).Create(&fileIntent).Error; err == nil {
 			createdIntents++
 		}

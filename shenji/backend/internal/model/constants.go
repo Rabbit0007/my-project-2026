@@ -63,4 +63,45 @@ const (
 	ModelPurposeBrain  = "brain"
 	ModelPurposeWorker = "worker"
 	ModelPurposeBoth   = "both"
+
+	// --- Clue-Driven Exploration (Phase 0+) ---
+
+	// Clue NodeTypes (new writes use these; legacy types remain readable via mapping)
+	NodeClueOrigin      = "clue_origin"
+	NodeClueObservation = "clue_observation"
+	NodeClueLink        = "clue_link"
+	NodeClueRefuted     = "clue_refuted"
+	NodeClueImpact      = "clue_impact"
+	NodeToolErrorClue   = "tool_error_clue"
+
+	// Clue EdgeTypes
+	EdgeClueSupports = "clue_supports"
+	EdgeClueRefutes  = "clue_refutes"
+	EdgeClueChainsTo = "clue_chains_to"
+
+	// Clue IntentTypes (five universal verbs)
+	IntentClueCollect     = "clue_collect"
+	IntentClueValidate    = "clue_validate"
+	IntentClueRefute      = "clue_refute"
+	IntentClueChainExtend = "clue_chain_extend"
+	IntentScopeObservation = "scope_observation"
+
+	// Clue Roles (used by Capability Gate for role coverage evaluation)
+	RoleOriginOrEntry              = "origin_or_entry"
+	RoleTriggerOrControl           = "trigger_or_control"
+	RoleReachabilityOrRelation     = "reachability_or_relation"
+	RoleSecurityEffectOrImpact     = "security_effect_or_impact"
+	RoleControlStateOrMissingControl = "control_state_or_missing_control"
+	RoleVerificationOrObservation  = "verification_or_observation"
 )
+
+// RequiredClueRoles is the minimum set of roles that must be covered for a
+// ClueChain to be considered closed (Capability Strength = verified).
+var RequiredClueRoles = []string{
+	RoleOriginOrEntry,
+	RoleTriggerOrControl,
+	RoleReachabilityOrRelation,
+	RoleSecurityEffectOrImpact,
+	RoleControlStateOrMissingControl,
+	RoleVerificationOrObservation,
+}

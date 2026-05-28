@@ -49,6 +49,12 @@ func main() {
 	}
 	router := api.NewRouter(cfg, services)
 	log.Info().Str("addr", cfg.ServerAddr).Msg("starting backend")
+	log.Info().
+		Int("clueDrivenPhase", cfg.ClueDrivenPhase).
+		Str("promotionGate", cfg.PromotionGate).
+		Str("finalizeMode", cfg.FinalizeMode).
+		Str("deliveryWriteback", cfg.DeliveryWriteback).
+		Msg("clue-driven runtime toggles")
 	if err := router.Run(cfg.ServerAddr); err != nil {
 		log.Fatal().Err(err).Msg("backend stopped")
 	}

@@ -13,8 +13,9 @@ import (
 )
 
 type HypothesisLifecycleService struct {
-	db         *gorm.DB
-	blackboard *BlackboardService
+	db              *gorm.DB
+	blackboard      *BlackboardService
+	clueDrivenPhase int
 }
 
 type HypothesisDraft struct {
@@ -69,6 +70,13 @@ func (b ExpansionBudget) toConfig() ExplorationBudgetConfig {
 
 func NewHypothesisLifecycleService(db *gorm.DB, blackboard *BlackboardService) *HypothesisLifecycleService {
 	return &HypothesisLifecycleService{db: db, blackboard: blackboard}
+}
+
+// SetClueDrivenPhase sets the phase for intent normalization.
+func (s *HypothesisLifecycleService) SetClueDrivenPhase(phase int) {
+	if s != nil {
+		s.clueDrivenPhase = phase
+	}
 }
 
 func (s *HypothesisLifecycleService) EnsureDefaultGoalProfile(ctx context.Context, task model.AISecurityTask) (model.AIGoalProfile, error) {
@@ -242,6 +250,7 @@ func (s *HypothesisLifecycleService) CreateValidationIntent(ctx context.Context,
 	if len(extraConstraints) > 0 && len(extraConstraints[0]) > 0 {
 		intent.ConstraintsJSON = mergeIntentConstraints(intent.ConstraintsJSON, extraConstraints[0])
 	}
+	normalizeIntentBeforeCreate(&intent, s.clueDrivenPhase)
 	if err := s.db.WithContext(ctx).Create(&intent).Error; err != nil {
 		return intent, err
 	}

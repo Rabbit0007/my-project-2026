@@ -1,0 +1,7 @@
+{
+  "specType": "feature",
+  "workflowType": "design-first",
+  "designArtifacts": ["high-level", "low-level"],
+  "featureName": "clue-driven-exploration-realignment",
+  "intent": "Realign Rabbit from vulnerability/finding/report-driven into a clue-driven Cairn-style state-space exploration system. Five-layer separation: Kernel / Security Exploration / Tool Collection / Evidence Gate / Delivery."
+}

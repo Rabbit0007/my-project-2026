@@ -111,7 +111,7 @@ Console: http://localhost:19111
 - 代码审计任务支持 ZIP 上传，并进行 zip slip、路径穿越、文件数量和大小限制检查。
 - Agent 运行时会创建 Loop/Iteration，围绕 Intent 调用注册工具，并持久化 ToolRun / Evidence / Contract / Report。
 - SafePolicy 默认允许授权的只读证明，阻断破坏、持久化和出范围动作。
-- Finding 不使用置信度作为结论依据，Contract incomplete 会降级并生成补证据 Intent。
+- Finding 不使用置信度作为结论依据，Contract incomplete 仅记录 diagnostic 并降级 Finding 状态，不再反向生成补证据 Intent。
 - 报告支持 Markdown + HTML，并根据 Finding 状态控制措辞。
 - 模型配置支持真实 CRUD，任务创建时可选择已保存模型配置。
 - 前端面向用户展示任务、证据和报告，复杂黑板信息仅放在高级观察区。

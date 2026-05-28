@@ -19,8 +19,9 @@ import (
 )
 
 type ModelRuntimeService struct {
-	db     *gorm.DB
-	client *http.Client
+	db              *gorm.DB
+	client          *http.Client
+	clueDrivenPhase int
 }
 
 type IterationPlan struct {
@@ -153,8 +154,18 @@ func NewModelRuntimeService(db *gorm.DB, timeout time.Duration) *ModelRuntimeSer
 	}
 }
 
+// SetClueDrivenPhase sets the phase for phase-gated behavior (prompt/fallback selection).
+func (s *ModelRuntimeService) SetClueDrivenPhase(phase int) {
+	if s != nil {
+		s.clueDrivenPhase = phase
+	}
+}
+
 func (s *ModelRuntimeService) PlanIteration(ctx context.Context, task model.AISecurityTask, intent *model.AIIntent, agentContext AgentContext) (IterationPlan, error) {
 	if task.ModelConfigID == nil {
+		if s.clueDrivenPhase >= 3 {
+			return deterministicIterationPlanClue(task, intent), nil
+		}
 		return deterministicIterationPlan(task, intent), nil
 	}
 
@@ -259,7 +270,12 @@ func (s *ModelRuntimeService) AnalyzeSecurityGraph(ctx context.Context, task mod
 }
 
 func (s *ModelRuntimeService) FallbackIterationPlan(ctx context.Context, task model.AISecurityTask, intent *model.AIIntent) IterationPlan {
-	plan := deterministicIterationPlan(task, intent)
+	var plan IterationPlan
+	if s.clueDrivenPhase >= 3 {
+		plan = deterministicIterationPlanClue(task, intent)
+	} else {
+		plan = deterministicIterationPlan(task, intent)
+	}
 	if task.ModelConfigID == nil {
 		return plan
 	}
@@ -460,6 +476,25 @@ func deterministicIterationPlan(task model.AISecurityTask, intent *model.AIInten
 	}
 }
 
+// deterministicIterationPlanClue is the Phase 3+ clue-driven deterministic fallback.
+// It never references vulnerability types and only produces clue-driven intents.
+func deterministicIterationPlanClue(task model.AISecurityTask, intent *model.AIIntent) IterationPlan {
+	thought := "Observed authorized scope origin. Selecting next clue collection step within scope boundary."
+	action := "Execute scope_observation to collect first-layer clue observations."
+
+	if intent != nil {
+		thought = fmt.Sprintf("Advancing clue chain via intent %s. Aligning next action with clue-progress objective.", intent.IntentType)
+		action = "Execute current clue intent through registered tools and persist ClueObservation/Evidence."
+	}
+
+	return IterationPlan{
+		ModelProvider:  "deterministic-runtime",
+		ModelName:      "clue-driven-fallback",
+		ThoughtSummary: thought,
+		PlannedAction:  action,
+	}
+}
+
 func deterministicEvidenceIntent(finding model.AIFinding, missingFields []string) EvidenceIntentSuggestion {
 	intentType := "collect_evidence"
 	title := "补齐 Finding Contract 缺失证据"
@@ -543,7 +578,7 @@ func (s *ModelRuntimeService) planWithOpenAI(ctx context.Context, config model.A
 	if err != nil {
 		return IterationPlan{}, err
 	}
-	systemPrompt, userPrompt := buildPlannerPrompt(task, intent, agentContext)
+	systemPrompt, userPrompt := buildPlannerPromptWithPhase(task, intent, agentContext, s.clueDrivenPhase)
 	var raw string
 	switch strings.ToLower(strings.TrimSpace(options.WireAPI)) {
 	case "", "responses":
@@ -743,7 +778,7 @@ func (s *ModelRuntimeService) analyzeSecurityGraphWithOpenAI(ctx context.Context
 	if err != nil {
 		return SecurityGraphDecision{}, err
 	}
-	systemPrompt, userPrompt := buildSecurityGraphPrompt(task, packet)
+	systemPrompt, userPrompt := buildSecurityGraphPromptWithPhase(task, packet, s.clueDrivenPhase)
 	graphOptions := options
 	graphOptions.ModelReasoningEffort = codeAuditReasoningEffort(options.ModelReasoningEffort)
 	graphOptions.DisableResponseStorage = true
@@ -1257,7 +1292,25 @@ func compactStringListForModel(values []string) []string {
 }
 
 func buildPlannerPrompt(task model.AISecurityTask, intent *model.AIIntent, agentContext AgentContext) (string, string) {
+	return buildPlannerPromptWithPhase(task, intent, agentContext, 0)
+}
+
+func buildPlannerPromptWithPhase(task model.AISecurityTask, intent *model.AIIntent, agentContext AgentContext, phase int) (string, string) {
 	systemPrompt := "You are Rabbit Security Validation Platform's coverage-oriented graph reasoner. Respond with a single JSON object only. Keys: thought_summary, planned_action, next_intents. next_intents is optional and must contain 0-3 evidence-seeking follow-up intents with title, objective, intent_type, required_evidence. Prefer generic graph-search intent types such as discover_entrypoints, enumerate_surfaces, inspect_dataflow, inspect_guard, inspect_auth_boundary, inspect_sink_reachability, validate_hypothesis, compare_behavior, resolve_unknown, verify_capability, expand_attack_surface, recheck_inconclusive_path, or run_tool. A verified capability is an output item, not a global stop condition. After a capability is verified, continue exploring unresolved high-priority surfaces unless budget is exhausted or coverage is sufficient. Do not generate intents only to complete a report or finding. Use coverage gain, evidence gap, novelty, and risk signal to prioritize intents. Vulnerability type is a result label, not the planning boundary. Do not reveal chain-of-thought. Do not create findings. Keep every suggestion inside the authorized scope and focused on facts that can be observed or validated."
+
+	if phase >= 3 {
+		systemPrompt = `You are the Reasoner of a clue-driven security exploration system.
+Your job: read the current blackboard summary, decide which CLUE to advance, and emit STRUCTURED clue operations. You MUST NOT classify findings, propose specific vulnerability types, or output report-style language.
+Output JSON shape: {"thought_summary":"...","planned_action":"...","next_intents":[{"intent_type":"clue_collect|clue_validate|clue_refute|clue_chain_extend|scope_observation","operation":"resolve_unknown|correlate_clues|compare_behavior|expand_surface|recheck_inconclusive|inspect_auth_boundary|inspect_runtime_behavior|inspect_business_object","intent_goal":"concrete clue-progress sentence","title":"...","objective":"...","target_clue_refs":[],"expected_evidence":"...","expected_clue_roles":["origin_or_entry","trigger_or_control","reachability_or_relation","security_effect_or_impact","control_state_or_missing_control","verification_or_observation"],"success_criteria":"...","failure_criteria":"...","allowed_tools":["http_request","code_search"],"priority":1}]}
+Rules:
+- Never reference vulnerability names (SQLi, XSS, IDOR, RCE, SSRF, etc.) in any field.
+- Do NOT emit fields named vuln_type, cwe, severity, or finding_title.
+- Each next_intent MUST cite at least one target_clue_refs or scope handle.
+- intent_type stays in the five-verb set; richer semantics live in operation and intent_goal.
+- If you have no high-value clue to advance, return empty next_intents and explain in thought_summary.
+- Output is scoped to the current intent. Do NOT produce a global summary of all findings.`
+	}
+
 	intentType := ""
 	intentTitle := ""
 	intentObjective := ""
@@ -1274,7 +1327,7 @@ func buildPlannerPrompt(task model.AISecurityTask, intent *model.AIIntent, agent
 		graphSummary = string(raw)
 	}
 	userPrompt := fmt.Sprintf(
-		"Task Type: %s\nObjective: %s\nAuthorization: %s\nCurrent Intent Type: %s\nCurrent Intent Title: %s\nCurrent Intent Objective: %s\nRecommended Next: %s\nGraphSummary:\n%s\nKey Facts:\n%s\nRecent Evidence:\n%s\nReturn JSON only. Example shape: {\"thought_summary\":\"...\",\"planned_action\":\"...\",\"next_intents\":[{\"title\":\"Inspect unresolved guard\",\"objective\":\"Determine whether the observed source-to-sink path has an effective guard.\",\"intent_type\":\"inspect_guard\",\"required_evidence\":[\"code_slice\",\"guard\"]}]}",
+		"Task Type: %s\nObjective: %s\nAuthorization: %s\nCurrent Intent Type: %s\nCurrent Intent Title: %s\nCurrent Intent Objective: %s\nRecommended Next: %s\nGraphSummary:\n%s\nKey Facts:\n%s\nRecent Evidence:\n%s\nReturn JSON only.",
 		task.TaskType,
 		task.Objective,
 		agentContext.AuthorizationView,
@@ -1305,6 +1358,10 @@ func buildEvidenceIntentPrompt(task model.AISecurityTask, finding model.AIFindin
 }
 
 func buildSecurityGraphPrompt(task model.AISecurityTask, packet SecurityGraphAuditPacket) (string, string) {
+	return buildSecurityGraphPromptWithPhase(task, packet, 0)
+}
+
+func buildSecurityGraphPromptWithPhase(task model.AISecurityTask, packet SecurityGraphAuditPacket, phase int) (string, string) {
 	systemPrompt := `You are the Reasoner in a Cairn-style security state-space search engine.
 Your job: read the current graph state, assess coverage progress, and output 1-3 high-value structured Intents.
 You do NOT execute tools. You only reason and plan.
@@ -1321,6 +1378,25 @@ Rules:
 - For code audit: think cross-file (route→auth→model→sink), not single-file grep.
 - For pentest: think behavior probing (baseline vs variant), not CVE lookup.
 - Return JSON only. No markdown, no explanation outside JSON.`
+
+	if phase >= 3 {
+		systemPrompt = `You are the Reasoner in a clue-driven security state-space exploration system.
+Your job: read the current graph state, assess clue coverage progress, and output 1-3 high-value structured clue Intents.
+You do NOT execute tools. You only reason and plan.
+Rules:
+- Never reference vulnerability names (SQLi, XSS, IDOR, RCE, SSRF, etc.) in any field.
+- Do NOT emit fields named vuln_type, cwe, severity, or finding_title.
+- Each Intent must use intent_type from: clue_collect, clue_validate, clue_refute, clue_chain_extend, scope_observation.
+- Each Intent must cite source_node_ids from the graph.
+- Each Intent must include operation, intent_goal, expected_clue_roles.
+- Do not emit findings directly. Emit Intents that will produce ClueObservations and Evidence.
+- A verified capability is an output item, not a global stop condition.
+- Continue exploring unresolved clue chains unless budget is exhausted or coverage is sufficient.
+- Prioritize unexplored high-value clue paths over repeating refuted ones.
+- Output is scoped to the current graph state. Do NOT produce a global report.
+- Return JSON only. No markdown, no explanation outside JSON.
+Output shape: {"analysis_summary":"...","goal_progress":"...","should_finalize":false,"finalize_reason":"","selected_intents":[{"title":"...","intent_type":"clue_validate","operation":"compare_behavior","intent_goal":"...","source_node_ids":[12,18],"hypothesis":"...","objective":"...","expected_clue_roles":["verification_or_observation"],"success_criteria":"...","failure_criteria":"...","allowed_tools":["http_request"],"risk_level":"low","priority":90}],"facts":[{"node_type":"clue_observation","title":"...","summary":"..."}]}`
+	}
 
 	nodes := make([]string, 0, len(packet.Nodes))
 	for i, node := range packet.Nodes {
@@ -1345,7 +1421,9 @@ Rules:
 		snippets = append(snippets, fmt.Sprintf("FILE: %s (lines %d-%d)\n%s", snippet.FilePath, snippet.LineStart, snippet.LineEnd, content))
 	}
 
-	schema := `{
+	schema := `Return structured JSON matching the system prompt schema.`
+	if phase < 3 {
+		schema = `{
   "analysis_summary": "brief assessment of current state",
   "goal_progress": "coverage status, unresolved high-priority surfaces, and evidence gaps",
   "should_finalize": false,
@@ -1366,9 +1444,10 @@ Rules:
   ],
   "facts": [{"node_type":"fact","title":"","summary":""}]
 }`
+	}
 
 	userPrompt := fmt.Sprintf(
-		"Task: %s\nType: %s\nGoal: %s\n\nCurrent Graph State:\n%s\n\nRelationships:\n%s\n\nCode Context:\n%s\n\nReturn structured JSON:\n%s",
+		"Task: %s\nType: %s\nGoal: %s\n\nCurrent Graph State:\n%s\n\nRelationships:\n%s\n\nCode Context:\n%s\n\n%s",
 		task.Name,
 		task.TaskType,
 		task.Objective,

@@ -13,9 +13,10 @@ import (
 )
 
 type ContractService struct {
-	db         *gorm.DB
-	blackboard *BlackboardService
-	models     *ModelRuntimeService
+	db                *gorm.DB
+	blackboard        *BlackboardService
+	models            *ModelRuntimeService
+	deliveryWriteback string // "off" (default) or "on" for legacy escape hatch
 }
 
 // ContractService is a delivery quality gate. It checks whether an
@@ -47,7 +48,14 @@ var genericContractFields = []string{
 }
 
 func NewContractService(db *gorm.DB, blackboard *BlackboardService, models *ModelRuntimeService) *ContractService {
-	return &ContractService{db: db, blackboard: blackboard, models: models}
+	return &ContractService{db: db, blackboard: blackboard, models: models, deliveryWriteback: "off"}
+}
+
+// SetDeliveryWriteback sets the delivery writeback mode ("off" or "on").
+func (s *ContractService) SetDeliveryWriteback(mode string) {
+	if s != nil && (mode == "off" || mode == "on") {
+		s.deliveryWriteback = mode
+	}
 }
 
 func (s *ContractService) ListByTask(ctx context.Context, taskID uint) ([]model.AIContractCheckResult, error) {
@@ -135,6 +143,17 @@ func (s *ContractService) CheckFinding(ctx context.Context, finding *model.AIFin
 			Count(&existing).Error; err == nil && existing > 0 {
 			return result, nil
 		}
+
+		// Phase 4: When deliveryWriteback is "off" (default), do NOT create
+		// a core Intent from the Delivery Layer. Only emit audit diagnostic.
+		if s.deliveryWriteback != "on" {
+			appendAuditEvent(ctx, s.db, &finding.TaskID, "agent.contract_incomplete_diagnostic", "contract-service",
+				"Contract incomplete; delivery writeback disabled, not spawning Intent.",
+				map[string]any{"findingId": finding.ID, "missing": missing, "downgrade": downgrade})
+			return result, nil
+		}
+
+		// Legacy escape hatch (RABBIT_DELIVERY_WRITEBACK=on): create Intent as before
 		intent := model.AIIntent{
 			TaskID:           finding.TaskID,
 			IntentType:       intentType,

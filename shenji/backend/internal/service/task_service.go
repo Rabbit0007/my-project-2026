@@ -269,6 +269,7 @@ func (s *TaskService) Create(ctx context.Context, input CreateTaskInput) (model.
 			SafetyLevel:        "authorized_non_destructive",
 		})
 	}
+	normalizeIntentBeforeCreate(&initialIntent, s.cfg.ClueDrivenPhase)
 	if err := s.db.WithContext(ctx).Create(&initialIntent).Error; err != nil {
 		return task, err
 	}
@@ -382,6 +383,7 @@ func (s *TaskService) UploadZip(ctx context.Context, taskID uint, fileName strin
 			CreatedAt:        time.Now().UTC(),
 			UpdatedAt:        time.Now().UTC(),
 		}
+		normalizeIntentBeforeCreate(&intent, s.cfg.ClueDrivenPhase)
 		_ = s.db.WithContext(ctx).Create(&intent).Error
 	}
 	if err := s.db.WithContext(ctx).Save(&task).Error; err != nil {

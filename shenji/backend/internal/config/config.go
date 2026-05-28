@@ -45,6 +45,12 @@ type Config struct {
 	CodeAuditMaxSnippets     int
 	CodeAuditBatchSize       int
 	CodeAuditMaxBatches      int
+
+	// Clue-driven runtime toggles (Phase 0+)
+	ClueDrivenPhase   int    // env RABBIT_CLUE_DRIVEN_PHASE, default 0
+	PromotionGate     string // env RABBIT_PROMOTION_GATE, default "clue_chain"
+	FinalizeMode      string // env RABBIT_FINALIZE_FALLBACK, default "legacy"
+	DeliveryWriteback string // env RABBIT_DELIVERY_WRITEBACK, default "off"
 }
 
 func Load() Config {
@@ -87,6 +93,12 @@ func Load() Config {
 		CodeAuditMaxSnippets:     intFromEnv("CODE_AUDIT_MAX_SNIPPETS", 420),
 		CodeAuditBatchSize:       intFromEnv("CODE_AUDIT_BATCH_SIZE", 6),
 		CodeAuditMaxBatches:      intFromEnv("CODE_AUDIT_MAX_BATCHES", 80),
+
+		// Clue-driven runtime toggles
+		ClueDrivenPhase:   intFromEnv("RABBIT_CLUE_DRIVEN_PHASE", 0),
+		PromotionGate:     getenv("RABBIT_PROMOTION_GATE", "legacy"),
+		FinalizeMode:      getenv("RABBIT_FINALIZE_FALLBACK", "legacy"),
+		DeliveryWriteback: getenv("RABBIT_DELIVERY_WRITEBACK", "off"),
 	}
 }
 

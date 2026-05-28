@@ -75,7 +75,7 @@ func TestDeliveryLayerOnlyConsumesVerifiedCapability(t *testing.T) {
 	ctx := context.Background()
 	task := createCoverageTask(t, db, 9204)
 	blackboard := NewBlackboardService(db)
-	loop := NewCairnLoop(db, blackboard, NewIntentService(db), nil, NewFindingService(db), NewContractService(db, blackboard, nil), nil, nil, nil)
+	loop := NewCairnLoop(db, blackboard, NewIntentService(db), nil, NewFindingService(db), NewContractService(db, blackboard, nil), nil, nil, nil).WithPromotionGate("legacy")
 	ids := createStructuredGateEvidenceSet(t, db, task.ID)
 
 	if _, err := loop.WriteCapability(ctx, task.ID, CapabilityDraft{CapabilityType: model.CapFileWrite, Target: "POST /upload", Strength: model.StrengthObserved, ProofSummary: string(mustJSON(completeDeliveryDetails("POST /upload", model.CapFileWrite, ids))), EvidenceIDs: ids, CanAdvanceGoal: true}, nil); err != nil {

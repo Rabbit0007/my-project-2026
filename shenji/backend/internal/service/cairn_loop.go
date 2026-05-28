@@ -23,15 +23,19 @@ import (
 // are report quality gates, Reports are outputs, and the graph exploration
 // loop is the product.
 type CairnLoop struct {
-	db         *gorm.DB
-	blackboard *BlackboardService
-	intents    *IntentService
-	toolRuns   *ToolRunService
-	findings   *FindingService
-	contracts  *ContractService
-	models     *ModelRuntimeService
-	reports    *ReportService
-	compactor  *BlackboardCompactor
+	db              *gorm.DB
+	blackboard      *BlackboardService
+	intents         *IntentService
+	toolRuns        *ToolRunService
+	findings        *FindingService
+	contracts       *ContractService
+	models          *ModelRuntimeService
+	reports         *ReportService
+	compactor       *BlackboardCompactor
+	clueChain       *ClueChainService
+	promotionGate   string // "clue_chain" or "legacy"
+	finalizeMode    string // "clue" or "legacy"
+	clueDrivenPhase int    // controls phase-gated behavior
 }
 
 // ExploreResult is the structured output of executing a single Intent.
@@ -63,6 +67,44 @@ type GraphDelta struct {
 	GoalStateUpdate         map[string]any     `json:"goal_state_update,omitempty"`
 	Diagnostics             []string           `json:"diagnostics"`
 	Errors                  []string           `json:"errors"`
+
+	// Clue-driven structured fields (Phase 0+). When present, these take
+	// priority over legacy flat fields during graph merge (Phase 2+).
+	NewClueFacts   []ClueFact      `json:"new_clue_facts,omitempty"`
+	ClueChainLinks []ClueChainLink `json:"clue_chain_link,omitempty"`
+	RefutedClues   []ClueRefutation `json:"refuted_clue,omitempty"`
+}
+
+// ClueFact is a structured clue observation to write to the blackboard.
+type ClueFact struct {
+	NodeKind     string         `json:"node_kind"`                    // clue_origin / clue_observation / clue_impact
+	Title        string         `json:"title"`
+	Summary      string         `json:"summary"`
+	Signal       string         `json:"observation_signal,omitempty"`
+	Roles        []string       `json:"roles,omitempty"`
+	EvidenceIDs  []uint         `json:"evidence_ids,omitempty"`
+	SourceIntent uint           `json:"source_intent_id,omitempty"`
+	Extra        map[string]any `json:"extra,omitempty"`
+}
+
+// ClueChainLink represents a directed relationship between two clue nodes.
+type ClueChainLink struct {
+	FromCluePath string         `json:"from_clue"`
+	ToCluePath   string         `json:"to_clue"`
+	LinkKind     string         `json:"link_kind"` // reachability / control_flow / authorization / data_flow / behavior_correlation
+	Roles        []string       `json:"roles,omitempty"`
+	EvidenceIDs  []uint         `json:"evidence_ids,omitempty"`
+	Extra        map[string]any `json:"extra,omitempty"`
+}
+
+// ClueRefutation marks a clue as disproved.
+type ClueRefutation struct {
+	TargetNodeID   uint   `json:"target_node_id,omitempty"`   // preferred: explicit node ID
+	TargetClueRef  string `json:"target_clue_ref,omitempty"`  // stable dedup key or clue ref
+	TargetDedupKey string `json:"target_dedup_key,omitempty"` // blackboard dedup_key
+	TargetCluePath string `json:"target_clue"`                // title fallback (legacy compat only)
+	Reason         string `json:"refute_reason"`
+	EvidenceIDs    []uint `json:"evidence_ids,omitempty"`
 }
 
 // GraphFact is a structured fact to write to the blackboard.
@@ -84,15 +126,20 @@ type CapabilityDraft struct {
 
 // IntentSuggestion is a structured intent suggestion from Reasoner or Explore.
 type IntentSuggestion struct {
-	IntentType      string   `json:"intent_type"`
-	Hypothesis      string   `json:"hypothesis"`
-	Objective       string   `json:"objective"`
-	SuccessCriteria string   `json:"success_criteria"`
-	FailureCriteria string   `json:"failure_criteria"`
-	AllowedTools    []string `json:"allowed_tools"`
-	RiskLevel       string   `json:"risk_level"`
-	Priority        int      `json:"priority"`
-	ParentNodeIDs   []uint   `json:"parent_node_ids"`
+	IntentType        string   `json:"intent_type"`
+	Hypothesis        string   `json:"hypothesis"`
+	Objective         string   `json:"objective"`
+	SuccessCriteria   string   `json:"success_criteria"`
+	FailureCriteria   string   `json:"failure_criteria"`
+	AllowedTools      []string `json:"allowed_tools"`
+	RiskLevel         string   `json:"risk_level"`
+	Priority          int      `json:"priority"`
+	ParentNodeIDs     []uint   `json:"parent_node_ids"`
+
+	// Clue-driven fields (Phase 0+)
+	Operation         string   `json:"operation,omitempty"`
+	IntentGoal        string   `json:"intent_goal,omitempty"`
+	ExpectedClueRoles []string `json:"expected_clue_roles,omitempty"`
 }
 
 type CoverageUpdate struct {
@@ -278,6 +325,10 @@ type GraphRecentProgress struct {
 	NewEvidenceLastN     int `json:"new_evidence_last_n"`
 	NewCapabilitiesLastN int `json:"new_capabilities_last_n"`
 	NewSurfacesLastN     int `json:"new_surfaces_last_n"`
+
+	// Clue-driven field (Phase 0+). Populated in Phase 2 when clue-plateau
+	// fallback is enabled.
+	NewClueFactsLastN int `json:"new_clue_facts_last_n"`
 }
 
 type CapabilityPromotionGate struct {
@@ -326,7 +377,31 @@ func NewCairnLoop(db *gorm.DB, bb *BlackboardService, intents *IntentService, to
 		db: db, blackboard: bb, intents: intents, toolRuns: toolRuns,
 		findings: findings, contracts: contracts, models: models,
 		reports: reports, compactor: compactor,
+		clueChain:     NewClueChainService(db),
+		promotionGate: "legacy", // default to legacy; orchestrator overrides via WithPromotionGate
 	}
+}
+
+// WithPromotionGate sets the promotion gate mode ("clue_chain" or "legacy").
+func (l *CairnLoop) WithPromotionGate(gate string) *CairnLoop {
+	if gate == "legacy" || gate == "clue_chain" {
+		l.promotionGate = gate
+	}
+	return l
+}
+
+// WithFinalizeMode sets the finalize mode ("clue" or "legacy").
+func (l *CairnLoop) WithFinalizeMode(mode string) *CairnLoop {
+	if mode == "clue" || mode == "legacy" {
+		l.finalizeMode = mode
+	}
+	return l
+}
+
+// WithClueDrivenPhase sets the clue-driven phase level for phase-gated behavior.
+func (l *CairnLoop) WithClueDrivenPhase(phase int) *CairnLoop {
+	l.clueDrivenPhase = phase
+	return l
 }
 
 // BuildGraphSummary creates a compressed view of the current graph state for the Reasoner.
@@ -804,15 +879,21 @@ func authContextsFromTask(task model.AISecurityTask) []string {
 func (l *CairnLoop) recentCoverageProgress(ctx context.Context, taskID uint) GraphRecentProgress {
 	since := time.Now().Add(-15 * time.Minute)
 	var progress GraphRecentProgress
-	var facts, evidence, caps, surfaces int64
+	var facts, evidence, caps, surfaces, clueFacts int64
 	_ = l.db.WithContext(ctx).Model(&model.AIBlackboardNode{}).Where("task_id = ? AND created_at >= ?", taskID, since).Count(&facts).Error
 	_ = l.db.WithContext(ctx).Model(&model.AIEvidence{}).Where("task_id = ? AND created_at >= ?", taskID, since).Count(&evidence).Error
 	_ = l.db.WithContext(ctx).Model(&model.AICapability{}).Where("task_id = ? AND created_at >= ?", taskID, since).Count(&caps).Error
 	_ = l.db.WithContext(ctx).Model(&model.AICoverageItem{}).Where("task_id = ? AND created_at >= ?", taskID, since).Count(&surfaces).Error
+	// Count clue_* nodes specifically for the clue-progress fallback
+	_ = l.db.WithContext(ctx).Model(&model.AIBlackboardNode{}).
+		Where("task_id = ? AND created_at >= ? AND node_type IN ?", taskID, since,
+			[]string{model.NodeClueOrigin, model.NodeClueObservation, model.NodeClueLink, model.NodeClueImpact}).
+		Count(&clueFacts).Error
 	progress.NewFactsLastN = int(facts)
 	progress.NewEvidenceLastN = int(evidence)
 	progress.NewCapabilitiesLastN = int(caps)
 	progress.NewSurfacesLastN = int(surfaces)
+	progress.NewClueFactsLastN = int(clueFacts)
 	return progress
 }
 
@@ -830,6 +911,7 @@ func (l *CairnLoop) ShouldFinalizeWithNoProgressLimit(ctx context.Context, task 
 	}
 	// Budget exhausted
 	if iterationNo >= maxIterations {
+		appendAuditEvent(ctx, l.db, &task.ID, "agent.shouldfinalize_reason", "cairn-loop", "budget-exhausted", map[string]any{"iteration": iterationNo, "max": maxIterations})
 		return true
 	}
 
@@ -851,6 +933,7 @@ func (l *CairnLoop) ShouldFinalizeWithNoProgressLimit(ctx context.Context, task 
 	}
 
 	if coverage.ScopeSummary.SurfaceCount > 0 && coverage.UnresolvedHighPrioritySurfaces == 0 && coverage.OpenHighPriorityIntents == 0 {
+		appendAuditEvent(ctx, l.db, &task.ID, "agent.shouldfinalize_reason", "cairn-loop", "clue-coverage-sufficient", map[string]any{"iteration": iterationNo, "surfaceCount": coverage.ScopeSummary.SurfaceCount})
 		return true
 	}
 
@@ -858,10 +941,27 @@ func (l *CairnLoop) ShouldFinalizeWithNoProgressLimit(ctx context.Context, task 
 	// than one failed validation so Rabbit can pivot through NegativeFact /
 	// UnverifiedRisk before it decides the graph has stopped expanding.
 	if consecutiveNoProgress >= noProgressLimit {
+		appendAuditEvent(ctx, l.db, &task.ID, "agent.shouldfinalize_reason", "cairn-loop", "clue-plateau", map[string]any{"iteration": iterationNo, "consecutiveNoProgress": consecutiveNoProgress, "limit": noProgressLimit})
 		return true
 	}
 
-	// All verified capabilities have been attempted for goal progression
+	// Phase 2 clue-progress fallback: when FinalizeMode == "clue" and
+	// SurfaceCount == 0, use clue-progress metrics instead of the legacy
+	// "verifiedCaps > 0 && iterationNo > 5" heuristic.
+	if l.finalizeMode == "clue" {
+		progress := l.recentCoverageProgress(ctx, task.ID)
+		if progress.NewClueFactsLastN == 0 &&
+			progress.NewEvidenceLastN == 0 &&
+			progress.NewCapabilitiesLastN == 0 &&
+			progress.NewSurfacesLastN == 0 &&
+			coverage.OpenHighPriorityIntents == 0 {
+			appendAuditEvent(ctx, l.db, &task.ID, "agent.shouldfinalize_reason", "cairn-loop", "clue-plateau", map[string]any{"iteration": iterationNo, "mode": "clue-progress-fallback", "progress": progress})
+			return true
+		}
+		return false
+	}
+
+	// Legacy fallback: All verified capabilities have been attempted for goal progression
 	var verifiedCaps int64
 	_ = l.db.WithContext(ctx).Model(&model.AICapability{}).
 		Where("task_id = ? AND strength = ?", task.ID, model.StrengthVerified).
@@ -1059,6 +1159,104 @@ func (l *CairnLoop) WriteExploreResult(ctx context.Context, taskID uint, result 
 // packets. It preserves the existing ExploreResult path while making the
 // graph update contract explicit for Bootstrap, Reason, and Explore.
 func (l *CairnLoop) ApplyGraphDelta(ctx context.Context, taskID uint, delta GraphDelta) error {
+	// Phase 2: Process structured clue fields first (primary source)
+	clueFactsIngested := 0
+	clueLinksIngested := 0
+	clueRefutesIngested := 0
+
+	for _, cf := range delta.NewClueFacts {
+		nodeType := cf.NodeKind
+		if nodeType == "" {
+			nodeType = model.NodeClueObservation
+		}
+		content := map[string]any{
+			"roles":              cf.Roles,
+			"observation_signal": cf.Signal,
+			"source_intent_id":  cf.SourceIntent,
+		}
+		for k, v := range cf.Extra {
+			content[k] = v
+		}
+		_, err := l.blackboard.UpsertNode(ctx, BlackboardNodeDraft{
+			TaskID:          taskID,
+			NodeType:        nodeType,
+			Title:           cf.Title,
+			Summary:         cf.Summary,
+			Content:         content,
+			DedupSeed:       nodeType + "|" + cf.Title,
+			ImportanceScore: 0.75,
+			SourceType:      "clue-delta",
+			SourceID:        fmt.Sprintf("intent-%d", delta.IntentID),
+			EvidenceRefs:    cf.EvidenceIDs,
+		})
+		if err == nil {
+			clueFactsIngested++
+		}
+	}
+
+	for _, link := range delta.ClueChainLinks {
+		edgeType := model.EdgeClueChainsTo
+		switch link.LinkKind {
+		case "reachability", "control_flow", "data_flow", "behavior_correlation":
+			edgeType = model.EdgeClueChainsTo
+		}
+		// Find from/to node IDs by dedup key or title match
+		fromID := l.resolveClueNodeID(ctx, taskID, link.FromCluePath)
+		toID := l.resolveClueNodeID(ctx, taskID, link.ToCluePath)
+		if fromID != 0 && toID != 0 {
+			_ = l.blackboard.AddEdge(ctx, taskID, fromID, toID, edgeType, 0.7, map[string]any{
+				"link_kind":    link.LinkKind,
+				"roles":        link.Roles,
+				"evidence_ids": link.EvidenceIDs,
+			})
+			clueLinksIngested++
+		}
+	}
+
+	for _, ref := range delta.RefutedClues {
+		// Write clue_refuted node
+		refutedNode, err := l.blackboard.UpsertNode(ctx, BlackboardNodeDraft{
+			TaskID:          taskID,
+			NodeType:        model.NodeClueRefuted,
+			Title:           "Refuted: " + ref.TargetCluePath,
+			Summary:         ref.Reason,
+			Content:         map[string]any{"target_clue": ref.TargetCluePath, "target_node_id": ref.TargetNodeID, "target_dedup_key": ref.TargetDedupKey, "refute_reason": ref.Reason},
+			DedupSeed:       "refuted|" + fmt.Sprintf("%d|%s|%s", ref.TargetNodeID, ref.TargetDedupKey, ref.TargetCluePath),
+			ImportanceScore: 0.6,
+			SourceType:      "clue-delta",
+			SourceID:        fmt.Sprintf("intent-%d", delta.IntentID),
+			EvidenceRefs:    ref.EvidenceIDs,
+		})
+		if err != nil {
+			continue
+		}
+		// Suppress the target clue node (don't delete, just mark suppressed)
+		targetID := l.resolveRefutationTarget(ctx, taskID, ref)
+		if targetID != 0 {
+			_ = l.db.WithContext(ctx).Model(&model.AIBlackboardNode{}).
+				Where("id = ? AND task_id = ?", targetID, taskID).
+				Update("status", model.BlackboardNodeStatusSuppressed).Error
+			// Add clue_refutes edge
+			_ = l.blackboard.AddEdge(ctx, taskID, refutedNode.ID, targetID, model.EdgeClueRefutes, 0.8, map[string]any{
+				"reason":       ref.Reason,
+				"evidence_ids": ref.EvidenceIDs,
+			})
+		}
+		clueRefutesIngested++
+	}
+
+	// Emit audit for structured clue ingestion
+	if clueFactsIngested > 0 || clueLinksIngested > 0 || clueRefutesIngested > 0 {
+		appendAuditEvent(ctx, l.db, &taskID, "agent.clue_delta_ingested", "cairn-loop", "Structured clue delta ingested", map[string]any{
+			"new_clue_facts": clueFactsIngested,
+			"clue_chain_links": clueLinksIngested,
+			"refuted_clues": clueRefutesIngested,
+			"intent_id": delta.IntentID,
+		})
+	}
+
+	// Legacy fields: process as observation-only (do NOT use for Promotion decisions)
+	// They still get written to the graph for visibility, but won't drive ClueChain evaluation
 	result := ExploreResult{
 		IntentID:         delta.IntentID,
 		Status:           "completed",
@@ -1095,6 +1293,75 @@ func (l *CairnLoop) ApplyGraphDelta(ctx context.Context, taskID uint, delta Grap
 		}
 	}
 	return nil
+}
+
+// resolveClueNodeID finds a blackboard node using a priority-based lookup:
+// 1. Explicit node ID (if non-zero)
+// 2. Stable dedup_key
+// 3. Clue ref (treated as dedup_key prefix or exact match)
+// 4. Title fallback (only if unique match; ambiguous = 0)
+func (l *CairnLoop) resolveClueNodeID(ctx context.Context, taskID uint, path string) uint {
+	if path == "" {
+		return 0
+	}
+	var node model.AIBlackboardNode
+
+	// Try dedup_key exact match
+	err := l.db.WithContext(ctx).
+		Where("task_id = ? AND dedup_key = ? AND status = ?", taskID, path, model.BlackboardNodeStatusActive).
+		First(&node).Error
+	if err == nil {
+		return node.ID
+	}
+
+	// Try exact title match (must be unique)
+	var nodes []model.AIBlackboardNode
+	_ = l.db.WithContext(ctx).
+		Where("task_id = ? AND title = ? AND status = ?", taskID, path, model.BlackboardNodeStatusActive).
+		Limit(2).
+		Find(&nodes).Error
+	if len(nodes) == 1 {
+		return nodes[0].ID
+	}
+	// Ambiguous (multiple matches) or no match — return 0
+	return 0
+}
+
+// resolveRefutationTarget resolves the target node for a ClueRefutation using
+// the priority: target_node_id > target_dedup_key > target_clue_ref > target_clue (title fallback).
+func (l *CairnLoop) resolveRefutationTarget(ctx context.Context, taskID uint, ref ClueRefutation) uint {
+	// 1. Explicit node ID
+	if ref.TargetNodeID != 0 {
+		var node model.AIBlackboardNode
+		if err := l.db.WithContext(ctx).
+			Where("id = ? AND task_id = ?", ref.TargetNodeID, taskID).
+			First(&node).Error; err == nil {
+			return node.ID
+		}
+	}
+	// 2. Dedup key
+	if ref.TargetDedupKey != "" {
+		var node model.AIBlackboardNode
+		if err := l.db.WithContext(ctx).
+			Where("task_id = ? AND dedup_key = ?", taskID, ref.TargetDedupKey).
+			First(&node).Error; err == nil {
+			return node.ID
+		}
+	}
+	// 3. Clue ref (treated as dedup_key)
+	if ref.TargetClueRef != "" {
+		var node model.AIBlackboardNode
+		if err := l.db.WithContext(ctx).
+			Where("task_id = ? AND dedup_key = ?", taskID, ref.TargetClueRef).
+			First(&node).Error; err == nil {
+			return node.ID
+		}
+	}
+	// 4. Title fallback (must be unique)
+	if ref.TargetCluePath != "" {
+		return l.resolveClueNodeID(ctx, taskID, ref.TargetCluePath)
+	}
+	return 0
 }
 
 func (l *CairnLoop) EmitGraphSearchDiagnostic(ctx context.Context, diagnostic GraphSearchLoopDiagnostic) {
@@ -1174,6 +1441,10 @@ func (l *CairnLoop) CreateIntentFromSuggestion(ctx context.Context, taskID uint,
 		CreatedReason:    "Cairn reasoner suggested exploration",
 		CreatedAt:        time.Now().UTC(),
 		UpdatedAt:        time.Now().UTC(),
+	}
+	if normalized, origType, hint := normalizeIntentBeforeCreate(&intent, l.clueDrivenPhase); normalized {
+		appendAuditEvent(ctx, l.db, &taskID, "agent.legacy_intent_normalized", "cairn-loop",
+			"Intent normalized from "+origType+" to "+intent.IntentType, map[string]any{"original": origType, "modern": intent.IntentType, "hint": hint})
 	}
 	_ = l.db.WithContext(ctx).Create(&intent).Error
 }
@@ -1458,6 +1729,21 @@ func mergeJSONUintRefs(existing datatypes.JSON, more []uint) datatypes.JSON {
 }
 
 func (l *CairnLoop) EvaluateCapabilityPromotionGate(ctx context.Context, cap model.AICapability) CapabilityPromotionGate {
+	// Phase 1: When promotionGate is "clue_chain", use ClueChainService for role-coverage evaluation.
+	// When "legacy", fall through to the old delivery-proof-based gate.
+	if l.promotionGate == "clue_chain" && l.clueChain != nil {
+		eval := l.clueChain.EvaluateCapability(ctx, cap)
+		return CapabilityPromotionGate{
+			Allowed:       eval.Allowed,
+			Missing:       eval.Missing,
+			EvidenceRefs:  eval.EvidenceRefs,
+			FactRefs:      eval.NodeRefs,
+			ValidationRef: strings.Join(eval.Relations, ", "),
+			Relations:     eval.Relations,
+		}
+	}
+
+	// TODO(phase4): remove legacy promotion proof path
 	gate := CapabilityPromotionGate{
 		EvidenceRefs: uintListFromJSON(cap.EvidenceRefs),
 		FactRefs:     uintListFromJSON(cap.SourceNodeIDs),
