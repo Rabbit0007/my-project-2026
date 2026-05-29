@@ -1,0 +1,61 @@
+=== Entrypoint Reachability Analysis for Intent 776 ===
+Task: 92 (code_audit)
+Analyzed: 2026-05-29
+
+## Identified Entrypoint Candidates
+
+### 1. UserController.search()
+File: /workspace/input/extracted/src/main/java/demo/UserController.java
+- Method: search(HttpServletRequest request)
+- Parameters:
+  * keyword = request.getParameter("keyword")
+  * orderBy = request.getParameter("orderBy")
+- Flow: UserController -> UserService -> UserMapper -> SQL Query
+- Vulnerable Parameter: orderBy (used with ${orderBy} in SQL - direct interpolation)
+
+### 2. AdminExportController.export()
+File: /workspace/input/extracted/src/main/java/demo/AdminExportController.java
+- Method: export(HttpServletRequest request)
+- Parameters:
+  * format = request.getParameter("format")
+  * includeInactive = request.getParameter("includeInactive")
+- Flow: AdminExportController -> AdminExportService
+- No SQL injection; format validated against whitelist
+
+## Vulnerability Confirmed
+
+### SQL Injection in ORDER BY Clause
+File: /workspace/input/extracted/src/main/resources/mapper/UserMapper.xml
+Line: 7 (ORDER BY ${orderBy})
+
+Vulnerable Code:
+```xml
+ORDER BY ${orderBy}
+```
+
+Issue: Uses MyBatis string interpolation (${...}) instead of parameter binding (#{...})
+- ${orderBy} = direct string substitution = SQL INJECTION
+- #{keyword} = prepared statement parameter = SAFE
+
+Attack Vector:
+- orderBy parameter is passed from UserController -> UserService -> UserMapper
+- No sanitization or whitelist validation observed
+- Attacker can inject: orderBy="id; DROP TABLE users--"
+
+## Reachability Assessment
+
+Static Analysis Results:
+- Controller classes accept HttpServletRequest parameters -> web endpoint pattern
+- No Spring MVC annotations visible (may use XML-based wiring)
+- Code paths are well-formed and executable
+
+Runtime Validation:
+- No running application server available in worker container
+- Cannot perform actual HTTP request validation
+- Static code path confirms end-to-end flow exists
+
+## Conclusion
+
+Entrypoints are structurally valid and reachable in code path terms.
+SQL injection vulnerability is CONFIRMED via static analysis.
+Actual network reachability requires runtime deployment.

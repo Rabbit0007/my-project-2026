@@ -1,0 +1,730 @@
+[
+    {
+        "id": 2987,
+        "taskId": 83,
+        "iterationId": 399,
+        "intentId": 669,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 669,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-669-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "enumerate_surfaces",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2987-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2987-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2987-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:26:50.613046Z",
+        "finishedAt": "2026-05-29T02:26:50.649189Z",
+        "CreatedAt": "2026-05-29T02:26:50.613046Z"
+    },
+    {
+        "id": 2986,
+        "taskId": 83,
+        "iterationId": 398,
+        "intentId": 664,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 664,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-664-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "enumerate_surfaces",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2986-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2986-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2986-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:26:12.73413Z",
+        "finishedAt": "2026-05-29T02:26:12.764334Z",
+        "CreatedAt": "2026-05-29T02:26:12.73413Z"
+    },
+    {
+        "id": 2985,
+        "taskId": 83,
+        "iterationId": 397,
+        "intentId": 661,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 661,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-661-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "enumerate_surfaces",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2985-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2985-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2985-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:25:37.292281Z",
+        "finishedAt": "2026-05-29T02:25:37.320395Z",
+        "CreatedAt": "2026-05-29T02:25:37.292281Z"
+    },
+    {
+        "id": 2984,
+        "taskId": 83,
+        "iterationId": 396,
+        "intentId": 658,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 658,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-658-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "enumerate_surfaces",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2984-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2984-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2984-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:25:05.764248Z",
+        "finishedAt": "2026-05-29T02:25:05.80909Z",
+        "CreatedAt": "2026-05-29T02:25:05.764248Z"
+    },
+    {
+        "id": 2983,
+        "taskId": 83,
+        "iterationId": 395,
+        "intentId": 654,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 654,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-654-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "discover_entrypoints",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2983-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2983-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2983-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:24:31.09067Z",
+        "finishedAt": "2026-05-29T02:24:31.129085Z",
+        "CreatedAt": "2026-05-29T02:24:31.09067Z"
+    },
+    {
+        "id": 2981,
+        "taskId": 83,
+        "iterationId": 392,
+        "intentId": 646,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 646,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-646-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "enumerate_surfaces",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2981-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2981-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2981-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:23:55.981799Z",
+        "finishedAt": "2026-05-29T02:23:56.028056Z",
+        "CreatedAt": "2026-05-29T02:23:55.981799Z"
+    },
+    {
+        "id": 2979,
+        "taskId": 83,
+        "iterationId": 390,
+        "intentId": 640,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 640,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-640-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "discover_entrypoints",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2979-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2979-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2979-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:23:21.180771Z",
+        "finishedAt": "2026-05-29T02:23:21.2063Z",
+        "CreatedAt": "2026-05-29T02:23:21.180771Z"
+    },
+    {
+        "id": 2977,
+        "taskId": 83,
+        "iterationId": 388,
+        "intentId": 634,
+        "runnerType": "worker_agent",
+        "toolName": "pi_worker",
+        "inputJson": {
+            "model": "glm-5",
+            "tools": [
+                "read",
+                "write",
+                "edit",
+                "bash",
+                "grep",
+                "find",
+                "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+                "tool_responsibilities": [
+                    "Perform bounded observation or validation actions.",
+                    "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                    "Produce raw observations suitable for Evidence normalization."
+                ],
+                "brain_responsibilities": [
+                    "Read graph state and decide which Hypothesis or Intent should exist next.",
+                    "Score and budget branch expansion before execution.",
+                    "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                    "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+                ],
+                "worker_responsibilities": [
+                    "Claim and execute exactly one current Intent.",
+                    "Use controlled tools to observe or validate only within authorized scope.",
+                    "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                    "Stop at fact production; Rabbit Brain performs graph judgment."
+                ],
+                "delivery_responsibilities": [
+                    "Generate Findings only from evidence-backed validated paths.",
+                    "Use Contract as report quality gate, not as exploration planner.",
+                    "Render reports after graph exploration produces sufficient facts."
+                ],
+                "forbidden_worker_decisions": [
+                    "Do not decide that the goal is complete.",
+                    "Do not mark a Hypothesis as validated or refuted.",
+                    "Do not create or confirm Findings.",
+                    "Do not run Contract checks or report formatting.",
+                    "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+                ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 634,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-634-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "code_trace",
+            "containerImage": "rabbit-pi-worker-kali:local"
+        },
+        "commandPreview": "",
+        "containerId": "",
+        "imageName": "",
+        "workspacePath": "/app/workspace/task-83/work/pi-workers/7",
+        "networkPolicy": "bridge",
+        "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+        },
+        "status": "failed",
+        "exitCode": null,
+        "stdoutRef": "minio://rabbit-artifacts/task-83/toolruns/2977-stdout.txt",
+        "stderrRef": "minio://rabbit-artifacts/task-83/toolruns/2977-stderr.txt",
+        "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-83/toolruns/2977-worker-context.json"
+        },
+        "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+        },
+        "blockReason": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "startedAt": "2026-05-29T02:22:53.86482Z",
+        "finishedAt": "2026-05-29T02:22:53.900736Z",
+        "CreatedAt": "2026-05-29T02:22:53.86482Z"
+    }
+]

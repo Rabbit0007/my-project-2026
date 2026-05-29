@@ -1,0 +1,52 @@
+=== Origin and Entry Clue Analysis (Intent 785) ===
+
+## Source Files Examined:
+1. src/main/java/demo/AdminExportController.java
+2. src/main/java/demo/UserController.java
+3. src/main/java/demo/UserService.java
+4. src/main/java/demo/AdminExportService.java
+5. src/main/java/demo/UserMapper.java
+6. src/main/resources/mapper/UserMapper.xml
+
+## origin_or_entry Clues (Entry Points):
+
+### AdminExportController.export(HttpServletRequest)
+- File: AdminExportController.java:7
+- Type: public controller method
+- Signature: public String export(HttpServletRequest request)
+- Role: HTTP request handler for admin export functionality
+
+### UserController.search(HttpServletRequest)
+- File: UserController.java:12
+- Type: public controller method
+- Signature: public List<UserRecord> search(HttpServletRequest request)
+- Role: HTTP request handler for user search functionality
+
+## trigger_or_control Clues (User Parameter Reception):
+
+### AdminExportController - Parameter Reception
+- File: AdminExportController.java:8-9
+- Parameters received from HttpServletRequest:
+  * format: request.getParameter("format") at line 8
+  * includeInactive: request.getParameter("includeInactive") at line 9
+- Flow: parameters passed to AdminExportService.exportUsers(format, includeInactive)
+
+### UserController - Parameter Reception
+- File: UserController.java:13-14
+- Parameters received from HttpServletRequest:
+  * keyword: request.getParameter("keyword") at line 13
+  * orderBy: request.getParameter("orderBy") at line 14
+- Flow: parameters passed to UserService.search(keyword, orderBy) -> UserMapper.search(keyword, orderBy)
+
+## Data Flow to Downstream Sinks:
+
+### UserMapper.xml - SQL Query Construction
+- File: UserMapper.xml:5-9
+- keyword: uses #{keyword} (prepared statement - safe from SQL injection)
+- orderBy: uses ${orderBy} (string interpolation - potential SQL injection vector)
+- The orderBy parameter flows from UserController.search() -> UserService.search() -> UserMapper.search() -> ${orderBy} in SQL
+
+## Summary:
+- 2 origin_or_entry clues identified (controller methods)
+- 4 trigger_or_control clues identified (user parameters: format, includeInactive, keyword, orderBy)
+- 1 potential security-relevant sink identified (${orderBy} in MyBatis)

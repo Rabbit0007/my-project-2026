@@ -1,0 +1,2199 @@
+[
+    {
+        "id": 6986,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 647.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 647,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "inspect_dataflow",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:26:50.695936Z"
+    },
+    {
+        "id": 6985,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.4309,
+            "topIntentId": 647,
+            "scoredIntents": 16,
+            "pendingIntents": 16,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:26:50.694663Z"
+    },
+    {
+        "id": 6984,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 8,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 76,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 669,
+                "goal": "Catalog file open, read, write, and delete operations in the extracted code as potential sinks for path injection.",
+                "kind": "enumerate_surfaces",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:26:50.685683Z"
+    },
+    {
+        "id": 6983,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.4309,
+            "topIntentId": 647,
+            "scoredIntents": 16,
+            "pendingIntents": 16,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:26:50.682583Z"
+    },
+    {
+        "id": 6982,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 2,
+            "parentIntentId": 669
+        },
+        "occurredAt": "2026-05-29T02:26:50.673935Z"
+    },
+    {
+        "id": 6981,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Trace dataflow from entrypoints to identified sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 671,
+            "hypothesisId": 435
+        },
+        "occurredAt": "2026-05-29T02:26:50.672957Z"
+    },
+    {
+        "id": 6980,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Trace dataflow from entrypoints to identified sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 435,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:26:50.671016Z"
+    },
+    {
+        "id": 6979,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Diagnose tool failure for pi_worker",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 670,
+            "hypothesisId": 434
+        },
+        "occurredAt": "2026-05-29T02:26:50.667706Z"
+    },
+    {
+        "id": 6978,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Diagnose tool failure for pi_worker",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 434,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:26:50.664767Z"
+    },
+    {
+        "id": 6977,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 14,
+                "context_growth_rate": 72,
+                "average_branch_value": 0.42421428571428577,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 72,
+                "pending_hypothesis_count": 14,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 14
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "iteration_planner",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 3,
+            "generated_count_requested": 3,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:26:50.662699Z"
+    },
+    {
+        "id": 6976,
+        "taskId": 83,
+        "eventType": "hypothesis.inconclusive",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate filesystem operation sinks",
+        "metadata": {
+            "reason": "inconclusive_evidence",
+            "hypothesisId": 433,
+            "unverifiedRiskId": 169
+        },
+        "occurredAt": "2026-05-29T02:26:50.661596Z"
+    },
+    {
+        "id": 6975,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 15,
+                "context_growth_rate": 70,
+                "average_branch_value": 0.42421428571428577,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 70,
+                "pending_hypothesis_count": 15,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 14
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "evidence_expansion",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 6,
+            "generated_count_requested": 0,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:26:50.657279Z"
+    },
+    {
+        "id": 6974,
+        "taskId": 83,
+        "eventType": "agent.pi_worker_failed",
+        "actor": "worker-runtime",
+        "summary": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "metadata": {
+            "driver": "pi_container_kali",
+            "intentId": 669,
+            "workerId": "worker:7:glm-5"
+        },
+        "occurredAt": "2026-05-29T02:26:50.654453Z"
+    },
+    {
+        "id": 6973,
+        "taskId": 83,
+        "eventType": "agent.model_plan",
+        "actor": "model-runtime",
+        "summary": "Model-assisted iteration plan generated.",
+        "metadata": {
+            "model": "glm-5",
+            "intentId": 669,
+            "provider": "openai-compatible",
+            "latencyMs": 37790,
+            "intentType": "enumerate_surfaces"
+        },
+        "occurredAt": "2026-05-29T02:26:50.60885Z"
+    },
+    {
+        "id": 6972,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 669.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 669,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "enumerate_surfaces",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:26:12.813757Z"
+    },
+    {
+        "id": 6971,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 669,
+            "scoredIntents": 15,
+            "pendingIntents": 15,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:26:12.81271Z"
+    },
+    {
+        "id": 6970,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 7,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 69,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 664,
+                "goal": "Identify functions or handlers accepting external file path arguments to establish potential injection sources.",
+                "kind": "enumerate_surfaces",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:26:12.803093Z"
+    },
+    {
+        "id": 6969,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 669,
+            "scoredIntents": 15,
+            "pendingIntents": 15,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:26:12.80012Z"
+    },
+    {
+        "id": 6968,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 3,
+            "parentIntentId": 664
+        },
+        "occurredAt": "2026-05-29T02:26:12.793565Z"
+    },
+    {
+        "id": 6967,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Enumerate filesystem operation sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 669,
+            "hypothesisId": 433
+        },
+        "occurredAt": "2026-05-29T02:26:12.792554Z"
+    },
+    {
+        "id": 6966,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate filesystem operation sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 433,
+            "expectedCapability": "internal_service_access"
+        },
+        "occurredAt": "2026-05-29T02:26:12.790617Z"
+    },
+    {
+        "id": 6965,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Inspect path validation and sanitization guards",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 668,
+            "hypothesisId": 432
+        },
+        "occurredAt": "2026-05-29T02:26:12.787404Z"
+    },
+    {
+        "id": 6964,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Inspect path validation and sanitization guards",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 432,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:26:12.784736Z"
+    },
+    {
+        "id": 6963,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Map dataflow from path entrypoints to filesystem sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 667,
+            "hypothesisId": 431
+        },
+        "occurredAt": "2026-05-29T02:26:12.781913Z"
+    },
+    {
+        "id": 6962,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Map dataflow from path entrypoints to filesystem sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 431,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:26:12.778432Z"
+    },
+    {
+        "id": 6961,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 12,
+                "context_growth_rate": 63,
+                "average_branch_value": 0.42430000000000007,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 63,
+                "pending_hypothesis_count": 12,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 12
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "iteration_planner",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 3,
+            "generated_count_requested": 3,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:26:12.776059Z"
+    },
+    {
+        "id": 6960,
+        "taskId": 83,
+        "eventType": "hypothesis.inconclusive",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate path entrypoints in extracted code",
+        "metadata": {
+            "reason": "inconclusive_evidence",
+            "hypothesisId": 428,
+            "unverifiedRiskId": 168
+        },
+        "occurredAt": "2026-05-29T02:26:12.774857Z"
+    },
+    {
+        "id": 6959,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 13,
+                "context_growth_rate": 61,
+                "average_branch_value": 0.42430000000000007,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 61,
+                "pending_hypothesis_count": 13,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 12
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "evidence_expansion",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 6,
+            "generated_count_requested": 0,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:26:12.770949Z"
+    },
+    {
+        "id": 6958,
+        "taskId": 83,
+        "eventType": "agent.pi_worker_failed",
+        "actor": "worker-runtime",
+        "summary": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "metadata": {
+            "driver": "pi_container_kali",
+            "intentId": 664,
+            "workerId": "worker:7:glm-5"
+        },
+        "occurredAt": "2026-05-29T02:26:12.768814Z"
+    },
+    {
+        "id": 6957,
+        "taskId": 83,
+        "eventType": "agent.model_plan",
+        "actor": "model-runtime",
+        "summary": "Model-assisted iteration plan generated.",
+        "metadata": {
+            "model": "glm-5",
+            "intentId": 664,
+            "provider": "openai-compatible",
+            "latencyMs": 35356,
+            "intentType": "enumerate_surfaces"
+        },
+        "occurredAt": "2026-05-29T02:26:12.727939Z"
+    },
+    {
+        "id": 6956,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 664.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 664,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "enumerate_surfaces",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:25:37.364809Z"
+    },
+    {
+        "id": 6955,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 664,
+            "scoredIntents": 13,
+            "pendingIntents": 13,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:25:37.363796Z"
+    },
+    {
+        "id": 6954,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 6,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 60,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 661,
+                "goal": "Scan the 2 extracted files for file open, read, write, and delete operations, cataloging each as a potential sink for path injection.",
+                "kind": "enumerate_surfaces",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:25:37.356266Z"
+    },
+    {
+        "id": 6953,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 664,
+            "scoredIntents": 13,
+            "pendingIntents": 13,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:25:37.352595Z"
+    },
+    {
+        "id": 6952,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 3,
+            "parentIntentId": 661
+        },
+        "occurredAt": "2026-05-29T02:25:37.346898Z"
+    },
+    {
+        "id": 6951,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Inspect path validation guards",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 666,
+            "hypothesisId": 430
+        },
+        "occurredAt": "2026-05-29T02:25:37.34581Z"
+    },
+    {
+        "id": 6950,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Inspect path validation guards",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 430,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:25:37.343617Z"
+    },
+    {
+        "id": 6949,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Trace dataflow from entrypoints to sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 665,
+            "hypothesisId": 429
+        },
+        "occurredAt": "2026-05-29T02:25:37.340734Z"
+    },
+    {
+        "id": 6948,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Trace dataflow from entrypoints to sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 429,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:25:37.33878Z"
+    },
+    {
+        "id": 6947,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Enumerate path entrypoints in extracted code",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 664,
+            "hypothesisId": 428
+        },
+        "occurredAt": "2026-05-29T02:25:37.33596Z"
+    },
+    {
+        "id": 6946,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate path entrypoints in extracted code",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 428,
+            "expectedCapability": "internal_service_access"
+        },
+        "occurredAt": "2026-05-29T02:25:37.333877Z"
+    },
+    {
+        "id": 6945,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 10,
+                "context_growth_rate": 54,
+                "average_branch_value": 0.42442,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 54,
+                "pending_hypothesis_count": 10,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 10
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "iteration_planner",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 3,
+            "generated_count_requested": 3,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:25:37.332293Z"
+    },
+    {
+        "id": 6944,
+        "taskId": 83,
+        "eventType": "hypothesis.inconclusive",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Identify filesystem operation sinks in extracted code",
+        "metadata": {
+            "reason": "inconclusive_evidence",
+            "hypothesisId": 425,
+            "unverifiedRiskId": 167
+        },
+        "occurredAt": "2026-05-29T02:25:37.331464Z"
+    },
+    {
+        "id": 6943,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 11,
+                "context_growth_rate": 52,
+                "average_branch_value": 0.42442,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 52,
+                "pending_hypothesis_count": 11,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 10
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "evidence_expansion",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 6,
+            "generated_count_requested": 0,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:25:37.326377Z"
+    },
+    {
+        "id": 6942,
+        "taskId": 83,
+        "eventType": "agent.pi_worker_failed",
+        "actor": "worker-runtime",
+        "summary": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "metadata": {
+            "driver": "pi_container_kali",
+            "intentId": 661,
+            "workerId": "worker:7:glm-5"
+        },
+        "occurredAt": "2026-05-29T02:25:37.324208Z"
+    },
+    {
+        "id": 6941,
+        "taskId": 83,
+        "eventType": "agent.model_plan",
+        "actor": "model-runtime",
+        "summary": "Model-assisted iteration plan generated.",
+        "metadata": {
+            "model": "glm-5",
+            "intentId": 661,
+            "provider": "openai-compatible",
+            "latencyMs": 31412,
+            "intentType": "enumerate_surfaces"
+        },
+        "occurredAt": "2026-05-29T02:25:37.286963Z"
+    },
+    {
+        "id": 6940,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 661.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 661,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "enumerate_surfaces",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:25:05.854373Z"
+    },
+    {
+        "id": 6939,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 661,
+            "scoredIntents": 11,
+            "pendingIntents": 11,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:25:05.853056Z"
+    },
+    {
+        "id": 6938,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 5,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 51,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 658,
+                "goal": "Identify file open, read, write, and delete operations that could act as sinks for injected paths in the extracted code.",
+                "kind": "enumerate_surfaces",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:25:05.846246Z"
+    },
+    {
+        "id": 6937,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 661,
+            "scoredIntents": 11,
+            "pendingIntents": 11,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:25:05.84334Z"
+    },
+    {
+        "id": 6936,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 3,
+            "parentIntentId": 658
+        },
+        "occurredAt": "2026-05-29T02:25:05.837959Z"
+    },
+    {
+        "id": 6935,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Identify sanitization guards on path arguments",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 663,
+            "hypothesisId": 427
+        },
+        "occurredAt": "2026-05-29T02:25:05.836726Z"
+    },
+    {
+        "id": 6934,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Identify sanitization guards on path arguments",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 427,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:25:05.834422Z"
+    },
+    {
+        "id": 6933,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Map path arguments to filesystem sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 662,
+            "hypothesisId": 426
+        },
+        "occurredAt": "2026-05-29T02:25:05.832044Z"
+    },
+    {
+        "id": 6932,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Map path arguments to filesystem sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 426,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:25:05.830071Z"
+    },
+    {
+        "id": 6931,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Identify filesystem operation sinks in extracted code",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 661,
+            "hypothesisId": 425
+        },
+        "occurredAt": "2026-05-29T02:25:05.826936Z"
+    },
+    {
+        "id": 6930,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Identify filesystem operation sinks in extracted code",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 425,
+            "expectedCapability": "internal_service_access"
+        },
+        "occurredAt": "2026-05-29T02:25:05.824749Z"
+    },
+    {
+        "id": 6929,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 8,
+                "context_growth_rate": 45,
+                "average_branch_value": 0.4246000000000001,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 45,
+                "pending_hypothesis_count": 8,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 8
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "iteration_planner",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 3,
+            "generated_count_requested": 3,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:25:05.822673Z"
+    },
+    {
+        "id": 6928,
+        "taskId": 83,
+        "eventType": "hypothesis.inconclusive",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate filesystem operation sinks",
+        "metadata": {
+            "reason": "inconclusive_evidence",
+            "hypothesisId": 422,
+            "unverifiedRiskId": 166
+        },
+        "occurredAt": "2026-05-29T02:25:05.82182Z"
+    },
+    {
+        "id": 6927,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 9,
+                "context_growth_rate": 43,
+                "average_branch_value": 0.4246000000000001,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 43,
+                "pending_hypothesis_count": 9,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 8
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "evidence_expansion",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 6,
+            "generated_count_requested": 0,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:25:05.81666Z"
+    },
+    {
+        "id": 6926,
+        "taskId": 83,
+        "eventType": "agent.pi_worker_failed",
+        "actor": "worker-runtime",
+        "summary": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "metadata": {
+            "driver": "pi_container_kali",
+            "intentId": 658,
+            "workerId": "worker:7:glm-5"
+        },
+        "occurredAt": "2026-05-29T02:25:05.813972Z"
+    },
+    {
+        "id": 6925,
+        "taskId": 83,
+        "eventType": "agent.model_plan",
+        "actor": "model-runtime",
+        "summary": "Model-assisted iteration plan generated.",
+        "metadata": {
+            "model": "glm-5",
+            "intentId": 658,
+            "provider": "openai-compatible",
+            "latencyMs": 34579,
+            "intentType": "enumerate_surfaces"
+        },
+        "occurredAt": "2026-05-29T02:25:05.758042Z"
+    },
+    {
+        "id": 6924,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 658.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 658,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "enumerate_surfaces",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:24:31.174864Z"
+    },
+    {
+        "id": 6923,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 658,
+            "scoredIntents": 9,
+            "pendingIntents": 9,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:24:31.173816Z"
+    },
+    {
+        "id": 6922,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 4,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 42,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 654,
+                "goal": "Identify functions or handlers that accept file path arguments from external input sources in the extracted fixture code.",
+                "kind": "discover_entrypoints",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:24:31.167862Z"
+    },
+    {
+        "id": 6921,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 658,
+            "scoredIntents": 9,
+            "pendingIntents": 9,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:24:31.165356Z"
+    },
+    {
+        "id": 6920,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 3,
+            "parentIntentId": 654
+        },
+        "occurredAt": "2026-05-29T02:24:31.159578Z"
+    },
+    {
+        "id": 6919,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Trace dataflow from entrypoints to sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 660,
+            "hypothesisId": 424
+        },
+        "occurredAt": "2026-05-29T02:24:31.158547Z"
+    },
+    {
+        "id": 6918,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Trace dataflow from entrypoints to sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 424,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:24:31.156299Z"
+    },
+    {
+        "id": 6917,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Inspect path validation guards",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 659,
+            "hypothesisId": 423
+        },
+        "occurredAt": "2026-05-29T02:24:31.153651Z"
+    },
+    {
+        "id": 6916,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Inspect path validation guards",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 423,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:24:31.15143Z"
+    },
+    {
+        "id": 6915,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Enumerate filesystem operation sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 658,
+            "hypothesisId": 422
+        },
+        "occurredAt": "2026-05-29T02:24:31.148133Z"
+    },
+    {
+        "id": 6914,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate filesystem operation sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 422,
+            "expectedCapability": "internal_service_access"
+        },
+        "occurredAt": "2026-05-29T02:24:31.145516Z"
+    },
+    {
+        "id": 6913,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 6,
+                "context_growth_rate": 36,
+                "average_branch_value": 0.4249,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 36,
+                "pending_hypothesis_count": 6,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 6
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "iteration_planner",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 3,
+            "generated_count_requested": 3,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:24:31.142978Z"
+    },
+    {
+        "id": 6912,
+        "taskId": 83,
+        "eventType": "hypothesis.inconclusive",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate path entrypoints",
+        "metadata": {
+            "reason": "inconclusive_evidence",
+            "hypothesisId": 418,
+            "unverifiedRiskId": 165
+        },
+        "occurredAt": "2026-05-29T02:24:31.141844Z"
+    },
+    {
+        "id": 6911,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 7,
+                "context_growth_rate": 34,
+                "average_branch_value": 0.4249,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 34,
+                "pending_hypothesis_count": 7,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 6
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "evidence_expansion",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 6,
+            "generated_count_requested": 0,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:24:31.137299Z"
+    },
+    {
+        "id": 6910,
+        "taskId": 83,
+        "eventType": "agent.pi_worker_failed",
+        "actor": "worker-runtime",
+        "summary": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "metadata": {
+            "driver": "pi_container_kali",
+            "intentId": 654,
+            "workerId": "worker:7:glm-5"
+        },
+        "occurredAt": "2026-05-29T02:24:31.134074Z"
+    },
+    {
+        "id": 6909,
+        "taskId": 83,
+        "eventType": "agent.model_plan",
+        "actor": "model-runtime",
+        "summary": "Model-assisted iteration plan generated.",
+        "metadata": {
+            "model": "glm-5",
+            "intentId": 654,
+            "provider": "openai-compatible",
+            "latencyMs": 35003,
+            "intentType": "discover_entrypoints"
+        },
+        "occurredAt": "2026-05-29T02:24:31.084241Z"
+    },
+    {
+        "id": 6890,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 654.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 654,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "discover_entrypoints",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:23:56.077461Z"
+    },
+    {
+        "id": 6889,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 654,
+            "scoredIntents": 7,
+            "pendingIntents": 7,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:23:56.075894Z"
+    },
+    {
+        "id": 6888,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 3,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 33,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 646,
+                "goal": "Identify file open/read/write calls that could serve as sinks for path injection.",
+                "kind": "enumerate_surfaces",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:23:56.069604Z"
+    },
+    {
+        "id": 6887,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 654,
+            "scoredIntents": 7,
+            "pendingIntents": 7,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:23:56.066949Z"
+    },
+    {
+        "id": 6886,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 3,
+            "parentIntentId": 646
+        },
+        "occurredAt": "2026-05-29T02:23:56.062122Z"
+    },
+    {
+        "id": 6885,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Enumerate path entrypoints",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 654,
+            "hypothesisId": 418
+        },
+        "occurredAt": "2026-05-29T02:23:56.060976Z"
+    },
+    {
+        "id": 6884,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate path entrypoints",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 418,
+            "expectedCapability": "internal_service_access"
+        },
+        "occurredAt": "2026-05-29T02:23:56.058405Z"
+    },
+    {
+        "id": 6883,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Inspect sanitization guards",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 653,
+            "hypothesisId": 417
+        },
+        "occurredAt": "2026-05-29T02:23:56.055278Z"
+    },
+    {
+        "id": 6882,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Inspect sanitization guards",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 417,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:23:56.052268Z"
+    },
+    {
+        "id": 6881,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Map dataflow to identified sinks",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 652,
+            "hypothesisId": 416
+        },
+        "occurredAt": "2026-05-29T02:23:56.049446Z"
+    },
+    {
+        "id": 6880,
+        "taskId": 83,
+        "eventType": "hypothesis.formed",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Map dataflow to identified sinks",
+        "metadata": {
+            "type": "information_disclosure_candidate",
+            "hypothesisId": 416,
+            "expectedCapability": ""
+        },
+        "occurredAt": "2026-05-29T02:23:56.046696Z"
+    },
+    {
+        "id": 6879,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 4,
+                "context_growth_rate": 27,
+                "average_branch_value": 0.4255,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 27,
+                "pending_hypothesis_count": 4,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 4
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "iteration_planner",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 3,
+            "generated_count_requested": 3,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:23:56.043239Z"
+    },
+    {
+        "id": 6878,
+        "taskId": 83,
+        "eventType": "hypothesis.inconclusive",
+        "actor": "hypothesis-lifecycle",
+        "summary": "Enumerate file operation sinks",
+        "metadata": {
+            "reason": "inconclusive_evidence",
+            "hypothesisId": 410,
+            "unverifiedRiskId": 163
+        },
+        "occurredAt": "2026-05-29T02:23:56.041891Z"
+    },
+    {
+        "id": 6877,
+        "taskId": 83,
+        "eventType": "exploration_budget.decision",
+        "actor": "exploration-budget-manager",
+        "summary": "within exploration budget",
+        "metadata": {
+            "reason": "within exploration budget",
+            "metrics": {
+                "active_branch_count": 5,
+                "context_growth_rate": 25,
+                "average_branch_value": 0.4255,
+                "intent_generation_rate": 0,
+                "graph_expansion_velocity": 25,
+                "pending_hypothesis_count": 5,
+                "suppressed_low_value_branches": 0,
+                "pending_validation_intent_count": 4
+            },
+            "decision": "allowed",
+            "thresholds": {
+                "branch_decay_rounds": 3,
+                "low_value_suppress_batch": 8,
+                "low_value_branch_threshold": 0.24,
+                "max_active_branches_per_task": 24,
+                "max_generated_intents_per_round": 6,
+                "max_pending_hypotheses_per_task": 80,
+                "max_pending_validation_intents_per_task": 40
+            },
+            "triggered_by": "evidence_expansion",
+            "suppressed_intent_ids": null,
+            "generated_count_allowed": 6,
+            "generated_count_requested": 0,
+            "suppressed_hypothesis_ids": null
+        },
+        "occurredAt": "2026-05-29T02:23:56.036403Z"
+    },
+    {
+        "id": 6876,
+        "taskId": 83,
+        "eventType": "agent.pi_worker_failed",
+        "actor": "worker-runtime",
+        "summary": "Error response from daemon: invalid mount config for type \"bind\": bind source path does not exist: /host_mnt/Users/rabbit/Desktop/shenji/workspace/task-83/input",
+        "metadata": {
+            "driver": "pi_container_kali",
+            "intentId": 646,
+            "workerId": "worker:7:glm-5"
+        },
+        "occurredAt": "2026-05-29T02:23:56.033071Z"
+    },
+    {
+        "id": 6875,
+        "taskId": 83,
+        "eventType": "agent.model_plan",
+        "actor": "model-runtime",
+        "summary": "Model-assisted iteration plan generated.",
+        "metadata": {
+            "model": "glm-5",
+            "intentId": 646,
+            "provider": "openai-compatible",
+            "latencyMs": 34725,
+            "intentType": "enumerate_surfaces"
+        },
+        "occurredAt": "2026-05-29T02:23:55.975236Z"
+    },
+    {
+        "id": 6858,
+        "taskId": 83,
+        "eventType": "agent.worker_selected",
+        "actor": "agent-runtime",
+        "summary": "Selected worker model glm-5 for intent 646.",
+        "metadata": {
+            "model": "glm-5",
+            "modelId": 7,
+            "running": 1,
+            "intentId": 646,
+            "priority": 1,
+            "provider": "openai-compatible",
+            "workerId": "worker:7:glm-5",
+            "taskTypes": [
+                "all"
+            ],
+            "intentType": "enumerate_surfaces",
+            "maxRunning": 2
+        },
+        "occurredAt": "2026-05-29T02:23:21.247673Z"
+    },
+    {
+        "id": 6857,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 646,
+            "scoredIntents": 5,
+            "pendingIntents": 5,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:23:21.246662Z"
+    },
+    {
+        "id": 6856,
+        "taskId": 83,
+        "eventType": "graph_search.loop_diagnostic",
+        "actor": "graph-search-loop",
+        "summary": "explore",
+        "metadata": {
+            "phase": "explore",
+            "task_id": 83,
+            "iteration": 2,
+            "goal_state": {
+                "type": "scope_bounded_security_discovery",
+                "status": "active",
+                "task_id": 83,
+                "goal_type": "scope_bounded_security_discovery",
+                "description": "Clue-driven security exploration of file-path-control fixture",
+                "stop_reason": "",
+                "should_continue": true,
+                "coverage_summary": {
+                    "out_of_scope": 0,
+                    "total_surfaces": 0,
+                    "blocked_surfaces": 0,
+                    "resolved_refuted": 0,
+                    "explored_surfaces": 0,
+                    "resolved_surfaces": 0,
+                    "resolved_verified": 0,
+                    "inconclusive_surfaces": 0
+                },
+                "success_criteria": [
+                    "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+                    "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+                    "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+                ],
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "goal_status": "active",
+            "stop_reason": "",
+            "tools_called": null,
+            "coverage_state": {
+                "scope_summary": {
+                    "targets": null,
+                    "auth_contexts": [],
+                    "surface_count": 0,
+                    "excluded_paths": null,
+                    "entrypoint_count": 0
+                },
+                "recent_progress": {
+                    "new_facts_last_n": 24,
+                    "new_evidence_last_n": 0,
+                    "new_surfaces_last_n": 0,
+                    "new_clue_facts_last_n": 0,
+                    "new_capabilities_last_n": 0
+                },
+                "surface_coverage": null,
+                "blocked_path_count": 0,
+                "refuted_path_count": 0,
+                "inconclusive_path_count": 0,
+                "verified_capability_count": 0,
+                "open_high_priority_intents": 0,
+                "unresolved_high_priority_surfaces": 0
+            },
+            "selected_intent": {
+                "id": 640,
+                "goal": "Identify functions or handlers that accept file path arguments from user input in the extracted fixture code.",
+                "kind": "discover_entrypoints",
+                "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+                "status": "running",
+                "priority": 0.5928000000000001
+            },
+            "graph_delta_summary": {
+                "new_facts": 0,
+                "new_intents": 0,
+                "new_evidence": 0,
+                "updated_coverage": 0,
+                "new_negative_facts": 0,
+                "new_capability_candidates": 0
+            }
+        },
+        "occurredAt": "2026-05-29T02:23:21.242089Z"
+    },
+    {
+        "id": 6855,
+        "taskId": 83,
+        "eventType": "state_expansion_planner.scored",
+        "actor": "state-expansion-planner",
+        "summary": "Pending validation intents rescored by branch value.",
+        "metadata": {
+            "topScore": 0.5928000000000001,
+            "topIntentId": 646,
+            "scoredIntents": 5,
+            "pendingIntents": 5,
+            "negativePenaltyCount": 0,
+            "environmentBoostCount": 0,
+            "skippedMissingHypothesis": 0,
+            "skippedNoValidationMetadata": 0
+        },
+        "occurredAt": "2026-05-29T02:23:21.239812Z"
+    },
+    {
+        "id": 6854,
+        "taskId": 83,
+        "eventType": "planner.next_intents_created",
+        "actor": "model-runtime",
+        "summary": "Planner suggestions were converted into evidence-seeking Intents.",
+        "metadata": {
+            "created": 3,
+            "parentIntentId": 640
+        },
+        "occurredAt": "2026-05-29T02:23:21.237026Z"
+    },
+    {
+        "id": 6853,
+        "taskId": 83,
+        "eventType": "validation_intent.generated",
+        "actor": "dynamic-intent-expander",
+        "summary": "Validate hypothesis: Check path validation mechanisms",
+        "metadata": {
+            "method": "planner_suggested_followup",
+            "intentId": 648,
+            "hypothesisId": 412
+        },
+        "occurredAt": "2026-05-29T02:23:21.236013Z"
+    }
+]

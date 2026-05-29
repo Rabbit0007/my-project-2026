@@ -1,0 +1,91 @@
+Rabbit Worker Surface Analysis - Intent 792
+Task: 94 - code_audit
+Objective: Enumerate entry points, auth boundaries, and business objects
+
+================================================================================
+EXTRACTED SOURCE FILES
+================================================================================
+
+Files analyzed:
+- src/main/java/demo/AdminExportController.java
+- src/main/java/demo/AdminExportService.java
+- src/main/java/demo/UserController.java
+- src/main/java/demo/UserMapper.java
+- src/main/java/demo/UserService.java
+- src/main/resources/mapper/UserMapper.xml
+
+================================================================================
+ENTRY POINTS (HTTP Endpoints)
+================================================================================
+
+1. AdminExportController.export(HttpServletRequest)
+   - Parameters: format, includeInactive
+   - Route: Not explicitly annotated (likely configured elsewhere)
+   - Auth: None visible
+   - Risk: Admin naming convention without enforcement
+
+2. UserController.search(HttpServletRequest)
+   - Parameters: keyword, orderBy
+   - Route: Not explicitly annotated (likely configured elsewhere)
+   - Auth: None visible
+   - Data flow: keyword, orderBy -> UserService.search -> UserMapper.search -> SQL
+
+================================================================================
+AUTH BOUNDARIES
+================================================================================
+
+- No Spring Security annotations found (@PreAuthorize, @Secured, @RolesAllowed)
+- No security filters or interceptors visible in analyzed files
+- No authentication checks in controllers
+- AdminExportController: Named "Admin" but no auth enforcement
+- All endpoints appear to be unauthenticated
+
+================================================================================
+BUSINESS OBJECTS
+================================================================================
+
+- UserRecord: data record (id: long, name: String)
+- UserService: business logic for user search
+- AdminExportService: business logic for user export (csv/json)
+- UserMapper: MyBatis mapper interface for database access
+
+================================================================================
+SECURITY-RELEVANT FINDINGS
+================================================================================
+
+[CRITICAL] SQL Injection Vulnerability in UserMapper.xml
+  Location: src/main/resources/mapper/UserMapper.xml
+  Line: 7
+  Vulnerable code: ORDER BY ${orderBy}
+  Issue: Uses MyBatis string interpolation (${}) instead of prepared statement (#{})
+  Data flow: UserController.search(orderBy) -> UserService.search -> UserMapper.search -> ${orderBy}
+  Impact: Direct SQL injection via orderBy parameter
+
+[HIGH] Missing Authentication
+  Controllers lack auth annotations despite sensitive operations
+  AdminExportController.admin suggests privileged access but no enforcement
+  UserController exposes search functionality without auth
+
+[MEDIUM] Parameter Validation Gaps
+  AdminExportController: includeInactive passed without validation
+  UserController: orderBy passed directly to SQL (compounds injection risk)
+
+================================================================================
+SECURITY SURFACE MODEL
+================================================================================
+
+Attack Surface Summary:
+- Total entry points: 2
+- Authenticated: 0
+- Unauthenticated: 2
+- SQL injection paths: 1 (orderBy parameter)
+- Business logic exposure: 2 (search, export)
+
+High Priority Surfaces:
+1. SQL Injection via orderBy in UserController.search
+2. Unauthenticated admin export functionality
+3. Unauthenticated user search functionality
+
+================================================================================
+END OF ANALYSIS
+================================================================================

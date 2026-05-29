@@ -1,0 +1,2418 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return a GraphDelta-style packet. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-29T03:57:18.391731338Z",
+  "graph": {
+    "task": {
+      "id": 89,
+      "workspaceId": 89,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "Phase5B-raw-query",
+      "taskType": "code_audit",
+      "status": "running",
+      "objective": "Clue-driven exploration of raw-query-control fixture",
+      "scopeJson": {
+        "targets": [],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": null,
+      "isTestTask": true,
+      "archived": false,
+      "progressStage": "探索: Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+      "progressPercent": 42,
+      "startedAt": "2026-05-29T03:25:39.377178Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-29T03:25:39.207258Z",
+      "UpdatedAt": "2026-05-29T03:56:43.798824Z"
+    },
+    "intent": {
+      "id": 762,
+      "taskId": 89,
+      "parentNodeId": null,
+      "intentType": "clue_collect",
+      "title": "Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+      "objective": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+      "constraintsJson": {
+        "source": "iteration_planner",
+        "evidenceIds": [
+          15913
+        ],
+        "branch_value": {
+          "reason": "strong graph expansion, Environment signal runtime_environment.java=plausible aligns with this hypothesis., Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-29T03:56:43.796982253Z",
+          "risk_value": 0.82,
+          "final_score": 0.5672000000000001,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.54,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.5,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.79,
+          "capability_unlock_score": 0.76,
+          "matched_environment_refs": [
+            "runtime_environment.java=plausible"
+          ],
+          "environment_alignment_boost": 0.13
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 526,
+        "parentIntentId": 758,
+        "expected_evidence": "evidence that validates or refutes: Collect HTTP handler entrypoints from extracted source",
+        "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+        "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+        "validation_method": "planner_suggested_followup",
+        "expected_capability": "internal_service_access",
+        "environment_context_snapshot": {
+          "updated_at": "2026-05-29T03:37:25Z",
+          "updated_from": "toolrun-3040",
+          "runtime_environment": {
+            "java": "plausible",
+            "python": "plausible"
+          }
+        }
+      },
+      "requiredEvidence": null,
+      "priorityScore": 0.5672000000000001,
+      "status": "running",
+      "claimedBy": "worker:7:glm-5",
+      "claimExpiresAt": "2026-05-29T04:03:43.799565295Z",
+      "createdBy": "model-planner",
+      "createdReason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+      "startedAt": "2026-05-29T03:56:43.799565295Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-29T03:56:43.787385Z",
+      "UpdatedAt": "2026-05-29T03:56:43.799565295Z"
+    },
+    "keyFacts": [
+      {
+        "id": 13567,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 746,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:25:39.217346001Z",
+          "UpdatedAt": "2026-05-29T03:25:39.217346043Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_chain_extend",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "legacy_hint": "code_trace",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 510,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "source_code_read"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "e538d9e4ec9aac09b9116e18f2d2f5f16697cdc47d483e92fdca4e36463f2b4c",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "746",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:25:39.218697Z",
+        "lastSeenAt": "2026-05-29T03:25:39.390976Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:25:39.218933Z",
+        "UpdatedAt": "2026-05-29T03:25:39.391117Z"
+      },
+      {
+        "id": 13564,
+        "taskId": 89,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration of raw-query-control fixture",
+        "contentJson": {
+          "objective": "Clue-driven exploration of raw-query-control fixture"
+        },
+        "dedupKey": "4c07201f7d93e4ccf0883843eb3e536ec368fb3c7d6c61b248e9d714eb16f251",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:25:39.211146Z",
+        "lastSeenAt": "2026-05-29T03:25:39.211146Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:25:39.211514Z",
+        "UpdatedAt": "2026-05-29T03:25:39.211514Z"
+      },
+      {
+        "id": 13563,
+        "taskId": 89,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "6305a4088fc551c0d195ae111d620061189e475a9b78564103400f545310cce9",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:25:39.210032Z",
+        "lastSeenAt": "2026-05-29T03:25:39.210032Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:25:39.210377Z",
+        "UpdatedAt": "2026-05-29T03:25:39.210377Z"
+      },
+      {
+        "id": 13640,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Collect HTTP handler entrypoints from extracted source",
+        "summary": "Scan the 6 extracted source files for HTTP handler definitions (e.g., Flask/Django route decorators, Java Spring controllers, function exports) and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 522,
+          "title": "Collect HTTP handler entrypoints from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:50:49.363814631Z",
+          "updatedAt": "2026-05-29T03:50:49.363814631Z",
+          "description": "Scan the 6 extracted source files for HTTP handler definitions (e.g., Flask/Django route decorators, Java Spring controllers, function exports) and emit surface facts with file:line references.",
+          "validatedAt": null,
+          "targetEntity": "Scan the 6 extracted source files for HTTP handler definitions (e.g., Flask/Django route decorators, Java Spring controllers, function exports) and emit surface facts with file:line references.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:753",
+            "blackboard_node:13614"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "aac85b286ef3b17a82bfdb9dbad6a59ee2d62156b7c71a80887ce10794fbdb4f",
+        "importanceScore": 0.98,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "522",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:50:49.364851Z",
+        "lastSeenAt": "2026-05-29T03:56:43.78265Z",
+        "seenCount": 4,
+        "CreatedAt": "2026-05-29T03:50:49.36512Z",
+        "UpdatedAt": "2026-05-29T03:56:43.782769Z"
+      },
+      {
+        "id": 13658,
+        "taskId": 89,
+        "nodeType": "capability",
+        "title": "[verified] internal_service_access",
+        "summary": "Clue-chain validated capability internal_service_access at /workspace/input/extracted with 1 evidence items via intent 758.",
+        "contentJson": {
+          "id": 81,
+          "scope": "",
+          "target": "/workspace/input/extracted",
+          "taskId": 89,
+          "strength": "verified",
+          "createdAt": "2026-05-29T03:56:43.78149142Z",
+          "riskLevel": "low",
+          "updatedAt": "2026-05-29T03:56:43.781491461Z",
+          "evidenceRefs": [
+            15913
+          ],
+          "proofSummary": "Clue-chain validated capability internal_service_access at /workspace/input/extracted with 1 evidence items via intent 758.",
+          "sourceNodeIds": null,
+          "canAdvanceGoal": true,
+          "capabilityType": "internal_service_access",
+          "acquiredByIntentId": 758,
+          "nextSuggestedIntents": null,
+          "derivedFromEvidenceRefs": [
+            15913
+          ],
+          "validatedByHypothesisId": 522
+        },
+        "dedupKey": "18b815937944d641268dd192be9dfd9644a89abcd6b1635ff5a58bb7c058d853",
+        "importanceScore": 0.95,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "capability-81",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.782283Z",
+        "lastSeenAt": "2026-05-29T03:56:43.782283Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.782437Z",
+        "UpdatedAt": "2026-05-29T03:56:43.782437Z"
+      },
+      {
+        "id": 13565,
+        "taskId": 89,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for code_audit",
+        "summary": "Clue-driven exploration of raw-query-control fixture",
+        "contentJson": {
+          "id": 29,
+          "mode": "code_audit",
+          "name": "Hypothesis-driven coverage objective for code_audit",
+          "taskId": 89,
+          "goalType": "coverage",
+          "createdAt": "2026-05-29T03:25:39.212404751Z",
+          "updatedAt": "2026-05-29T03:25:39.212404751Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "Clue-driven exploration of raw-query-control fixture",
+          "normalizedGoal": "Clue-driven exploration of raw-query-control fixture",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "35d9c5d45e53faa19d9617c9385ab4f68f763779e93b5ccfbe16a1e2fd6efdfa",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-29",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:25:39.213123Z",
+        "lastSeenAt": "2026-05-29T03:25:39.213123Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:25:39.213438Z",
+        "UpdatedAt": "2026-05-29T03:25:39.213438Z"
+      },
+      {
+        "id": 13568,
+        "taskId": 89,
+        "nodeType": "fact",
+        "title": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "contentJson": {
+          "files": [
+            "src/main/resources/mapper/UserMapper.xml",
+            "src/main/java/demo/UserService.java",
+            "src/main/java/demo/AdminExportController.java",
+            "src/main/java/demo/UserMapper.java",
+            "src/main/java/demo/AdminExportService.java",
+            "src/main/java/demo/UserController.java"
+          ],
+          "skipped": [],
+          "totalBytes": 1988,
+          "extractedDir": "/app/workspace/task-89/input/extracted"
+        },
+        "dedupKey": "be2d16acce50cab5cfca9620d77b01701003e76309b3adeecf6be1d4bc36efbc",
+        "importanceScore": 0.9,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "workspace",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:25:39.364349Z",
+        "lastSeenAt": "2026-05-29T03:25:39.364349Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:25:39.364863Z",
+        "UpdatedAt": "2026-05-29T03:25:39.364863Z"
+      },
+      {
+        "id": 13575,
+        "taskId": 89,
+        "nodeType": "environment_model",
+        "title": "Environment model",
+        "summary": "runtime_environment: python=plausible, java=plausible",
+        "contentJson": {
+          "id": 19,
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:31:17.613730921Z",
+          "modelJson": {
+            "updated_at": "2026-05-29T03:31:17Z",
+            "updated_from": "toolrun-3038",
+            "runtime_environment": {
+              "python": "plausible"
+            }
+          },
+          "updatedAt": "2026-05-29T03:31:17.613730921Z",
+          "updatedFrom": "toolrun-3038"
+        },
+        "dedupKey": "7efefeec5ee8b33f69a924260cb48cb07a092e984b5164f5b035b1f4741b1a48",
+        "importanceScore": 0.88,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "toolrun-3038",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:31:17.614708Z",
+        "lastSeenAt": "2026-05-29T03:37:25.396375Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:31:17.615Z",
+        "UpdatedAt": "2026-05-29T03:37:25.396488Z"
+      },
+      {
+        "id": 13641,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+        "summary": "Scan the 6 extracted source files for HTTP handler definitions (e.g., Flask/Django route decorators, Java Spring controllers, function exports) and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 758,
+          "title": "Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:50:49.369691547Z",
+          "UpdatedAt": "2026-05-29T03:50:49.369691589Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Scan the 6 extracted source files for HTTP handler definitions (e.g., Flask/Django route decorators, Java Spring controllers, function exports) and emit surface facts with file:line references.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 522,
+            "expected_evidence": "evidence that validates or refutes: Collect HTTP handler entrypoints from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "2541f27c7fa42a31b1f0702020a202ec4c09bad605522f39d1ef167c17fe49a5",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "758",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:50:49.372043Z",
+        "lastSeenAt": "2026-05-29T03:50:49.408379Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:50:49.372248Z",
+        "UpdatedAt": "2026-05-29T03:50:49.408554Z"
+      },
+      {
+        "id": 13614,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Read extracted source files to collect surface facts",
+        "summary": "Locate HTTP handlers, auth decorators/middleware, and ORM/raw-query calls in the 6 extracted source files and emit corresponding surface facts.",
+        "contentJson": {
+          "id": 753,
+          "title": "Validate hypothesis: Read extracted source files to collect surface facts",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:42:55.508287175Z",
+          "UpdatedAt": "2026-05-29T03:42:55.508287217Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Locate HTTP handlers, auth decorators/middleware, and ORM/raw-query calls in the 6 extracted source files and emit corresponding surface facts.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 517,
+            "expected_evidence": "evidence that validates or refutes: Read extracted source files to collect surface facts",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "09dfa8a1aac35b450ba9b3e7821fc86c06b68d0cb3a455c2b4cfc228c6e42d8f",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "753",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:42:55.509882Z",
+        "lastSeenAt": "2026-05-29T03:42:55.521675Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:42:55.510117Z",
+        "UpdatedAt": "2026-05-29T03:42:55.521796Z"
+      },
+      {
+        "id": 13592,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect surface facts from extracted source files",
+        "summary": "Read each of the 6 source files and identify entrypoints (HTTP handlers, function exports), authentication/authorization boundaries (decorators, middleware), and database interaction points (ORM calls, raw queries). Produce corresponding surface facts.",
+        "contentJson": {
+          "id": 750,
+          "title": "Validate hypothesis: Collect surface facts from extracted source files",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:37:25.407483467Z",
+          "UpdatedAt": "2026-05-29T03:37:25.407483509Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Read each of the 6 source files and identify entrypoints (HTTP handlers, function exports), authentication/authorization boundaries (decorators, middleware), and database interaction points (ORM calls, raw queries). Produce corresponding surface facts.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 514,
+            "expected_evidence": "evidence that validates or refutes: Collect surface facts from extracted source files",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "b2a5dd101b10598fb6d70c51fbf4b044d03979dbfb2fc4801456a16964d8c982",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "750",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:37:25.408989Z",
+        "lastSeenAt": "2026-05-29T03:37:25.422015Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:37:25.409129Z",
+        "UpdatedAt": "2026-05-29T03:37:25.422142Z"
+      },
+      {
+        "id": 13580,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Enumerate entrypoints and security surfaces from extracted source",
+        "summary": "Scan the 6 extracted source files to discover entrypoints (HTTP handlers, function exports), authentication/authorization boundaries, and database interaction points, producing surface facts.",
+        "contentJson": {
+          "id": 748,
+          "title": "Validate hypothesis: Enumerate entrypoints and security surfaces from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:31:17.628298088Z",
+          "UpdatedAt": "2026-05-29T03:31:17.62829813Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Scan the 6 extracted source files to discover entrypoints (HTTP handlers, function exports), authentication/authorization boundaries, and database interaction points, producing surface facts.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "scope_observation",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 512,
+            "expected_evidence": "evidence that validates or refutes: Enumerate entrypoints and security surfaces from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:31:17Z",
+              "updated_from": "toolrun-3038",
+              "runtime_environment": {
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "fbc71b3fb6b0eede4747905f3416f1a19b9c981a6443e904cf8c8f26d61f9c0f",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "748",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:31:17.629611Z",
+        "lastSeenAt": "2026-05-29T03:31:17.645254Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:31:17.629741Z",
+        "UpdatedAt": "2026-05-29T03:31:17.645382Z"
+      },
+      {
+        "id": 13566,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 510,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:25:39.214968001Z",
+          "updatedAt": "2026-05-29T03:25:39.214968001Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "source_code_read",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:13563"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "f099e740c8c9aa37fd8325bab04aa43334e588966ad0159a6fb11e994c2f59a8",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "510",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:25:39.215773Z",
+        "lastSeenAt": "2026-05-29T03:31:17.623792Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:25:39.216058Z",
+        "UpdatedAt": "2026-05-29T03:31:17.623921Z"
+      },
+      {
+        "id": 13660,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Collect HTTP handler entrypoints from extracted source",
+        "summary": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 526,
+          "title": "Collect HTTP handler entrypoints from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:56:43.786176753Z",
+          "updatedAt": "2026-05-29T03:56:43.786176753Z",
+          "description": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+          "validatedAt": null,
+          "targetEntity": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:758",
+            "blackboard_node:13641",
+            "evidence:15913"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "96a7cd88096b072f38408b89c26d5ed2798c7dd306bb3d8b1745b50859071a61",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "526",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:56:43.786482Z",
+        "lastSeenAt": "2026-05-29T03:56:43.788169Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:56:43.786608Z",
+        "UpdatedAt": "2026-05-29T03:56:43.78827Z"
+      },
+      {
+        "id": 13644,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Collect database interaction points from extracted source",
+        "summary": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 524,
+          "title": "Collect database interaction points from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:50:49.383844047Z",
+          "updatedAt": "2026-05-29T03:50:49.383844047Z",
+          "description": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+          "validatedAt": null,
+          "targetEntity": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:753",
+            "blackboard_node:13614"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "9fa05874227f3e0524b52419631d2ae4b1e1fd2f54566d106fdb5725219cc8e9",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "524",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:50:49.384325Z",
+        "lastSeenAt": "2026-05-29T03:50:49.386821Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:50:49.384562Z",
+        "UpdatedAt": "2026-05-29T03:50:49.386987Z"
+      },
+      {
+        "id": 13642,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Collect auth boundary facts from extracted source",
+        "summary": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 523,
+          "title": "Collect auth boundary facts from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:50:49.375903756Z",
+          "updatedAt": "2026-05-29T03:50:49.375903756Z",
+          "description": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+          "validatedAt": null,
+          "targetEntity": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:753",
+            "blackboard_node:13614"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "2caae228ced4d248b8b0e7828958157b3f01e3b63ecf6100a3db1b77cdab0ae8",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "523",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:50:49.37626Z",
+        "lastSeenAt": "2026-05-29T03:50:49.379231Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:50:49.376468Z",
+        "UpdatedAt": "2026-05-29T03:50:49.379465Z"
+      },
+      {
+        "id": 13613,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Read extracted source files to collect surface facts",
+        "summary": "Locate HTTP handlers, auth decorators/middleware, and ORM/raw-query calls in the 6 extracted source files and emit corresponding surface facts.",
+        "contentJson": {
+          "id": 517,
+          "title": "Read extracted source files to collect surface facts",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:42:55.506909467Z",
+          "updatedAt": "2026-05-29T03:42:55.506909467Z",
+          "description": "Locate HTTP handlers, auth decorators/middleware, and ORM/raw-query calls in the 6 extracted source files and emit corresponding surface facts.",
+          "validatedAt": null,
+          "targetEntity": "Locate HTTP handlers, auth decorators/middleware, and ORM/raw-query calls in the 6 extracted source files and emit corresponding surface facts.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:750",
+            "blackboard_node:13592",
+            "evidence:15909"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "17d5a9213094885de6f31a7621f8af5bdedeb91ebe3c2c3e64c19435bb1972a9",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "517",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:42:55.507355Z",
+        "lastSeenAt": "2026-05-29T03:50:49.355413Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:42:55.507474Z",
+        "UpdatedAt": "2026-05-29T03:50:49.355642Z"
+      },
+      {
+        "id": 13591,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Collect surface facts from extracted source files",
+        "summary": "Read each of the 6 source files and identify entrypoints (HTTP handlers, function exports), authentication/authorization boundaries (decorators, middleware), and database interaction points (ORM calls, raw queries). Produce corresponding surface facts.",
+        "contentJson": {
+          "id": 514,
+          "title": "Collect surface facts from extracted source files",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:37:25.405587175Z",
+          "updatedAt": "2026-05-29T03:37:25.405587175Z",
+          "description": "Read each of the 6 source files and identify entrypoints (HTTP handlers, function exports), authentication/authorization boundaries (decorators, middleware), and database interaction points (ORM calls, raw queries). Produce corresponding surface facts.",
+          "validatedAt": null,
+          "targetEntity": "Read each of the 6 source files and identify entrypoints (HTTP handlers, function exports), authentication/authorization boundaries (decorators, middleware), and database interaction points (ORM calls, raw queries). Produce corresponding surface facts.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:748",
+            "blackboard_node:13580",
+            "evidence:15906"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "97322cee6c8d3a44937107c66fde537bce8414f2d653b55878f504b3bfc13ef9",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "514",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:37:25.405981Z",
+        "lastSeenAt": "2026-05-29T03:42:55.504676Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:37:25.406145Z",
+        "UpdatedAt": "2026-05-29T03:42:55.504791Z"
+      },
+      {
+        "id": 13579,
+        "taskId": 89,
+        "nodeType": "hypothesis",
+        "title": "Enumerate entrypoints and security surfaces from extracted source",
+        "summary": "Scan the 6 extracted source files to discover entrypoints (HTTP handlers, function exports), authentication/authorization boundaries, and database interaction points, producing surface facts.",
+        "contentJson": {
+          "id": 512,
+          "title": "Enumerate entrypoints and security surfaces from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:31:17.62615088Z",
+          "updatedAt": "2026-05-29T03:31:17.62615088Z",
+          "description": "Scan the 6 extracted source files to discover entrypoints (HTTP handlers, function exports), authentication/authorization boundaries, and database interaction points, producing surface facts.",
+          "validatedAt": null,
+          "targetEntity": "Scan the 6 extracted source files to discover entrypoints (HTTP handlers, function exports), authentication/authorization boundaries, and database interaction points, producing surface facts.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:746",
+            "blackboard_node:13567"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "f8d2d1436bd55eb4eb7c931de084579ef9a0b62fc29d22af887cd59cd13bf3a1",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "512",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:31:17.626891Z",
+        "lastSeenAt": "2026-05-29T03:37:25.402262Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T03:31:17.627056Z",
+        "UpdatedAt": "2026-05-29T03:37:25.402377Z"
+      },
+      {
+        "id": 13654,
+        "taskId": 89,
+        "nodeType": "behavior_fact",
+        "title": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+        "summary": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+        "contentJson": {
+          "fact": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+          "source": "worker_agent",
+          "intentId": 758,
+          "toolRunId": 3046
+        },
+        "dedupKey": "3746b992ed410aeda1e2e7cb774ce80050b3baef52349351063b27c61f33defe",
+        "importanceScore": 0.7354,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3046",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.77369Z",
+        "lastSeenAt": "2026-05-29T03:56:43.77369Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.773812Z",
+        "UpdatedAt": "2026-05-29T03:56:43.773812Z"
+      },
+      {
+        "id": 13653,
+        "taskId": 89,
+        "nodeType": "behavior_fact",
+        "title": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+        "summary": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+        "contentJson": {
+          "fact": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+          "source": "worker_agent",
+          "intentId": 758,
+          "toolRunId": 3046
+        },
+        "dedupKey": "f2f353f54104add360ce26e9d8385c34ea0aab3c1a33d136203ecf344245f493",
+        "importanceScore": 0.7354,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3046",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.773334Z",
+        "lastSeenAt": "2026-05-29T03:56:43.773334Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.773477Z",
+        "UpdatedAt": "2026-05-29T03:56:43.773477Z"
+      },
+      {
+        "id": 13652,
+        "taskId": 89,
+        "nodeType": "behavior_fact",
+        "title": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+        "summary": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+        "contentJson": {
+          "fact": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+          "source": "worker_agent",
+          "intentId": 758,
+          "toolRunId": 3046
+        },
+        "dedupKey": "a7eab080444460be094d2704f60eb401ad0746c02708d3b449d35136ee03dbca",
+        "importanceScore": 0.7354,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3046",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.772967Z",
+        "lastSeenAt": "2026-05-29T03:56:43.772967Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.773126Z",
+        "UpdatedAt": "2026-05-29T03:56:43.773126Z"
+      },
+      {
+        "id": 13651,
+        "taskId": 89,
+        "nodeType": "behavior_fact",
+        "title": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+        "summary": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+        "contentJson": {
+          "fact": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+          "source": "worker_agent",
+          "intentId": 758,
+          "toolRunId": 3046
+        },
+        "dedupKey": "4faf3d71d0298a6666e7df25b31e6e521287080be356cf4df16529cfe4337c5d",
+        "importanceScore": 0.7354,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3046",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.772398Z",
+        "lastSeenAt": "2026-05-29T03:56:43.772398Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.772609Z",
+        "UpdatedAt": "2026-05-29T03:56:43.772609Z"
+      },
+      {
+        "id": 13659,
+        "taskId": 89,
+        "nodeType": "evidence",
+        "title": "Evidence 15913",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15913
+        },
+        "dedupKey": "2360dee6749153c7d78e31ed470322f082f02eab9d0581d8fa90ecddbbeae442",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15913",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.783415Z",
+        "lastSeenAt": "2026-05-29T03:56:43.783415Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.783523Z",
+        "UpdatedAt": "2026-05-29T03:56:43.783523Z"
+      },
+      {
+        "id": 13656,
+        "taskId": 89,
+        "nodeType": "evidence",
+        "title": "HTTP handler entrypoints scan result",
+        "summary": "Scanned 6 extracted source files for HTTP handler definitions. Found 2 servlet-style controller methods in AdminExportController.java and UserController.java. No Spring annotations present.",
+        "contentJson": {
+          "id": 15913,
+          "hash": "e7dca032674512d56418d08b1b6a8bbaa7795613c865e228a950247424dc1144",
+          "title": "HTTP handler entrypoints scan result",
+          "rawRef": "minio://rabbit-artifacts/task-89/evidence/1780027003769419128-worker_observation.txt",
+          "target": "/workspace/input/extracted",
+          "taskId": 89,
+          "lineEnd": null,
+          "summary": "Scanned 6 extracted source files for HTTP handler definitions. Found 2 servlet-style controller methods in AdminExportController.java and UserController.java. No Spring annotations present.",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T03:56:43.770643295Z",
+          "lineStart": null,
+          "toolRunId": 3046,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-89/evidence/1780027003769419128-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "b778cb83d1fbb02b06f56a4608e1e02967b2dc2aaa566c2cea633712ebb3a57c",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3046",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.777679Z",
+        "lastSeenAt": "2026-05-29T03:56:43.777679Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:56:43.77781Z",
+        "UpdatedAt": "2026-05-29T03:56:43.77781Z"
+      },
+      {
+        "id": 13610,
+        "taskId": 89,
+        "nodeType": "evidence",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "contentJson": {
+          "id": 15909,
+          "hash": "8a6b7b183aaafba21541a96ab07f62d65d8835195d66a26087b1183d07f6e206",
+          "title": "Unstructured Pi worker observation",
+          "rawRef": "minio://rabbit-artifacts/task-89/evidence/1780026175495028300-worker_observation.txt",
+          "target": "",
+          "taskId": 89,
+          "lineEnd": null,
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T03:42:55.496242592Z",
+          "lineStart": null,
+          "toolRunId": 3042,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-89/evidence/1780026175495028300-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "8862d7151b80789abec86b0c800f258db2d4f93e7afa3439505ac8c373e6b105",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3042",
+        "evidenceRefs": [
+          "15909"
+        ],
+        "firstSeenAt": "2026-05-29T03:42:55.499325Z",
+        "lastSeenAt": "2026-05-29T03:42:55.499325Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:42:55.499453Z",
+        "UpdatedAt": "2026-05-29T03:42:55.499453Z"
+      },
+      {
+        "id": 13588,
+        "taskId": 89,
+        "nodeType": "evidence",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "contentJson": {
+          "id": 15906,
+          "hash": "3e5fd381a0900b9d3be4b829ef7e9452c491f629d4f6d27546d7436914447fbe",
+          "title": "Unstructured Pi worker observation",
+          "rawRef": "minio://rabbit-artifacts/task-89/evidence/1780025845391865967-worker_observation.txt",
+          "target": "",
+          "taskId": 89,
+          "lineEnd": null,
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T03:37:25.393328675Z",
+          "lineStart": null,
+          "toolRunId": 3040,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-89/evidence/1780025845391865967-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "d45b42014123a1f87a481dfe3584e31b6bee80e4afc85cddecb88e8c92a8a268",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3040",
+        "evidenceRefs": [
+          "15906"
+        ],
+        "firstSeenAt": "2026-05-29T03:37:25.398214Z",
+        "lastSeenAt": "2026-05-29T03:37:25.398214Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:37:25.398383Z",
+        "UpdatedAt": "2026-05-29T03:37:25.398383Z"
+      },
+      {
+        "id": 13661,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+        "summary": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 762,
+          "title": "Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:56:43.787385211Z",
+          "UpdatedAt": "2026-05-29T03:56:43.787385295Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 526,
+            "expected_evidence": "evidence that validates or refutes: Collect HTTP handler entrypoints from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "ccd3d53d531cdd0ca7b863063e8e0363279c0259f0b42809d53ba6216ec9fddc",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "762",
+        "evidenceRefs": [
+          "15913"
+        ],
+        "firstSeenAt": "2026-05-29T03:56:43.788452Z",
+        "lastSeenAt": "2026-05-29T03:56:43.789555Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:56:43.788576Z",
+        "UpdatedAt": "2026-05-29T03:56:43.789695Z"
+      },
+      {
+        "id": 13645,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect database interaction points from extracted source",
+        "summary": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 760,
+          "title": "Validate hypothesis: Collect database interaction points from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:50:49.385955172Z",
+          "UpdatedAt": "2026-05-29T03:50:49.385955256Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 524,
+            "expected_evidence": "evidence that validates or refutes: Collect database interaction points from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "8f1fb65b557087f70f3b929b07812dca4960e709c207bebbfdd8368bf468d25e",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "760",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:50:49.387308Z",
+        "lastSeenAt": "2026-05-29T03:50:49.389457Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:50:49.387527Z",
+        "UpdatedAt": "2026-05-29T03:50:49.389671Z"
+      },
+      {
+        "id": 13643,
+        "taskId": 89,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect auth boundary facts from extracted source",
+        "summary": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+        "contentJson": {
+          "id": 759,
+          "title": "Validate hypothesis: Collect auth boundary facts from extracted source",
+          "status": "pending",
+          "taskId": 89,
+          "CreatedAt": "2026-05-29T03:50:49.378050881Z",
+          "UpdatedAt": "2026-05-29T03:50:49.378050922Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 523,
+            "expected_evidence": "evidence that validates or refutes: Collect auth boundary facts from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "ebad694b5c30e957505d5188f780899cd36811dedbefc0764cf47aaa1763b916",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "759",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:50:49.37984Z",
+        "lastSeenAt": "2026-05-29T03:50:49.381971Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T03:50:49.380052Z",
+        "UpdatedAt": "2026-05-29T03:50:49.382103Z"
+      },
+      {
+        "id": 13639,
+        "taskId": 89,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: Read extracted source files to collect surface facts",
+        "summary": "Pi Kali worker execution failed",
+        "contentJson": {
+          "id": 225,
+          "title": "Unverified: Read extracted source files to collect surface facts",
+          "detail": "Pi Kali worker execution failed",
+          "reason": "inconclusive_evidence",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:50:49.353168506Z",
+          "evidenceRefs": [],
+          "hypothesisId": 517,
+          "observationRefs": [
+            "planner_intent:750",
+            "blackboard_node:13592",
+            "evidence:15909"
+          ],
+          "blockedByIntentId": 753
+        },
+        "dedupKey": "7d49c6767f9c81d7ae0d667b65a5516f3eef4ef43e9434f981503a4cff9db8f7",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "225",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T03:50:49.354744Z",
+        "lastSeenAt": "2026-05-29T03:50:49.354744Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:50:49.354983Z",
+        "UpdatedAt": "2026-05-29T03:50:49.354983Z"
+      },
+      {
+        "id": 13612,
+        "taskId": 89,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: Collect surface facts from extracted source files",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "contentJson": {
+          "id": 223,
+          "title": "Unverified: Collect surface facts from extracted source files",
+          "detail": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "reason": "method_not_observable",
+          "taskId": 89,
+          "createdAt": "2026-05-29T03:42:55.5034978Z",
+          "evidenceRefs": [
+            15909
+          ],
+          "hypothesisId": 514,
+          "observationRefs": [
+            "planner_intent:748",
+            "blackboard_node:13580",
+            "evidence:15906"
+          ],
+          "blockedByIntentId": 750
+        },
+        "dedupKey": "8ed585115ac98583965982ff47036a443ebf3c07ad1e0baa4e9964c449609270",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "223",
+        "evidenceRefs": [
+          "15909"
+        ],
+        "firstSeenAt": "2026-05-29T03:42:55.50419Z",
+        "lastSeenAt": "2026-05-29T03:42:55.50419Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T03:42:55.504436Z",
+        "UpdatedAt": "2026-05-29T03:42:55.504436Z"
+      }
+    ],
+    "recentEvidence": [
+      {
+        "id": 15913,
+        "taskId": 89,
+        "toolRunId": 3046,
+        "evidenceType": "worker_observation",
+        "title": "HTTP handler entrypoints scan result",
+        "summary": "Scanned 6 extracted source files for HTTP handler definitions. Found 2 servlet-style controller methods in AdminExportController.java and UserController.java. No Spring annotations present.",
+        "rawRef": "minio://rabbit-artifacts/task-89/evidence/1780027003769419128-worker_observation.txt",
+        "hash": "e7dca032674512d56418d08b1b6a8bbaa7795613c865e228a950247424dc1144",
+        "target": "/workspace/input/extracted",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-89/evidence/1780027003769419128-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T03:56:43.770643Z"
+      },
+      {
+        "id": 15909,
+        "taskId": 89,
+        "toolRunId": 3042,
+        "evidenceType": "worker_observation",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "rawRef": "minio://rabbit-artifacts/task-89/evidence/1780026175495028300-worker_observation.txt",
+        "hash": "8a6b7b183aaafba21541a96ab07f62d65d8835195d66a26087b1183d07f6e206",
+        "target": "",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-89/evidence/1780026175495028300-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T03:42:55.496242Z"
+      },
+      {
+        "id": 15906,
+        "taskId": 89,
+        "toolRunId": 3040,
+        "evidenceType": "worker_observation",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "rawRef": "minio://rabbit-artifacts/task-89/evidence/1780025845391865967-worker_observation.txt",
+        "hash": "3e5fd381a0900b9d3be4b829ef7e9452c491f629d4f6d27546d7436914447fbe",
+        "target": "",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-89/evidence/1780025845391865967-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T03:37:25.393328Z"
+      }
+    ],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+    "failedToolRuns": [
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-89/work/pi-workers/7",
+        "error": "context deadline exceeded"
+      },
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-89/work/pi-workers/7",
+        "error": "worker capability candidate 0 must include capability_type, target, and proof_summary"
+      }
+    ],
+    "capabilities": [
+      "[verified] internal_service_access: /workspace/input/extracted"
+    ],
+    "graphSummary": {
+      "task_id": 89,
+      "task_type": "code_audit",
+      "goal": "Clue-driven exploration of raw-query-control fixture",
+      "goal_state": {
+        "task_id": 89,
+        "type": "scope_bounded_security_discovery",
+        "goal_type": "scope_bounded_security_discovery",
+        "description": "Clue-driven exploration of raw-query-control fixture",
+        "success_criteria": [
+          "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+          "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+          "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+        ],
+        "status": "active",
+        "verified_capability_count": 1,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "coverage_summary": {
+          "total_surfaces": 0,
+          "explored_surfaces": 0,
+          "resolved_surfaces": 0,
+          "resolved_verified": 0,
+          "resolved_refuted": 0,
+          "blocked_surfaces": 0,
+          "inconclusive_surfaces": 0,
+          "out_of_scope": 0
+        },
+        "stop_reason": "",
+        "should_continue": true
+      },
+      "coverage_state": {
+        "scope_summary": {
+          "targets": null,
+          "entrypoint_count": 0,
+          "surface_count": 0,
+          "auth_contexts": [],
+          "excluded_paths": null
+        },
+        "surface_coverage": null,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "verified_capability_count": 1,
+        "refuted_path_count": 0,
+        "blocked_path_count": 0,
+        "inconclusive_path_count": 0,
+        "recent_progress": {
+          "new_facts_last_n": 26,
+          "new_evidence_last_n": 2,
+          "new_capabilities_last_n": 1,
+          "new_surfaces_last_n": 0,
+          "new_clue_facts_last_n": 0
+        }
+      },
+      "confirmed_facts": [
+        {
+          "id": 13563,
+          "kind": "origin",
+          "subject": "Authorized task origin",
+          "summary": "Task created from user-provided authorized scope.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13564,
+          "kind": "goal",
+          "subject": "Delivery-ready evidence report",
+          "summary": "Clue-driven exploration of raw-query-control fixture",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13568,
+          "kind": "fact",
+          "subject": "Source archive extracted safely",
+          "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13653,
+          "kind": "behavior_fact",
+          "subject": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+          "summary": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+          "evidence_refs": [
+            15913
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13651,
+          "kind": "behavior_fact",
+          "subject": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+          "summary": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+          "evidence_refs": [
+            15913
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13654,
+          "kind": "behavior_fact",
+          "subject": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+          "summary": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+          "evidence_refs": [
+            15913
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13652,
+          "kind": "behavior_fact",
+          "subject": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+          "summary": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+          "evidence_refs": [
+            15913
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13609,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13587,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13576,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status failed",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13655,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13637,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status failed",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13657,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+          "summary": "Validation method produced evidence that can support or refine the current hypothesis.",
+          "evidence_refs": [
+            15913
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13577,
+          "kind": "tested_path",
+          "subject": "Tested path: 启动授权安全验证",
+          "summary": "Validation method executed and produced evidence for graph reasoning.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13589,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Enumerate entrypoints and security surfaces from extracted source",
+          "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "evidence_refs": [
+            15906
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13638,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Read extracted source files to collect surface facts",
+          "summary": "Validation method executed and produced evidence for graph reasoning.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13611,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Collect surface facts from extracted source files",
+          "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "evidence_refs": [
+            15909
+          ],
+          "confidence_source": "evidence"
+        }
+      ],
+      "open_intents": [
+        {
+          "id": 760,
+          "kind": "clue_collect",
+          "goal": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+          "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+          "priority": 0.5568000000000002,
+          "status": "pending",
+          "target": {
+            "branch_value": {
+              "capability_unlock_score": 0.76,
+              "coverage_gain": 0.5,
+              "duplicate_penalty": 0,
+              "environment_alignment_boost": 0,
+              "evidence_quality": 0.5,
+              "execution_cost": 0.42,
+              "final_score": 0.5568000000000002,
+              "goal_type_boost": 0,
+              "graph_expansion_score": 0.79,
+              "matched_environment_refs": null,
+              "negative_fact_refs": null,
+              "novelty_score": 0.54,
+              "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+              "risk_value": 0.82,
+              "safety_risk": 0.24,
+              "scored_at": "2026-05-29T03:56:43.797952045Z"
+            },
+            "environment_context_snapshot": {
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              },
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040"
+            },
+            "evidenceIds": [],
+            "expected_capability": "internal_service_access",
+            "expected_evidence": "evidence that validates or refutes: Collect database interaction points from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "hypothesis_id": 524,
+            "parentIntentId": 753,
+            "safety_level": "authorized_non_destructive",
+            "source": "iteration_planner",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup"
+          }
+        },
+        {
+          "id": 759,
+          "kind": "clue_collect",
+          "goal": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+          "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+          "priority": 0.5568000000000002,
+          "status": "pending",
+          "target": {
+            "branch_value": {
+              "capability_unlock_score": 0.76,
+              "coverage_gain": 0.5,
+              "duplicate_penalty": 0,
+              "environment_alignment_boost": 0,
+              "evidence_quality": 0.5,
+              "execution_cost": 0.42,
+              "final_score": 0.5568000000000002,
+              "goal_type_boost": 0,
+              "graph_expansion_score": 0.79,
+              "matched_environment_refs": null,
+              "negative_fact_refs": null,
+              "novelty_score": 0.54,
+              "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+              "risk_value": 0.82,
+              "safety_risk": 0.24,
+              "scored_at": "2026-05-29T03:56:43.797425378Z"
+            },
+            "environment_context_snapshot": {
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              },
+              "updated_at": "2026-05-29T03:37:25Z",
+              "updated_from": "toolrun-3040"
+            },
+            "evidenceIds": [],
+            "expected_capability": "internal_service_access",
+            "expected_evidence": "evidence that validates or refutes: Collect auth boundary facts from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "hypothesis_id": 523,
+            "parentIntentId": 753,
+            "safety_level": "authorized_non_destructive",
+            "source": "iteration_planner",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup"
+          }
+        }
+      ],
+      "recent_evidence": [
+        {
+          "id": 15913,
+          "kind": "worker_observation",
+          "relation": "worker_result",
+          "target": "/workspace/input/extracted",
+          "summary": "Scanned 6 extracted source files for HTTP handler definitions. Found 2 servlet-style controller methods in AdminExportController.java and UserController.java. No Spring annotations present."
+        },
+        {
+          "id": 15909,
+          "kind": "worker_observation",
+          "relation": "worker_result",
+          "target": "",
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+        },
+        {
+          "id": 15906,
+          "kind": "worker_observation",
+          "relation": "worker_result",
+          "target": "",
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+        }
+      ],
+      "structured_negative_facts": null,
+      "capability_candidates": null,
+      "verified_capabilities": [
+        {
+          "id": 81,
+          "status": "verified",
+          "summary": "Clue-chain validated capability internal_service_access at /workspace/input/extracted with 1 evidence items via intent 758.",
+          "impact": "validated capability can affect protected application behavior inside scope",
+          "capability_type": "internal_service_access",
+          "target": "/workspace/input/extracted",
+          "fact_refs": null,
+          "evidence_refs": [
+            15913
+          ]
+        }
+      ],
+      "unknowns": [],
+      "hints": null,
+      "budget_state": {
+        "max_iterations": 0,
+        "current_iteration": 0,
+        "remaining_iterations": 0
+      },
+      "surface_facts": [
+        "ToolRun: pi_worker: pi_worker finished with status success",
+        "ToolRun: pi_worker: pi_worker finished with status success",
+        "ToolRun: pi_worker: pi_worker finished with status failed",
+        "ToolRun: pi_worker: pi_worker finished with status success",
+        "ToolRun: pi_worker: pi_worker finished with status failed"
+      ],
+      "fingerprints": null,
+      "code_facts": [
+        "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+      ],
+      "business_facts": null,
+      "secret_facts": null,
+      "capabilities": [
+        "[verified] internal_service_access",
+        "[verified] internal_service_access (/workspace/input/extracted) - Clue-chain validated capability internal_service_access at /workspace/input/extracted with 1 evidence items via intent 758."
+      ],
+      "pending_intents": [
+        "[clue_collect] Validate hypothesis: Collect database interaction points from extracted source",
+        "[clue_collect] Validate hypothesis: Collect auth boundary facts from extracted source"
+      ],
+      "negative_facts": null,
+      "environment_model": "runtime_environment: java=plausible, python=plausible",
+      "evidence_count": 3,
+      "iteration_budget": 0,
+      "iterations_current": 0
+    }
+  },
+  "graph_summary": {
+    "task_id": 89,
+    "task_type": "code_audit",
+    "goal": "Clue-driven exploration of raw-query-control fixture",
+    "goal_state": {
+      "task_id": 89,
+      "type": "scope_bounded_security_discovery",
+      "goal_type": "scope_bounded_security_discovery",
+      "description": "Clue-driven exploration of raw-query-control fixture",
+      "success_criteria": [
+        "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+        "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+        "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+      ],
+      "status": "active",
+      "verified_capability_count": 1,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "coverage_summary": {
+        "total_surfaces": 0,
+        "explored_surfaces": 0,
+        "resolved_surfaces": 0,
+        "resolved_verified": 0,
+        "resolved_refuted": 0,
+        "blocked_surfaces": 0,
+        "inconclusive_surfaces": 0,
+        "out_of_scope": 0
+      },
+      "stop_reason": "",
+      "should_continue": true
+    },
+    "coverage_state": {
+      "scope_summary": {
+        "targets": null,
+        "entrypoint_count": 0,
+        "surface_count": 0,
+        "auth_contexts": [],
+        "excluded_paths": null
+      },
+      "surface_coverage": null,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "verified_capability_count": 1,
+      "refuted_path_count": 0,
+      "blocked_path_count": 0,
+      "inconclusive_path_count": 0,
+      "recent_progress": {
+        "new_facts_last_n": 26,
+        "new_evidence_last_n": 2,
+        "new_capabilities_last_n": 1,
+        "new_surfaces_last_n": 0,
+        "new_clue_facts_last_n": 0
+      }
+    },
+    "confirmed_facts": [
+      {
+        "id": 13563,
+        "kind": "origin",
+        "subject": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13564,
+        "kind": "goal",
+        "subject": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration of raw-query-control fixture",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13568,
+        "kind": "fact",
+        "subject": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13653,
+        "kind": "behavior_fact",
+        "subject": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+        "summary": "Runtime environment Java=plausible confirmed by javax.servlet.http.HttpServletRequest and jakarta.servlet.http.HttpServletRequest imports",
+        "evidence_refs": [
+          15913
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13651,
+        "kind": "behavior_fact",
+        "subject": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+        "summary": "HTTP handler entrypoint: AdminExportController.export(HttpServletRequest) at AdminExportController.java:9 - parameters 'format' and 'includeInactive' extracted via request.getParameter()",
+        "evidence_refs": [
+          15913
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13654,
+        "kind": "behavior_fact",
+        "subject": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+        "summary": "No Spring Framework controller annotations (@Controller, @RestController, @RequestMapping) found in any source files - plain servlet-style pattern",
+        "evidence_refs": [
+          15913
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13652,
+        "kind": "behavior_fact",
+        "subject": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+        "summary": "HTTP handler entrypoint: UserController.search(HttpServletRequest) at UserController.java:12 - parameters 'keyword' and 'orderBy' extracted via request.getParameter()",
+        "evidence_refs": [
+          15913
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13609,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13587,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13576,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13655,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13637,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13657,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+        "summary": "Validation method produced evidence that can support or refine the current hypothesis.",
+        "evidence_refs": [
+          15913
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13577,
+        "kind": "tested_path",
+        "subject": "Tested path: 启动授权安全验证",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13589,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Enumerate entrypoints and security surfaces from extracted source",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "evidence_refs": [
+          15906
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13638,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Read extracted source files to collect surface facts",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13611,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Collect surface facts from extracted source files",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "evidence_refs": [
+          15909
+        ],
+        "confidence_source": "evidence"
+      }
+    ],
+    "open_intents": [
+      {
+        "id": 760,
+        "kind": "clue_collect",
+        "goal": "Scan the 6 extracted source files for ORM usage patterns or raw query construction and emit surface facts with file:line references.",
+        "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+        "priority": 0.5568000000000002,
+        "status": "pending",
+        "target": {
+          "branch_value": {
+            "capability_unlock_score": 0.76,
+            "coverage_gain": 0.5,
+            "duplicate_penalty": 0,
+            "environment_alignment_boost": 0,
+            "evidence_quality": 0.5,
+            "execution_cost": 0.42,
+            "final_score": 0.5568000000000002,
+            "goal_type_boost": 0,
+            "graph_expansion_score": 0.79,
+            "matched_environment_refs": null,
+            "negative_fact_refs": null,
+            "novelty_score": 0.54,
+            "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+            "risk_value": 0.82,
+            "safety_risk": 0.24,
+            "scored_at": "2026-05-29T03:56:43.797952045Z"
+          },
+          "environment_context_snapshot": {
+            "runtime_environment": {
+              "java": "plausible",
+              "python": "plausible"
+            },
+            "updated_at": "2026-05-29T03:37:25Z",
+            "updated_from": "toolrun-3040"
+          },
+          "evidenceIds": [],
+          "expected_capability": "internal_service_access",
+          "expected_evidence": "evidence that validates or refutes: Collect database interaction points from extracted source",
+          "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+          "hypothesis_id": 524,
+          "parentIntentId": 753,
+          "safety_level": "authorized_non_destructive",
+          "source": "iteration_planner",
+          "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+          "validation_method": "planner_suggested_followup"
+        }
+      },
+      {
+        "id": 759,
+        "kind": "clue_collect",
+        "goal": "Scan the 6 extracted source files for authentication decorators, middleware, or authorization checks and emit surface facts with file:line references.",
+        "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+        "priority": 0.5568000000000002,
+        "status": "pending",
+        "target": {
+          "branch_value": {
+            "capability_unlock_score": 0.76,
+            "coverage_gain": 0.5,
+            "duplicate_penalty": 0,
+            "environment_alignment_boost": 0,
+            "evidence_quality": 0.5,
+            "execution_cost": 0.42,
+            "final_score": 0.5568000000000002,
+            "goal_type_boost": 0,
+            "graph_expansion_score": 0.79,
+            "matched_environment_refs": null,
+            "negative_fact_refs": null,
+            "novelty_score": 0.54,
+            "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+            "risk_value": 0.82,
+            "safety_risk": 0.24,
+            "scored_at": "2026-05-29T03:56:43.797425378Z"
+          },
+          "environment_context_snapshot": {
+            "runtime_environment": {
+              "java": "plausible",
+              "python": "plausible"
+            },
+            "updated_at": "2026-05-29T03:37:25Z",
+            "updated_from": "toolrun-3040"
+          },
+          "evidenceIds": [],
+          "expected_capability": "internal_service_access",
+          "expected_evidence": "evidence that validates or refutes: Collect auth boundary facts from extracted source",
+          "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+          "hypothesis_id": 523,
+          "parentIntentId": 753,
+          "safety_level": "authorized_non_destructive",
+          "source": "iteration_planner",
+          "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+          "validation_method": "planner_suggested_followup"
+        }
+      }
+    ],
+    "recent_evidence": [
+      {
+        "id": 15913,
+        "kind": "worker_observation",
+        "relation": "worker_result",
+        "target": "/workspace/input/extracted",
+        "summary": "Scanned 6 extracted source files for HTTP handler definitions. Found 2 servlet-style controller methods in AdminExportController.java and UserController.java. No Spring annotations present."
+      },
+      {
+        "id": 15909,
+        "kind": "worker_observation",
+        "relation": "worker_result",
+        "target": "",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+      },
+      {
+        "id": 15906,
+        "kind": "worker_observation",
+        "relation": "worker_result",
+        "target": "",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+      }
+    ],
+    "structured_negative_facts": null,
+    "capability_candidates": null,
+    "verified_capabilities": [
+      {
+        "id": 81,
+        "status": "verified",
+        "summary": "Clue-chain validated capability internal_service_access at /workspace/input/extracted with 1 evidence items via intent 758.",
+        "impact": "validated capability can affect protected application behavior inside scope",
+        "capability_type": "internal_service_access",
+        "target": "/workspace/input/extracted",
+        "fact_refs": null,
+        "evidence_refs": [
+          15913
+        ]
+      }
+    ],
+    "unknowns": [],
+    "hints": null,
+    "budget_state": {
+      "max_iterations": 0,
+      "current_iteration": 0,
+      "remaining_iterations": 0
+    },
+    "surface_facts": [
+      "ToolRun: pi_worker: pi_worker finished with status success",
+      "ToolRun: pi_worker: pi_worker finished with status success",
+      "ToolRun: pi_worker: pi_worker finished with status failed",
+      "ToolRun: pi_worker: pi_worker finished with status success",
+      "ToolRun: pi_worker: pi_worker finished with status failed"
+    ],
+    "fingerprints": null,
+    "code_facts": [
+      "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+    ],
+    "business_facts": null,
+    "secret_facts": null,
+    "capabilities": [
+      "[verified] internal_service_access",
+      "[verified] internal_service_access (/workspace/input/extracted) - Clue-chain validated capability internal_service_access at /workspace/input/extracted with 1 evidence items via intent 758."
+    ],
+    "pending_intents": [
+      "[clue_collect] Validate hypothesis: Collect database interaction points from extracted source",
+      "[clue_collect] Validate hypothesis: Collect auth boundary facts from extracted source"
+    ],
+    "negative_facts": null,
+    "environment_model": "runtime_environment: java=plausible, python=plausible",
+    "evidence_count": 3,
+    "iteration_budget": 0,
+    "iterations_current": 0
+  },
+  "intent": {
+    "id": 762,
+    "taskId": 89,
+    "parentNodeId": null,
+    "intentType": "clue_collect",
+    "title": "Validate hypothesis: Collect HTTP handler entrypoints from extracted source",
+    "objective": "Scan the 6 extracted source files for HTTP handler definitions (Flask @app.route, Django URL patterns, Spring @RequestMapping/@GetMapping, function exports) and emit surface facts with file:line references.",
+    "constraintsJson": {
+      "source": "iteration_planner",
+      "evidenceIds": [
+        15913
+      ],
+      "branch_value": {
+        "reason": "strong graph expansion, Environment signal runtime_environment.java=plausible aligns with this hypothesis., Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-29T03:56:43.796982253Z",
+        "risk_value": 0.82,
+        "final_score": 0.5672000000000001,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.54,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.5,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.79,
+        "capability_unlock_score": 0.76,
+        "matched_environment_refs": [
+          "runtime_environment.java=plausible"
+        ],
+        "environment_alignment_boost": 0.13
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 526,
+      "parentIntentId": 758,
+      "expected_evidence": "evidence that validates or refutes: Collect HTTP handler entrypoints from extracted source",
+      "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+      "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+      "validation_method": "planner_suggested_followup",
+      "expected_capability": "internal_service_access",
+      "environment_context_snapshot": {
+        "updated_at": "2026-05-29T03:37:25Z",
+        "updated_from": "toolrun-3040",
+        "runtime_environment": {
+          "java": "plausible",
+          "python": "plausible"
+        }
+      }
+    },
+    "requiredEvidence": null,
+    "priorityScore": 0.5672000000000001,
+    "status": "running",
+    "claimedBy": "worker:7:glm-5",
+    "claimExpiresAt": "2026-05-29T04:03:43.799565295Z",
+    "createdBy": "model-planner",
+    "createdReason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+    "startedAt": "2026-05-29T03:56:43.799565295Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-29T03:56:43.787385Z",
+    "UpdatedAt": "2026-05-29T03:56:43.799565295Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "find",
+      "ls"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 89,
+    "objective": "Clue-driven exploration of raw-query-control fixture",
+    "scope": {
+      "targets": [],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "code_audit"
+  },
+  "worker": {
+    "current_load": 1,
+    "driver": "pi_container_kali",
+    "id": "worker:7:glm-5",
+    "max_running": 2,
+    "model": "glm-5",
+    "model_config": 7,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

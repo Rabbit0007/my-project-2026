@@ -1,0 +1,76 @@
+SQL Injection Path Validation Report
+=====================================
+
+Hypothesis: Potential SQL injection path requires validation (hypothesis_id: 544)
+
+SOURCE ANALYSIS
+---------------
+File: UserController.java
+Method: search(HttpServletRequest request)
+
+    public List<UserRecord> search(HttpServletRequest request) {
+        String keyword = request.getParameter("keyword");
+        String orderBy = request.getParameter("orderBy");
+        return userService.search(keyword, orderBy);
+    }
+
+Findings:
+- orderBy parameter taken directly from HTTP request
+- No authentication/authorization check before processing
+- No input validation or sanitization
+- Passes unmodified to userService.search()
+
+DATA FLOW ANALYSIS
+------------------
+UserController.search()
+  → UserService.search(keyword, orderBy)  [no modification]
+    → UserMapper.search(keyword, orderBy)  [interface method, no validation]
+
+SINK ANALYSIS
+-------------
+File: UserMapper.xml
+Query ID: search
+
+    SELECT id, name
+    FROM users
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY ${orderBy}
+
+Critical Finding:
+- #{keyword} uses prepared statement parameter (SAFE)
+- ${orderBy} uses MyBatis string interpolation (VULNERABLE)
+
+MyBatis Syntax Reference:
+- #{param} → Prepared statement parameter (escaped, safe)
+- ${param} → Direct string interpolation (NOT escaped, vulnerable to SQLi)
+
+VULNERABILITY CONFIRMATION
+--------------------------
+1. User-controlled input: orderBy parameter from HTTP request
+2. No validation/sanitization: None visible in the entire data flow
+3. Dynamic SQL construction: ${orderBy} in ORDER BY clause
+4. Authentication bypass: No auth check required to trigger
+
+EXPLOITABILITY ASSESSMENT
+-------------------------
+Status: EXPLOITABLE
+
+The orderBy parameter is directly interpolated into the SQL ORDER BY clause.
+An attacker can inject arbitrary SQL by providing orderBy values like:
+- "id; DROP TABLE users--"
+- "id OR 1=1"
+- "(CASE WHEN (SELECT 1)=1 THEN id ELSE name END)"
+
+This allows:
+- Blind SQL injection for data extraction
+- Potential data modification via stacked queries (if supported)
+- Information disclosure through error messages
+
+CONCLUSION
+----------
+The SQL injection path is VALIDATED and EXPLOITABLE.
+User-controlled data reaches dynamic SQL construction without validation.
+
+Capability: sql_injection
+Target: UserController.search:orderBy -> UserMapper.xml ORDER BY
+Strength: verified

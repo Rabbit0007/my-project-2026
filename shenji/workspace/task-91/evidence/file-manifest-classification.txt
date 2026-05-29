@@ -1,0 +1,58 @@
+=== File Manifest and Role Classification ===
+Task: 91 | Intent: 767 | Timestamp: 2026-05-29
+
+## Extracted Files (6 total, 1988 bytes)
+
+### Entry Points / Controllers (HTTP Request Handlers)
+1. src/main/java/demo/UserController.java
+   - Role: HTTP request handler for user search
+   - Methods: search(HttpServletRequest)
+   - Parameters: keyword, orderBy (both from request)
+   - Dependencies: UserService
+
+2. src/main/java/demo/AdminExportController.java
+   - Role: HTTP request handler for admin export
+   - Methods: export(HttpServletRequest)
+   - Parameters: format, includeInactive (both from request)
+   - Dependencies: AdminExportService (instantiated inline)
+
+### Service Layer (Business Logic)
+3. src/main/java/demo/UserService.java
+   - Role: Business service for user operations
+   - Methods: search(String keyword, String orderBy)
+   - Dependencies: UserMapper
+
+4. src/main/java/demo/AdminExportService.java
+   - Role: Business service for export operations
+   - Methods: exportUsers(String format, String includeInactive)
+   - Dependencies: none
+
+### Data Access Layer
+5. src/main/java/demo/UserMapper.java
+   - Role: MyBatis mapper interface
+   - Methods: search(String keyword, String orderBy)
+   - Returns: List<UserRecord>
+
+### SQL Template / Configuration
+6. src/main/resources/mapper/UserMapper.xml
+   - Role: MyBatis SQL mapper configuration
+   - Query: SELECT id, name FROM users WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY ${orderBy}
+   - SECURITY NOTE: Uses ${orderBy} (string interpolation) - SQL injection vulnerable
+   - Parameter #{keyword} is safe (parameterized)
+   - Parameter ${orderBy} is UNSAFE (direct string interpolation)
+
+## Architecture Pattern
+- Spring/Java web application with Controller-Service-Mapper (DAO) layered architecture
+- Uses MyBatis for SQL mapping
+- Request parameters flow: Controller -> Service -> Mapper -> SQL
+
+## Identified Attack Surfaces
+1. SQL Injection in UserController.search() via orderBy parameter
+   - Path: UserController.search() -> UserService.search() -> UserMapper.search() -> UserMapper.xml ${orderBy}
+   - The orderBy parameter is passed directly to SQL ORDER BY clause via ${orderBy}
+   - MyBatis ${} syntax performs string interpolation, not parameterization
+
+2. Admin Export functionality in AdminExportController.export()
+   - Path: AdminExportController.export() -> AdminExportService.exportUsers()
+   - Parameters: format, includeInactive
+   - Potential for data exfiltration or format-based attacks

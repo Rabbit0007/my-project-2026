@@ -1,0 +1,2037 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return a GraphDelta-style packet. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-29T05:54:44.504558336Z",
+  "graph": {
+    "task": {
+      "id": 93,
+      "workspaceId": 93,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "Phase5B-v3-final",
+      "taskType": "code_audit",
+      "status": "running",
+      "objective": "Clue-driven exploration",
+      "scopeJson": {
+        "targets": [],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": null,
+      "isTestTask": true,
+      "archived": false,
+      "progressStage": "探索: Validate hypothesis: Collect origin and entry clues from extracted sources",
+      "progressPercent": 38,
+      "startedAt": "2026-05-29T05:39:44.177426Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-29T05:39:44.011773Z",
+      "UpdatedAt": "2026-05-29T05:54:00.189471Z"
+    },
+    "intent": {
+      "id": 785,
+      "taskId": 93,
+      "parentNodeId": null,
+      "intentType": "clue_collect",
+      "title": "Validate hypothesis: Collect origin and entry clues from extracted sources",
+      "objective": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+      "constraintsJson": {
+        "source": "iteration_planner",
+        "evidenceIds": [],
+        "branch_value": {
+          "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-29T05:54:00.18701551Z",
+          "risk_value": 0.82,
+          "final_score": 0.6000000000000002,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.8999999999999999,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.5,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.79,
+          "capability_unlock_score": 0.76,
+          "matched_environment_refs": null,
+          "environment_alignment_boost": 0
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 549,
+        "parentIntentId": 784,
+        "expected_evidence": "evidence that validates or refutes: Collect origin and entry clues from extracted sources",
+        "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+        "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+        "validation_method": "planner_suggested_followup",
+        "expected_capability": "internal_service_access",
+        "environment_context_snapshot": {
+          "updated_at": "2026-05-29T05:54:00Z",
+          "updated_from": "toolrun-3064",
+          "runtime_environment": {
+            "java": "plausible",
+            "python": "plausible"
+          }
+        }
+      },
+      "requiredEvidence": null,
+      "priorityScore": 0.6000000000000002,
+      "status": "running",
+      "claimedBy": "worker:7:glm-5",
+      "claimExpiresAt": "2026-05-29T06:01:00.191683302Z",
+      "createdBy": "model-planner",
+      "createdReason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+      "startedAt": "2026-05-29T05:54:00.191683302Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-29T05:54:00.152408Z",
+      "UpdatedAt": "2026-05-29T05:54:00.191683302Z"
+    },
+    "keyFacts": [
+      {
+        "id": 13786,
+        "taskId": 93,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 782,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 93,
+          "CreatedAt": "2026-05-29T05:39:44.021897294Z",
+          "UpdatedAt": "2026-05-29T05:39:44.021897336Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_chain_extend",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "legacy_hint": "code_trace",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 546,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "source_code_read"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "810190d0fec879f6b9291bab5928735967731a1431d511af5cd6f6bd32b2d79a",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "782",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:39:44.023189Z",
+        "lastSeenAt": "2026-05-29T05:39:44.191756Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:39:44.023469Z",
+        "UpdatedAt": "2026-05-29T05:39:44.191895Z"
+      },
+      {
+        "id": 13783,
+        "taskId": 93,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration",
+        "contentJson": {
+          "objective": "Clue-driven exploration"
+        },
+        "dedupKey": "5a3c0952c5f63c65f1d161bb6f9baaa1531386f4f92ce393ca9f38a4541e4c8e",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:39:44.015806Z",
+        "lastSeenAt": "2026-05-29T05:39:44.015806Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:39:44.016106Z",
+        "UpdatedAt": "2026-05-29T05:39:44.016106Z"
+      },
+      {
+        "id": 13782,
+        "taskId": 93,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "adc07fb7027bf03517584382fd5cd92143544d816541883994ff862c2be938df",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:39:44.014604Z",
+        "lastSeenAt": "2026-05-29T05:39:44.014604Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:39:44.015018Z",
+        "UpdatedAt": "2026-05-29T05:39:44.015018Z"
+      },
+      {
+        "id": 13784,
+        "taskId": 93,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for code_audit",
+        "summary": "Clue-driven exploration",
+        "contentJson": {
+          "id": 33,
+          "mode": "code_audit",
+          "name": "Hypothesis-driven coverage objective for code_audit",
+          "taskId": 93,
+          "goalType": "coverage",
+          "createdAt": "2026-05-29T05:39:44.016723836Z",
+          "updatedAt": "2026-05-29T05:39:44.016723836Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "Clue-driven exploration",
+          "normalizedGoal": "Clue-driven exploration",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "a8a40c090a65b728d2d299bf24c70113b71fe384c3135c480ee6d945c174764c",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-33",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:39:44.017441Z",
+        "lastSeenAt": "2026-05-29T05:39:44.017441Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:39:44.017693Z",
+        "UpdatedAt": "2026-05-29T05:39:44.017693Z"
+      },
+      {
+        "id": 13787,
+        "taskId": 93,
+        "nodeType": "fact",
+        "title": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "contentJson": {
+          "files": [
+            "src/main/resources/mapper/UserMapper.xml",
+            "src/main/java/demo/UserService.java",
+            "src/main/java/demo/AdminExportController.java",
+            "src/main/java/demo/UserMapper.java",
+            "src/main/java/demo/AdminExportService.java",
+            "src/main/java/demo/UserController.java"
+          ],
+          "skipped": [],
+          "totalBytes": 1988,
+          "extractedDir": "/app/workspace/task-93/input/extracted"
+        },
+        "dedupKey": "136b91f93fe6f9edeed059ff2bd8495bb63e90a7b600efa8057a813a8954a71c",
+        "importanceScore": 0.9,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "workspace",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:39:44.16415Z",
+        "lastSeenAt": "2026-05-29T05:39:44.16415Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:39:44.164559Z",
+        "UpdatedAt": "2026-05-29T05:39:44.164559Z"
+      },
+      {
+        "id": 13788,
+        "taskId": 93,
+        "nodeType": "environment_model",
+        "title": "Environment model",
+        "summary": "runtime_environment: java=plausible, python=plausible",
+        "contentJson": {
+          "id": 23,
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:43:58.549243384Z",
+          "modelJson": {
+            "updated_at": "2026-05-29T05:43:58Z",
+            "updated_from": "toolrun-3062",
+            "runtime_environment": {
+              "java": "plausible"
+            }
+          },
+          "updatedAt": "2026-05-29T05:43:58.549243384Z",
+          "updatedFrom": "toolrun-3062"
+        },
+        "dedupKey": "71258f607be25591ba379634af9468bd40f278a9016f3339e93944e83db1ade5",
+        "importanceScore": 0.88,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "toolrun-3062",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:43:58.549664Z",
+        "lastSeenAt": "2026-05-29T05:54:00.138947Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:43:58.549841Z",
+        "UpdatedAt": "2026-05-29T05:54:00.139155Z"
+      },
+      {
+        "id": 13800,
+        "taskId": 93,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect structural clues from extracted source",
+        "summary": "Examine the 6 extracted source files to identify entry points, sensitive function calls, and data flow origins for security exploration.",
+        "contentJson": {
+          "id": 784,
+          "title": "Validate hypothesis: Collect structural clues from extracted source",
+          "status": "pending",
+          "taskId": 93,
+          "CreatedAt": "2026-05-29T05:47:05.017693554Z",
+          "UpdatedAt": "2026-05-29T05:47:05.017693596Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Examine the 6 extracted source files to identify entry points, sensitive function calls, and data flow origins for security exploration.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 548,
+            "expected_evidence": "evidence that validates or refutes: Collect structural clues from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:43:58Z",
+              "updated_from": "toolrun-3062",
+              "runtime_environment": {
+                "java": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "540a098dba25035a726c00483f5fef4a3e608b5dea37579b735735abb748b0dd",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "784",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:47:05.019157Z",
+        "lastSeenAt": "2026-05-29T05:47:05.031849Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:47:05.019351Z",
+        "UpdatedAt": "2026-05-29T05:47:05.031973Z"
+      },
+      {
+        "id": 13794,
+        "taskId": 93,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: 初始代码结构探测",
+        "summary": "Examine extracted source files to identify code structure, entry points, and potential security-relevant surfaces for subsequent hypothesis formation.",
+        "contentJson": {
+          "id": 783,
+          "title": "Validate hypothesis: 初始代码结构探测",
+          "status": "pending",
+          "taskId": 93,
+          "CreatedAt": "2026-05-29T05:43:58.560365843Z",
+          "UpdatedAt": "2026-05-29T05:43:58.560365884Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Examine extracted source files to identify code structure, entry points, and potential security-relevant surfaces for subsequent hypothesis formation.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "scope_observation",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 547,
+            "expected_evidence": "evidence that validates or refutes: 初始代码结构探测",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:43:58Z",
+              "updated_from": "toolrun-3062",
+              "runtime_environment": {
+                "java": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "97d2f67568da429fbff80fa362fc1c29dad2d07d33fbfd6d327c18d90d889bee",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "783",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:43:58.561457Z",
+        "lastSeenAt": "2026-05-29T05:43:58.574785Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:43:58.561617Z",
+        "UpdatedAt": "2026-05-29T05:43:58.574895Z"
+      },
+      {
+        "id": 13785,
+        "taskId": 93,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 546,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:39:44.019551544Z",
+          "updatedAt": "2026-05-29T05:39:44.019551544Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "source_code_read",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:13782"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "45cb61c3594352d06fd924d1508c90420e5ec9a4db4b0e5168e143015d663e91",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "546",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:39:44.020236Z",
+        "lastSeenAt": "2026-05-29T05:43:58.556274Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:39:44.020487Z",
+        "UpdatedAt": "2026-05-29T05:43:58.556411Z"
+      },
+      {
+        "id": 13806,
+        "taskId": 93,
+        "nodeType": "hypothesis",
+        "title": "Correlate sensitive sink calls in extracted sources",
+        "summary": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+        "contentJson": {
+          "id": 550,
+          "title": "Correlate sensitive sink calls in extracted sources",
+          "status": "pending",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:54:00.157844093Z",
+          "updatedAt": "2026-05-29T05:54:00.157844093Z",
+          "description": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+          "validatedAt": null,
+          "targetEntity": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:784",
+            "blackboard_node:13800"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "bcdf24352dd5d8d88d241c4ff4e0c6cb9a9873df027288fd34d5fda6976bf837",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "550",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.158259Z",
+        "lastSeenAt": "2026-05-29T05:54:00.161033Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:54:00.158619Z",
+        "UpdatedAt": "2026-05-29T05:54:00.161189Z"
+      },
+      {
+        "id": 13804,
+        "taskId": 93,
+        "nodeType": "hypothesis",
+        "title": "Collect origin and entry clues from extracted sources",
+        "summary": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+        "contentJson": {
+          "id": 549,
+          "title": "Collect origin and entry clues from extracted sources",
+          "status": "pending",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:54:00.150279718Z",
+          "updatedAt": "2026-05-29T05:54:00.150279718Z",
+          "description": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+          "validatedAt": null,
+          "targetEntity": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:784",
+            "blackboard_node:13800"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "aa63a9c30759bab7ebb23932beb4c807e68e8fca3ada16b966dc5171a7be97f2",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "549",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.150777Z",
+        "lastSeenAt": "2026-05-29T05:54:00.153721Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:54:00.150985Z",
+        "UpdatedAt": "2026-05-29T05:54:00.153889Z"
+      },
+      {
+        "id": 13799,
+        "taskId": 93,
+        "nodeType": "hypothesis",
+        "title": "Collect structural clues from extracted source",
+        "summary": "Examine the 6 extracted source files to identify entry points, sensitive function calls, and data flow origins for security exploration.",
+        "contentJson": {
+          "id": 548,
+          "title": "Collect structural clues from extracted source",
+          "status": "pending",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:47:05.016181929Z",
+          "updatedAt": "2026-05-29T05:47:05.016181929Z",
+          "description": "Examine the 6 extracted source files to identify entry points, sensitive function calls, and data flow origins for security exploration.",
+          "validatedAt": null,
+          "targetEntity": "Examine the 6 extracted source files to identify entry points, sensitive function calls, and data flow origins for security exploration.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:783",
+            "blackboard_node:13794",
+            "evidence:15926"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "bef543c38b7a23298acf3c4065d0fb054c2920845f1dc64d3453f0e50ba54ac2",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "548",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:47:05.016542Z",
+        "lastSeenAt": "2026-05-29T05:54:00.146891Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:47:05.016757Z",
+        "UpdatedAt": "2026-05-29T05:54:00.147069Z"
+      },
+      {
+        "id": 13793,
+        "taskId": 93,
+        "nodeType": "hypothesis",
+        "title": "初始代码结构探测",
+        "summary": "Examine extracted source files to identify code structure, entry points, and potential security-relevant surfaces for subsequent hypothesis formation.",
+        "contentJson": {
+          "id": 547,
+          "title": "初始代码结构探测",
+          "status": "pending",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:43:58.558940426Z",
+          "updatedAt": "2026-05-29T05:43:58.558940426Z",
+          "description": "Examine extracted source files to identify code structure, entry points, and potential security-relevant surfaces for subsequent hypothesis formation.",
+          "validatedAt": null,
+          "targetEntity": "Examine extracted source files to identify code structure, entry points, and potential security-relevant surfaces for subsequent hypothesis formation.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:782",
+            "blackboard_node:13786",
+            "evidence:15925"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "807f68379bbb69d5a9634ba376502a6dfb6e035ad9ab14c608d269182dff6b76",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "547",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:43:58.559263Z",
+        "lastSeenAt": "2026-05-29T05:47:05.01414Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:43:58.559428Z",
+        "UpdatedAt": "2026-05-29T05:47:05.014255Z"
+      },
+      {
+        "id": 13796,
+        "taskId": 93,
+        "nodeType": "evidence",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "contentJson": {
+          "id": 15926,
+          "hash": "4b42679a1145db7c7ece01f9e567068ad04c543b50da03681cbbb092919ad3e3",
+          "title": "Unstructured Pi worker observation",
+          "rawRef": "minio://rabbit-artifacts/task-93/evidence/1780033625005345221-worker_observation.txt",
+          "target": "",
+          "taskId": 93,
+          "lineEnd": null,
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T05:47:05.007031013Z",
+          "lineStart": null,
+          "toolRunId": 3063,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-93/evidence/1780033625005345221-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "99e367309106e4f8238bfd538f5bb842c0d5fd90c93d36f3841170b211df13f3",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3063",
+        "evidenceRefs": [
+          "15926"
+        ],
+        "firstSeenAt": "2026-05-29T05:47:05.010536Z",
+        "lastSeenAt": "2026-05-29T05:47:05.010536Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:47:05.010717Z",
+        "UpdatedAt": "2026-05-29T05:47:05.010717Z"
+      },
+      {
+        "id": 13790,
+        "taskId": 93,
+        "nodeType": "evidence",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "contentJson": {
+          "id": 15925,
+          "hash": "c888c396b7876049811f011343c28b7d3d4044570b872decce05fe1e76c56235",
+          "title": "Unstructured Pi worker observation",
+          "rawRef": "minio://rabbit-artifacts/task-93/evidence/1780033438544712718-worker_observation.txt",
+          "target": "",
+          "taskId": 93,
+          "lineEnd": null,
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T05:43:58.546274176Z",
+          "lineStart": null,
+          "toolRunId": 3062,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-93/evidence/1780033438544712718-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "680960616a81c349b6abea4f401d2b214cb8f9f03dbe8ac043d15cbfce9097d6",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3062",
+        "evidenceRefs": [
+          "15925"
+        ],
+        "firstSeenAt": "2026-05-29T05:43:58.551848Z",
+        "lastSeenAt": "2026-05-29T05:43:58.551848Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:43:58.551978Z",
+        "UpdatedAt": "2026-05-29T05:43:58.551978Z"
+      },
+      {
+        "id": 13807,
+        "taskId": 93,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Correlate sensitive sink calls in extracted sources",
+        "summary": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+        "contentJson": {
+          "id": 786,
+          "title": "Validate hypothesis: Correlate sensitive sink calls in extracted sources",
+          "status": "pending",
+          "taskId": 93,
+          "CreatedAt": "2026-05-29T05:54:00.160033552Z",
+          "UpdatedAt": "2026-05-29T05:54:00.160033593Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 550,
+            "expected_evidence": "evidence that validates or refutes: Correlate sensitive sink calls in extracted sources",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:54:00Z",
+              "updated_from": "toolrun-3064",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "35e98162feffe3332d3e19efe082aecf8dd346ad0ca2031be270aeb04c059f84",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "786",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.161537Z",
+        "lastSeenAt": "2026-05-29T05:54:00.166432Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:54:00.161765Z",
+        "UpdatedAt": "2026-05-29T05:54:00.166729Z"
+      },
+      {
+        "id": 13805,
+        "taskId": 93,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect origin and entry clues from extracted sources",
+        "summary": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+        "contentJson": {
+          "id": 785,
+          "title": "Validate hypothesis: Collect origin and entry clues from extracted sources",
+          "status": "pending",
+          "taskId": 93,
+          "CreatedAt": "2026-05-29T05:54:00.15240801Z",
+          "UpdatedAt": "2026-05-29T05:54:00.152408093Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 549,
+            "expected_evidence": "evidence that validates or refutes: Collect origin and entry clues from extracted sources",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:54:00Z",
+              "updated_from": "toolrun-3064",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "cafbacef5931eb4b8be430606a062661d180c85d57587c5e2e292118e00a58e3",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "785",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.154146Z",
+        "lastSeenAt": "2026-05-29T05:54:00.155815Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:54:00.154443Z",
+        "UpdatedAt": "2026-05-29T05:54:00.155988Z"
+      },
+      {
+        "id": 13803,
+        "taskId": 93,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: Collect structural clues from extracted source",
+        "summary": "Pi Kali worker execution failed",
+        "contentJson": {
+          "id": 237,
+          "title": "Unverified: Collect structural clues from extracted source",
+          "detail": "Pi Kali worker execution failed",
+          "reason": "inconclusive_evidence",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:54:00.145248885Z",
+          "evidenceRefs": [],
+          "hypothesisId": 548,
+          "observationRefs": [
+            "planner_intent:783",
+            "blackboard_node:13794",
+            "evidence:15926"
+          ],
+          "blockedByIntentId": 784
+        },
+        "dedupKey": "82705a1b5f98063fa14dde7bf3181f8e21d93667d45619c2adf6258afd9d0822",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "237",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.14612Z",
+        "lastSeenAt": "2026-05-29T05:54:00.14612Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:54:00.146295Z",
+        "UpdatedAt": "2026-05-29T05:54:00.146295Z"
+      },
+      {
+        "id": 13798,
+        "taskId": 93,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: 初始代码结构探测",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "contentJson": {
+          "id": 236,
+          "title": "Unverified: 初始代码结构探测",
+          "detail": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "reason": "method_not_observable",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:47:05.013249429Z",
+          "evidenceRefs": [
+            15926
+          ],
+          "hypothesisId": 547,
+          "observationRefs": [
+            "planner_intent:782",
+            "blackboard_node:13786",
+            "evidence:15925"
+          ],
+          "blockedByIntentId": 783
+        },
+        "dedupKey": "6853950ac9e16ef13604a7d3ce367f7082965afd36b1b14ab32152347380d8bc",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "236",
+        "evidenceRefs": [
+          "15926"
+        ],
+        "firstSeenAt": "2026-05-29T05:47:05.013799Z",
+        "lastSeenAt": "2026-05-29T05:47:05.013799Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:47:05.013936Z",
+        "UpdatedAt": "2026-05-29T05:47:05.013936Z"
+      },
+      {
+        "id": 13792,
+        "taskId": 93,
+        "nodeType": "unverified_risk",
+        "title": "Unverified: Authorized task surface can yield security-relevant observations",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "contentJson": {
+          "id": 235,
+          "title": "Unverified: Authorized task surface can yield security-relevant observations",
+          "detail": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "reason": "method_not_observable",
+          "taskId": 93,
+          "createdAt": "2026-05-29T05:43:58.554808259Z",
+          "evidenceRefs": [
+            15925
+          ],
+          "hypothesisId": 546,
+          "observationRefs": [
+            "node:13782"
+          ],
+          "blockedByIntentId": 782
+        },
+        "dedupKey": "dc5564d29574ec430e33b36da8648ee86a4a80542cf43c1fd36c66a25d6e88e6",
+        "importanceScore": 0.7,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "235",
+        "evidenceRefs": [
+          "15925"
+        ],
+        "firstSeenAt": "2026-05-29T05:43:58.555835Z",
+        "lastSeenAt": "2026-05-29T05:43:58.555835Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:43:58.556014Z",
+        "UpdatedAt": "2026-05-29T05:43:58.556014Z"
+      },
+      {
+        "id": 13801,
+        "taskId": 93,
+        "nodeType": "fact",
+        "title": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "contentJson": {
+          "id": 3064,
+          "status": "failed",
+          "taskId": 93,
+          "exitCode": null,
+          "intentId": 784,
+          "toolName": "pi_worker",
+          "CreatedAt": "2026-05-29T05:47:58.929299051Z",
+          "imageName": "rabbit-pi-worker-kali:local",
+          "inputJson": {
+            "model": "glm-5",
+            "tools": [
+              "read",
+              "write",
+              "edit",
+              "bash",
+              "grep",
+              "find",
+              "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+              "tool_responsibilities": [
+                "Perform bounded observation or validation actions.",
+                "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                "Produce raw observations suitable for Evidence normalization."
+              ],
+              "brain_responsibilities": [
+                "Read graph state and decide which Hypothesis or Intent should exist next.",
+                "Score and budget branch expansion before execution.",
+                "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+              ],
+              "worker_responsibilities": [
+                "Claim and execute exactly one current Intent.",
+                "Use controlled tools to observe or validate only within authorized scope.",
+                "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                "Stop at fact production; Rabbit Brain performs graph judgment."
+              ],
+              "delivery_responsibilities": [
+                "Generate Findings only from evidence-backed validated paths.",
+                "Use Contract as report quality gate, not as exploration planner.",
+                "Render reports after graph exploration produces sufficient facts."
+              ],
+              "forbidden_worker_decisions": [
+                "Do not decide that the goal is complete.",
+                "Do not mark a Hypothesis as validated or refuted.",
+                "Do not create or confirm Findings.",
+                "Do not run Contract checks or report formatting.",
+                "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+              ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 784,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-784-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "clue_collect",
+            "containerImage": "rabbit-pi-worker-kali:local"
+          },
+          "startedAt": "2026-05-29T05:47:58.929299051Z",
+          "stderrRef": "minio://rabbit-artifacts/task-93/toolruns/3064-stderr.txt",
+          "stdoutRef": "minio://rabbit-artifacts/task-93/toolruns/3064-stdout.txt",
+          "finishedAt": "2026-05-29T05:54:00.088507927Z",
+          "runnerType": "worker_agent",
+          "blockReason": "context deadline exceeded",
+          "containerId": "26b15dfc06c40d8d2f12dec34f8fbf8539b740fcddd4f6d8741e74d26365b6f1",
+          "iterationId": 477,
+          "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-93/toolruns/3064-worker-context.json"
+          },
+          "networkPolicy": "bridge",
+          "workspacePath": "/app/workspace/task-93/work/pi-workers/7",
+          "commandPreview": "sh -lc exec env PI_CODING_AGENT_DIR='/workspace/work/pi-workers/7' pi --no-extensions --no-skills --no-prompt-templates --no-themes --no-context-files --tools 'read,write,edit,bash,grep,find,ls' --provider rabbit --model 'glm-5' --mode json --session-dir '/workspace/work/pi-workers/7/sessions' --no-session -p \"$RABBIT_PI_PROMPT\"",
+          "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+          },
+          "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+          }
+        },
+        "dedupKey": "3235f96d9c57412128d0a211e3fe951d52068ad373a02f4728af340fa4ec7208",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3064",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.140243Z",
+        "lastSeenAt": "2026-05-29T05:54:00.140243Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:54:00.140562Z",
+        "UpdatedAt": "2026-05-29T05:54:00.140562Z"
+      },
+      {
+        "id": 13795,
+        "taskId": 93,
+        "nodeType": "fact",
+        "title": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "contentJson": {
+          "id": 3063,
+          "status": "success",
+          "taskId": 93,
+          "exitCode": null,
+          "intentId": 783,
+          "toolName": "pi_worker",
+          "CreatedAt": "2026-05-29T05:44:25.958780175Z",
+          "imageName": "rabbit-pi-worker-kali:local",
+          "inputJson": {
+            "model": "glm-5",
+            "tools": [
+              "read",
+              "write",
+              "edit",
+              "bash",
+              "grep",
+              "find",
+              "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+              "tool_responsibilities": [
+                "Perform bounded observation or validation actions.",
+                "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                "Produce raw observations suitable for Evidence normalization."
+              ],
+              "brain_responsibilities": [
+                "Read graph state and decide which Hypothesis or Intent should exist next.",
+                "Score and budget branch expansion before execution.",
+                "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+              ],
+              "worker_responsibilities": [
+                "Claim and execute exactly one current Intent.",
+                "Use controlled tools to observe or validate only within authorized scope.",
+                "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                "Stop at fact production; Rabbit Brain performs graph judgment."
+              ],
+              "delivery_responsibilities": [
+                "Generate Findings only from evidence-backed validated paths.",
+                "Use Contract as report quality gate, not as exploration planner.",
+                "Render reports after graph exploration produces sufficient facts."
+              ],
+              "forbidden_worker_decisions": [
+                "Do not decide that the goal is complete.",
+                "Do not mark a Hypothesis as validated or refuted.",
+                "Do not create or confirm Findings.",
+                "Do not run Contract checks or report formatting.",
+                "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+              ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 783,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-783-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "scope_observation",
+            "containerImage": "rabbit-pi-worker-kali:local"
+          },
+          "startedAt": "2026-05-29T05:44:25.958780175Z",
+          "stderrRef": "minio://rabbit-artifacts/task-93/toolruns/3063-stderr.txt",
+          "stdoutRef": "minio://rabbit-artifacts/task-93/toolruns/3063-stdout.txt",
+          "finishedAt": "2026-05-29T05:47:04.918156429Z",
+          "runnerType": "worker_agent",
+          "blockReason": "",
+          "containerId": "26b15dfc06c40d8d2f12dec34f8fbf8539b740fcddd4f6d8741e74d26365b6f1",
+          "iterationId": 476,
+          "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-93/toolruns/3063-worker-context.json"
+          },
+          "networkPolicy": "bridge",
+          "workspacePath": "/app/workspace/task-93/work/pi-workers/7",
+          "commandPreview": "sh -lc exec env PI_CODING_AGENT_DIR='/workspace/work/pi-workers/7' pi --no-extensions --no-skills --no-prompt-templates --no-themes --no-context-files --tools 'read,write,edit,bash,grep,find,ls' --provider rabbit --model 'glm-5' --mode json --session-dir '/workspace/work/pi-workers/7/sessions' --no-session -p \"$RABBIT_PI_PROMPT\"",
+          "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+          },
+          "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+          }
+        },
+        "dedupKey": "94eaf851d5d104285dba51dca57afb0f721118c754766cc4ea0b26c4f39c2110",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3063",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:47:05.009209Z",
+        "lastSeenAt": "2026-05-29T05:47:05.009209Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:47:05.009434Z",
+        "UpdatedAt": "2026-05-29T05:47:05.009434Z"
+      },
+      {
+        "id": 13789,
+        "taskId": 93,
+        "nodeType": "fact",
+        "title": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "contentJson": {
+          "id": 3062,
+          "status": "success",
+          "taskId": 93,
+          "exitCode": null,
+          "intentId": 782,
+          "toolName": "pi_worker",
+          "CreatedAt": "2026-05-29T05:40:40.122821334Z",
+          "imageName": "rabbit-pi-worker-kali:local",
+          "inputJson": {
+            "model": "glm-5",
+            "tools": [
+              "read",
+              "write",
+              "edit",
+              "bash",
+              "grep",
+              "find",
+              "ls"
+            ],
+            "driver": "pi_container_kali",
+            "phases": {
+              "tool_responsibilities": [
+                "Perform bounded observation or validation actions.",
+                "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+                "Produce raw observations suitable for Evidence normalization."
+              ],
+              "brain_responsibilities": [
+                "Read graph state and decide which Hypothesis or Intent should exist next.",
+                "Score and budget branch expansion before execution.",
+                "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+                "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+              ],
+              "worker_responsibilities": [
+                "Claim and execute exactly one current Intent.",
+                "Use controlled tools to observe or validate only within authorized scope.",
+                "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+                "Stop at fact production; Rabbit Brain performs graph judgment."
+              ],
+              "delivery_responsibilities": [
+                "Generate Findings only from evidence-backed validated paths.",
+                "Use Contract as report quality gate, not as exploration planner.",
+                "Render reports after graph exploration produces sufficient facts."
+              ],
+              "forbidden_worker_decisions": [
+                "Do not decide that the goal is complete.",
+                "Do not mark a Hypothesis as validated or refuted.",
+                "Do not create or confirm Findings.",
+                "Do not run Contract checks or report formatting.",
+                "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+              ]
+            },
+            "modelId": 7,
+            "runtime": "kali_worker_container",
+            "intentId": 782,
+            "snapshot": "/workspace/work/pi-workers/7/context/intent-782-context.json",
+            "workerId": "worker:7:glm-5",
+            "intentType": "clue_chain_extend",
+            "containerImage": "rabbit-pi-worker-kali:local"
+          },
+          "startedAt": "2026-05-29T05:40:40.122821334Z",
+          "stderrRef": "minio://rabbit-artifacts/task-93/toolruns/3062-stderr.txt",
+          "stdoutRef": "minio://rabbit-artifacts/task-93/toolruns/3062-stdout.txt",
+          "finishedAt": "2026-05-29T05:43:58.472567759Z",
+          "runnerType": "worker_agent",
+          "blockReason": "",
+          "containerId": "26b15dfc06c40d8d2f12dec34f8fbf8539b740fcddd4f6d8741e74d26365b6f1",
+          "iterationId": 475,
+          "artifactRefs": {
+            "worker_execution_context": "minio://rabbit-artifacts/task-93/toolruns/3062-worker-context.json"
+          },
+          "networkPolicy": "bridge",
+          "workspacePath": "/app/workspace/task-93/work/pi-workers/7",
+          "commandPreview": "sh -lc exec env PI_CODING_AGENT_DIR='/workspace/work/pi-workers/7' pi --no-extensions --no-skills --no-prompt-templates --no-themes --no-context-files --tools 'read,write,edit,bash,grep,find,ls' --provider rabbit --model 'glm-5' --mode json --session-dir '/workspace/work/pi-workers/7/sessions' --no-session -p \"$RABBIT_PI_PROMPT\"",
+          "resourceLimits": {
+            "driver": "pi_container_kali",
+            "workerId": "worker:7:glm-5",
+            "containerImage": "rabbit-pi-worker-kali:local",
+            "timeoutSeconds": 360
+          },
+          "safePolicySnapshot": {
+            "mode": "enterprise",
+            "allowedScopes": [],
+            "networkPolicy": "authorized-scope-only",
+            "authorizationLevel": 1,
+            "allowChainExploration": true,
+            "allowReadOnlyCommands": true,
+            "allowSandboxVerification": true,
+            "allowEvidenceProofCommands": true
+          }
+        },
+        "dedupKey": "7f4941da56de06682f1ad8de996def2293c714b52ba6e53c185ba30e7cdf4df0",
+        "importanceScore": 0.68,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3062",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:43:58.550641Z",
+        "lastSeenAt": "2026-05-29T05:43:58.550641Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:43:58.550846Z",
+        "UpdatedAt": "2026-05-29T05:43:58.550846Z"
+      },
+      {
+        "id": 13802,
+        "taskId": 93,
+        "nodeType": "tested_path",
+        "title": "Tested path: Validate hypothesis: Collect structural clues from extracted source",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "contentJson": {
+          "tools": [
+            "pi_worker"
+          ],
+          "reason": "",
+          "intentId": 784,
+          "statuses": [
+            "failed"
+          ],
+          "intentType": "clue_collect",
+          "validationFailed": false
+        },
+        "dedupKey": "7a041ae2bd6a484bb0ead92c799bd15285c097eb106548931753b85498178e87",
+        "importanceScore": 0.66,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "intent-784",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:54:00.143766Z",
+        "lastSeenAt": "2026-05-29T05:54:00.143766Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:54:00.143987Z",
+        "UpdatedAt": "2026-05-29T05:54:00.143987Z"
+      },
+      {
+        "id": 13797,
+        "taskId": 93,
+        "nodeType": "tested_path",
+        "title": "Tested path: Validate hypothesis: 初始代码结构探测",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "contentJson": {
+          "tools": [
+            "pi_worker"
+          ],
+          "reason": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "intentId": 783,
+          "statuses": [
+            "success"
+          ],
+          "intentType": "scope_observation",
+          "validationFailed": true
+        },
+        "dedupKey": "5bc8b425e8fd1309768ac4739196a73e926bad4789820bc653d53357e3cf01e1",
+        "importanceScore": 0.66,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "intent-783",
+        "evidenceRefs": [
+          "15926"
+        ],
+        "firstSeenAt": "2026-05-29T05:47:05.012379Z",
+        "lastSeenAt": "2026-05-29T05:47:05.012379Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:47:05.012598Z",
+        "UpdatedAt": "2026-05-29T05:47:05.012598Z"
+      },
+      {
+        "id": 13791,
+        "taskId": 93,
+        "nodeType": "tested_path",
+        "title": "Tested path: 启动授权安全验证",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "contentJson": {
+          "tools": [
+            "pi_worker"
+          ],
+          "reason": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "intentId": 782,
+          "statuses": [
+            "success"
+          ],
+          "intentType": "clue_chain_extend",
+          "validationFailed": true
+        },
+        "dedupKey": "5e93eb89993d376300edc011ef6afa948fd8d135a4aae6bac7df087b821b8859",
+        "importanceScore": 0.66,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "intent-782",
+        "evidenceRefs": [
+          "15925"
+        ],
+        "firstSeenAt": "2026-05-29T05:43:58.553764Z",
+        "lastSeenAt": "2026-05-29T05:43:58.553764Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:43:58.553905Z",
+        "UpdatedAt": "2026-05-29T05:43:58.553905Z"
+      }
+    ],
+    "recentEvidence": [
+      {
+        "id": 15926,
+        "taskId": 93,
+        "toolRunId": 3063,
+        "evidenceType": "worker_observation",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "rawRef": "minio://rabbit-artifacts/task-93/evidence/1780033625005345221-worker_observation.txt",
+        "hash": "4b42679a1145db7c7ece01f9e567068ad04c543b50da03681cbbb092919ad3e3",
+        "target": "",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-93/evidence/1780033625005345221-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T05:47:05.007031Z"
+      },
+      {
+        "id": 15925,
+        "taskId": 93,
+        "toolRunId": 3062,
+        "evidenceType": "worker_observation",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "rawRef": "minio://rabbit-artifacts/task-93/evidence/1780033438544712718-worker_observation.txt",
+        "hash": "c888c396b7876049811f011343c28b7d3d4044570b872decce05fe1e76c56235",
+        "target": "",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-93/evidence/1780033438544712718-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T05:43:58.546274Z"
+      }
+    ],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+    "failedToolRuns": [
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-93/work/pi-workers/7",
+        "error": "context deadline exceeded"
+      }
+    ],
+    "graphSummary": {
+      "task_id": 93,
+      "task_type": "code_audit",
+      "goal": "Clue-driven exploration",
+      "goal_state": {
+        "task_id": 93,
+        "type": "scope_bounded_security_discovery",
+        "goal_type": "scope_bounded_security_discovery",
+        "description": "Clue-driven exploration",
+        "success_criteria": [
+          "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+          "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+          "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+        ],
+        "status": "active",
+        "verified_capability_count": 0,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "coverage_summary": {
+          "total_surfaces": 0,
+          "explored_surfaces": 0,
+          "resolved_surfaces": 0,
+          "resolved_verified": 0,
+          "resolved_refuted": 0,
+          "blocked_surfaces": 0,
+          "inconclusive_surfaces": 0,
+          "out_of_scope": 0
+        },
+        "stop_reason": "",
+        "should_continue": true
+      },
+      "coverage_state": {
+        "scope_summary": {
+          "targets": null,
+          "entrypoint_count": 0,
+          "surface_count": 0,
+          "auth_contexts": [],
+          "excluded_paths": null
+        },
+        "surface_coverage": null,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "verified_capability_count": 0,
+        "refuted_path_count": 0,
+        "blocked_path_count": 0,
+        "inconclusive_path_count": 0,
+        "recent_progress": {
+          "new_facts_last_n": 26,
+          "new_evidence_last_n": 2,
+          "new_capabilities_last_n": 0,
+          "new_surfaces_last_n": 0,
+          "new_clue_facts_last_n": 0
+        }
+      },
+      "confirmed_facts": [
+        {
+          "id": 13782,
+          "kind": "origin",
+          "subject": "Authorized task origin",
+          "summary": "Task created from user-provided authorized scope.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13783,
+          "kind": "goal",
+          "subject": "Delivery-ready evidence report",
+          "summary": "Clue-driven exploration",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13787,
+          "kind": "fact",
+          "subject": "Source archive extracted safely",
+          "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13801,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status failed",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13795,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13789,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13802,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Collect structural clues from extracted source",
+          "summary": "Validation method executed and produced evidence for graph reasoning.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13797,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: 初始代码结构探测",
+          "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "evidence_refs": [
+            15926
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13791,
+          "kind": "tested_path",
+          "subject": "Tested path: 启动授权安全验证",
+          "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "evidence_refs": [
+            15925
+          ],
+          "confidence_source": "evidence"
+        }
+      ],
+      "open_intents": [
+        {
+          "id": 786,
+          "kind": "clue_collect",
+          "goal": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+          "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+          "priority": 0.5928000000000001,
+          "status": "pending",
+          "target": {
+            "branch_value": {
+              "capability_unlock_score": 0.76,
+              "coverage_gain": 0.5,
+              "duplicate_penalty": 0,
+              "environment_alignment_boost": 0,
+              "evidence_quality": 0.5,
+              "execution_cost": 0.42,
+              "final_score": 0.5928000000000001,
+              "goal_type_boost": 0,
+              "graph_expansion_score": 0.79,
+              "matched_environment_refs": null,
+              "negative_fact_refs": null,
+              "novelty_score": 0.84,
+              "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+              "risk_value": 0.82,
+              "safety_risk": 0.24,
+              "scored_at": "2026-05-29T05:54:00.188055677Z"
+            },
+            "environment_context_snapshot": {
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              },
+              "updated_at": "2026-05-29T05:54:00Z",
+              "updated_from": "toolrun-3064"
+            },
+            "evidenceIds": [],
+            "expected_capability": "internal_service_access",
+            "expected_evidence": "evidence that validates or refutes: Correlate sensitive sink calls in extracted sources",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "hypothesis_id": 550,
+            "parentIntentId": 784,
+            "safety_level": "authorized_non_destructive",
+            "source": "iteration_planner",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup"
+          }
+        }
+      ],
+      "recent_evidence": [
+        {
+          "id": 15926,
+          "kind": "worker_observation",
+          "relation": "worker_result",
+          "target": "",
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+        },
+        {
+          "id": 15925,
+          "kind": "worker_observation",
+          "relation": "worker_result",
+          "target": "",
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+        }
+      ],
+      "structured_negative_facts": null,
+      "capability_candidates": null,
+      "verified_capabilities": null,
+      "unknowns": [],
+      "hints": null,
+      "budget_state": {
+        "max_iterations": 0,
+        "current_iteration": 0,
+        "remaining_iterations": 0
+      },
+      "surface_facts": [
+        "ToolRun: pi_worker: pi_worker finished with status failed",
+        "ToolRun: pi_worker: pi_worker finished with status success",
+        "ToolRun: pi_worker: pi_worker finished with status success"
+      ],
+      "fingerprints": null,
+      "code_facts": [
+        "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+      ],
+      "business_facts": null,
+      "secret_facts": null,
+      "capabilities": null,
+      "pending_intents": [
+        "[clue_collect] Validate hypothesis: Correlate sensitive sink calls in extracted sources"
+      ],
+      "negative_facts": null,
+      "environment_model": "runtime_environment: java=plausible, python=plausible",
+      "evidence_count": 2,
+      "iteration_budget": 0,
+      "iterations_current": 0
+    }
+  },
+  "graph_summary": {
+    "task_id": 93,
+    "task_type": "code_audit",
+    "goal": "Clue-driven exploration",
+    "goal_state": {
+      "task_id": 93,
+      "type": "scope_bounded_security_discovery",
+      "goal_type": "scope_bounded_security_discovery",
+      "description": "Clue-driven exploration",
+      "success_criteria": [
+        "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+        "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+        "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+      ],
+      "status": "active",
+      "verified_capability_count": 0,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "coverage_summary": {
+        "total_surfaces": 0,
+        "explored_surfaces": 0,
+        "resolved_surfaces": 0,
+        "resolved_verified": 0,
+        "resolved_refuted": 0,
+        "blocked_surfaces": 0,
+        "inconclusive_surfaces": 0,
+        "out_of_scope": 0
+      },
+      "stop_reason": "",
+      "should_continue": true
+    },
+    "coverage_state": {
+      "scope_summary": {
+        "targets": null,
+        "entrypoint_count": 0,
+        "surface_count": 0,
+        "auth_contexts": [],
+        "excluded_paths": null
+      },
+      "surface_coverage": null,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "verified_capability_count": 0,
+      "refuted_path_count": 0,
+      "blocked_path_count": 0,
+      "inconclusive_path_count": 0,
+      "recent_progress": {
+        "new_facts_last_n": 26,
+        "new_evidence_last_n": 2,
+        "new_capabilities_last_n": 0,
+        "new_surfaces_last_n": 0,
+        "new_clue_facts_last_n": 0
+      }
+    },
+    "confirmed_facts": [
+      {
+        "id": 13782,
+        "kind": "origin",
+        "subject": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13783,
+        "kind": "goal",
+        "subject": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13787,
+        "kind": "fact",
+        "subject": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13801,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13795,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13789,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13802,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Collect structural clues from extracted source",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13797,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: 初始代码结构探测",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "evidence_refs": [
+          15926
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13791,
+        "kind": "tested_path",
+        "subject": "Tested path: 启动授权安全验证",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "evidence_refs": [
+          15925
+        ],
+        "confidence_source": "evidence"
+      }
+    ],
+    "open_intents": [
+      {
+        "id": 786,
+        "kind": "clue_collect",
+        "goal": "Scan the 6 extracted source files for calls to runtime.exec, ProcessBuilder, reflection APIs, file I/O, and database query construction to create security_effect_or_impact clues.",
+        "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+        "priority": 0.5928000000000001,
+        "status": "pending",
+        "target": {
+          "branch_value": {
+            "capability_unlock_score": 0.76,
+            "coverage_gain": 0.5,
+            "duplicate_penalty": 0,
+            "environment_alignment_boost": 0,
+            "evidence_quality": 0.5,
+            "execution_cost": 0.42,
+            "final_score": 0.5928000000000001,
+            "goal_type_boost": 0,
+            "graph_expansion_score": 0.79,
+            "matched_environment_refs": null,
+            "negative_fact_refs": null,
+            "novelty_score": 0.84,
+            "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+            "risk_value": 0.82,
+            "safety_risk": 0.24,
+            "scored_at": "2026-05-29T05:54:00.188055677Z"
+          },
+          "environment_context_snapshot": {
+            "runtime_environment": {
+              "java": "plausible",
+              "python": "plausible"
+            },
+            "updated_at": "2026-05-29T05:54:00Z",
+            "updated_from": "toolrun-3064"
+          },
+          "evidenceIds": [],
+          "expected_capability": "internal_service_access",
+          "expected_evidence": "evidence that validates or refutes: Correlate sensitive sink calls in extracted sources",
+          "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+          "hypothesis_id": 550,
+          "parentIntentId": 784,
+          "safety_level": "authorized_non_destructive",
+          "source": "iteration_planner",
+          "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+          "validation_method": "planner_suggested_followup"
+        }
+      }
+    ],
+    "recent_evidence": [
+      {
+        "id": 15926,
+        "kind": "worker_observation",
+        "relation": "worker_result",
+        "target": "",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+      },
+      {
+        "id": 15925,
+        "kind": "worker_observation",
+        "relation": "worker_result",
+        "target": "",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+      }
+    ],
+    "structured_negative_facts": null,
+    "capability_candidates": null,
+    "verified_capabilities": null,
+    "unknowns": [],
+    "hints": null,
+    "budget_state": {
+      "max_iterations": 0,
+      "current_iteration": 0,
+      "remaining_iterations": 0
+    },
+    "surface_facts": [
+      "ToolRun: pi_worker: pi_worker finished with status failed",
+      "ToolRun: pi_worker: pi_worker finished with status success",
+      "ToolRun: pi_worker: pi_worker finished with status success"
+    ],
+    "fingerprints": null,
+    "code_facts": [
+      "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+    ],
+    "business_facts": null,
+    "secret_facts": null,
+    "capabilities": null,
+    "pending_intents": [
+      "[clue_collect] Validate hypothesis: Correlate sensitive sink calls in extracted sources"
+    ],
+    "negative_facts": null,
+    "environment_model": "runtime_environment: java=plausible, python=plausible",
+    "evidence_count": 2,
+    "iteration_budget": 0,
+    "iterations_current": 0
+  },
+  "intent": {
+    "id": 785,
+    "taskId": 93,
+    "parentNodeId": null,
+    "intentType": "clue_collect",
+    "title": "Validate hypothesis: Collect origin and entry clues from extracted sources",
+    "objective": "Identify code locations that constitute origin_or_entry (public methods, servlet mappings, controller routes) and trigger_or_control (user parameter reception) clues.",
+    "constraintsJson": {
+      "source": "iteration_planner",
+      "evidenceIds": [],
+      "branch_value": {
+        "reason": "strong graph expansion, novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-29T05:54:00.18701551Z",
+        "risk_value": 0.82,
+        "final_score": 0.6000000000000002,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.8999999999999999,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.5,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.79,
+        "capability_unlock_score": 0.76,
+        "matched_environment_refs": null,
+        "environment_alignment_boost": 0
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 549,
+      "parentIntentId": 784,
+      "expected_evidence": "evidence that validates or refutes: Collect origin and entry clues from extracted sources",
+      "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+      "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+      "validation_method": "planner_suggested_followup",
+      "expected_capability": "internal_service_access",
+      "environment_context_snapshot": {
+        "updated_at": "2026-05-29T05:54:00Z",
+        "updated_from": "toolrun-3064",
+        "runtime_environment": {
+          "java": "plausible",
+          "python": "plausible"
+        }
+      }
+    },
+    "requiredEvidence": null,
+    "priorityScore": 0.6000000000000002,
+    "status": "running",
+    "claimedBy": "worker:7:glm-5",
+    "claimExpiresAt": "2026-05-29T06:01:00.191683302Z",
+    "createdBy": "model-planner",
+    "createdReason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+    "startedAt": "2026-05-29T05:54:00.191683302Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-29T05:54:00.152408Z",
+    "UpdatedAt": "2026-05-29T05:54:00.191683302Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "find",
+      "ls"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 93,
+    "objective": "Clue-driven exploration",
+    "scope": {
+      "targets": [],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "code_audit"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:7:glm-5",
+    "max_running": 2,
+    "model": "glm-5",
+    "model_config": 7,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

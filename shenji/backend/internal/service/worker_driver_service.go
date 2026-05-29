@@ -704,6 +704,7 @@ func (o *AgentOrchestrator) createWorkerSuggestedIntent(ctx context.Context, tas
 	}
 	parentNodeID := blackboardNodeIDForIntent(ctx, o.db, taskID, parentIntentID)
 	lifecycle := NewHypothesisLifecycleService(o.db, o.blackboard)
+	lifecycle.SetClueDrivenPhase(o.cfg.ClueDrivenPhase)
 	hypothesis, err := lifecycle.FormHypothesis(ctx, workerSuggestionHypothesisDraft(taskID, parentIntentID, toolRunID, parentNodeID, suggestion, evidenceIDs))
 	if err != nil {
 		return false, true

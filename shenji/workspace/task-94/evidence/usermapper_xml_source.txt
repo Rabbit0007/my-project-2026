@@ -1,0 +1,15 @@
+UserMapper.xml source showing SQL injection pattern:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="demo.UserMapper">
+  <select id="search" resultType="demo.UserRecord">
+    SELECT id, name
+    FROM users
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY ${orderBy}
+  </select>
+</mapper>
+
+Key observation: ${orderBy} uses raw string interpolation.
+#{keyword} uses safe parameterized query.
+The orderBy parameter flows unvalidated from HttpServletRequest to SQL.

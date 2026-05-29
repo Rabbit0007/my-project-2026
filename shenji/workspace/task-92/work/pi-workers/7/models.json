@@ -1,0 +1,1 @@
+{"providers":{"rabbit":{"api":"openai-completions","apiKey":"sk-c8I3u5nHDsQpnMsT737071E106E34076A9B9140964Ac13B1","baseUrl":"http://10.2.8.77:3000/v1","models":[{"id":"glm-5","name":"glm-5"}]}}}

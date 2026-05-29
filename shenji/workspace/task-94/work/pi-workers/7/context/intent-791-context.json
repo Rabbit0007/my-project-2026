@@ -1,0 +1,714 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return a GraphDelta-style packet. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-29T06:17:52.147530923Z",
+  "graph": {
+    "task": {
+      "id": 94,
+      "workspaceId": 94,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "Phase5C-bridge-test",
+      "taskType": "code_audit",
+      "status": "running",
+      "objective": "Clue-driven exploration with evidence bridge",
+      "scopeJson": {
+        "targets": [],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": null,
+      "isTestTask": true,
+      "archived": false,
+      "progressStage": "探索: 启动授权安全验证",
+      "progressPercent": 32,
+      "startedAt": "2026-05-29T06:16:58.734386Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-29T06:16:58.570878Z",
+      "UpdatedAt": "2026-05-29T06:16:58.742686Z"
+    },
+    "intent": {
+      "id": 791,
+      "taskId": 94,
+      "parentNodeId": null,
+      "intentType": "clue_chain_extend",
+      "title": "启动授权安全验证",
+      "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+      "constraintsJson": {
+        "policy": "authorized-scope-only",
+        "legacy_hint": "code_trace",
+        "branch_value": {
+          "reason": "novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-29T06:16:58.741022634Z",
+          "risk_value": 0.55,
+          "final_score": 0.4333000000000001,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.84,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.6200000000000001,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.51,
+          "capability_unlock_score": 0.48,
+          "matched_environment_refs": null,
+          "environment_alignment_boost": 0
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 555,
+        "expected_evidence": "first-layer authorized observations and evidence",
+        "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+        "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+        "validation_method": "bootstrap_surface_observation",
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "expected_capability": "source_code_read"
+      },
+      "requiredEvidence": [
+        "baseline_evidence",
+        "scope_statement",
+        "safety_statement"
+      ],
+      "priorityScore": 0.4333000000000001,
+      "status": "running",
+      "claimedBy": "worker:7:glm-5",
+      "claimExpiresAt": "2026-05-29T06:23:58.743665551Z",
+      "createdBy": "system",
+      "createdReason": "initial task bootstrap",
+      "startedAt": "2026-05-29T06:16:58.743665551Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-29T06:16:58.580274Z",
+      "UpdatedAt": "2026-05-29T06:16:58.743665551Z"
+    },
+    "keyFacts": [
+      {
+        "id": 13833,
+        "taskId": 94,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 791,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 94,
+          "CreatedAt": "2026-05-29T06:16:58.580274718Z",
+          "UpdatedAt": "2026-05-29T06:16:58.580274801Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_chain_extend",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "legacy_hint": "code_trace",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 555,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "source_code_read"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "f1d09f2688d17e4a86aac6a9910fd0a2fc668d5ec1ae82dbb6fd14d4f8af7c82",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "791",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T06:16:58.581276Z",
+        "lastSeenAt": "2026-05-29T06:16:58.581276Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T06:16:58.581527Z",
+        "UpdatedAt": "2026-05-29T06:16:58.581527Z"
+      },
+      {
+        "id": 13830,
+        "taskId": 94,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration with evidence bridge",
+        "contentJson": {
+          "objective": "Clue-driven exploration with evidence bridge"
+        },
+        "dedupKey": "fd2dd68704de9b2fd3364bea8df6865938724fe01870a03fabcca3cb709e1faf",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T06:16:58.574854Z",
+        "lastSeenAt": "2026-05-29T06:16:58.574854Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T06:16:58.575115Z",
+        "UpdatedAt": "2026-05-29T06:16:58.575115Z"
+      },
+      {
+        "id": 13829,
+        "taskId": 94,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "161ac222510d936964379ba60abeecff74bbbf1510812dd2f4e56cd038f5d83d",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T06:16:58.573881Z",
+        "lastSeenAt": "2026-05-29T06:16:58.573881Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T06:16:58.574254Z",
+        "UpdatedAt": "2026-05-29T06:16:58.574254Z"
+      },
+      {
+        "id": 13831,
+        "taskId": 94,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for code_audit",
+        "summary": "Clue-driven exploration with evidence bridge",
+        "contentJson": {
+          "id": 34,
+          "mode": "code_audit",
+          "name": "Hypothesis-driven coverage objective for code_audit",
+          "taskId": 94,
+          "goalType": "coverage",
+          "createdAt": "2026-05-29T06:16:58.575772343Z",
+          "updatedAt": "2026-05-29T06:16:58.575772343Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "Clue-driven exploration with evidence bridge",
+          "normalizedGoal": "Clue-driven exploration with evidence bridge",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "ba56be091f45e64461c4375cca35da638ecd0962c55d6c6ba7fd4f1f054dddf9",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-34",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T06:16:58.576419Z",
+        "lastSeenAt": "2026-05-29T06:16:58.576419Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T06:16:58.576682Z",
+        "UpdatedAt": "2026-05-29T06:16:58.576682Z"
+      },
+      {
+        "id": 13834,
+        "taskId": 94,
+        "nodeType": "fact",
+        "title": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "contentJson": {
+          "files": [
+            "src/main/resources/mapper/UserMapper.xml",
+            "src/main/java/demo/UserService.java",
+            "src/main/java/demo/AdminExportController.java",
+            "src/main/java/demo/UserMapper.java",
+            "src/main/java/demo/AdminExportService.java",
+            "src/main/java/demo/UserController.java"
+          ],
+          "skipped": [],
+          "totalBytes": 1988,
+          "extractedDir": "/app/workspace/task-94/input/extracted"
+        },
+        "dedupKey": "efc5a5e666f8905753f185c0ba33cb76144125b076df0a9996c200bca835719c",
+        "importanceScore": 0.9,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "workspace",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T06:16:58.721654Z",
+        "lastSeenAt": "2026-05-29T06:16:58.721654Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T06:16:58.722086Z",
+        "UpdatedAt": "2026-05-29T06:16:58.722086Z"
+      },
+      {
+        "id": 13832,
+        "taskId": 94,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 555,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 94,
+          "createdAt": "2026-05-29T06:16:58.578019259Z",
+          "updatedAt": "2026-05-29T06:16:58.578019259Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "source_code_read",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:13829"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "f6fa2748ec4ef0fbd70bb8a98b1efef58b0a30f577c6c1e3d6d7f6b33a1c6c98",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "555",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T06:16:58.578597Z",
+        "lastSeenAt": "2026-05-29T06:16:58.581877Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T06:16:58.578923Z",
+        "UpdatedAt": "2026-05-29T06:16:58.582056Z"
+      }
+    ],
+    "recentEvidence": [],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Collect first-layer facts and evidence from the authorized task origin.",
+    "graphSummary": {
+      "task_id": 94,
+      "task_type": "code_audit",
+      "goal": "Clue-driven exploration with evidence bridge",
+      "goal_state": {
+        "task_id": 94,
+        "type": "scope_bounded_security_discovery",
+        "goal_type": "scope_bounded_security_discovery",
+        "description": "Clue-driven exploration with evidence bridge",
+        "success_criteria": [
+          "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+          "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+          "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+        ],
+        "status": "active",
+        "verified_capability_count": 0,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "coverage_summary": {
+          "total_surfaces": 0,
+          "explored_surfaces": 0,
+          "resolved_surfaces": 0,
+          "resolved_verified": 0,
+          "resolved_refuted": 0,
+          "blocked_surfaces": 0,
+          "inconclusive_surfaces": 0,
+          "out_of_scope": 0
+        },
+        "stop_reason": "",
+        "should_continue": true
+      },
+      "coverage_state": {
+        "scope_summary": {
+          "targets": null,
+          "entrypoint_count": 0,
+          "surface_count": 0,
+          "auth_contexts": [],
+          "excluded_paths": null
+        },
+        "surface_coverage": null,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "verified_capability_count": 0,
+        "refuted_path_count": 0,
+        "blocked_path_count": 0,
+        "inconclusive_path_count": 0,
+        "recent_progress": {
+          "new_facts_last_n": 6,
+          "new_evidence_last_n": 0,
+          "new_capabilities_last_n": 0,
+          "new_surfaces_last_n": 0,
+          "new_clue_facts_last_n": 0
+        }
+      },
+      "confirmed_facts": [
+        {
+          "id": 13830,
+          "kind": "goal",
+          "subject": "Delivery-ready evidence report",
+          "summary": "Clue-driven exploration with evidence bridge",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13829,
+          "kind": "origin",
+          "subject": "Authorized task origin",
+          "summary": "Task created from user-provided authorized scope.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13834,
+          "kind": "fact",
+          "subject": "Source archive extracted safely",
+          "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        }
+      ],
+      "open_intents": null,
+      "recent_evidence": null,
+      "structured_negative_facts": null,
+      "capability_candidates": null,
+      "verified_capabilities": null,
+      "unknowns": [
+        "No open intent currently explains the next evidence-producing step.",
+        "No recent evidence is available to support fact or capability promotion."
+      ],
+      "hints": null,
+      "budget_state": {
+        "max_iterations": 0,
+        "current_iteration": 0,
+        "remaining_iterations": 0
+      },
+      "surface_facts": null,
+      "fingerprints": null,
+      "code_facts": [
+        "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+      ],
+      "business_facts": null,
+      "secret_facts": null,
+      "capabilities": null,
+      "pending_intents": null,
+      "negative_facts": null,
+      "environment_model": "",
+      "evidence_count": 0,
+      "iteration_budget": 0,
+      "iterations_current": 0
+    }
+  },
+  "graph_summary": {
+    "task_id": 94,
+    "task_type": "code_audit",
+    "goal": "Clue-driven exploration with evidence bridge",
+    "goal_state": {
+      "task_id": 94,
+      "type": "scope_bounded_security_discovery",
+      "goal_type": "scope_bounded_security_discovery",
+      "description": "Clue-driven exploration with evidence bridge",
+      "success_criteria": [
+        "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+        "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+        "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+      ],
+      "status": "active",
+      "verified_capability_count": 0,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "coverage_summary": {
+        "total_surfaces": 0,
+        "explored_surfaces": 0,
+        "resolved_surfaces": 0,
+        "resolved_verified": 0,
+        "resolved_refuted": 0,
+        "blocked_surfaces": 0,
+        "inconclusive_surfaces": 0,
+        "out_of_scope": 0
+      },
+      "stop_reason": "",
+      "should_continue": true
+    },
+    "coverage_state": {
+      "scope_summary": {
+        "targets": null,
+        "entrypoint_count": 0,
+        "surface_count": 0,
+        "auth_contexts": [],
+        "excluded_paths": null
+      },
+      "surface_coverage": null,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "verified_capability_count": 0,
+      "refuted_path_count": 0,
+      "blocked_path_count": 0,
+      "inconclusive_path_count": 0,
+      "recent_progress": {
+        "new_facts_last_n": 6,
+        "new_evidence_last_n": 0,
+        "new_capabilities_last_n": 0,
+        "new_surfaces_last_n": 0,
+        "new_clue_facts_last_n": 0
+      }
+    },
+    "confirmed_facts": [
+      {
+        "id": 13830,
+        "kind": "goal",
+        "subject": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration with evidence bridge",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13829,
+        "kind": "origin",
+        "subject": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13834,
+        "kind": "fact",
+        "subject": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      }
+    ],
+    "open_intents": null,
+    "recent_evidence": null,
+    "structured_negative_facts": null,
+    "capability_candidates": null,
+    "verified_capabilities": null,
+    "unknowns": [
+      "No open intent currently explains the next evidence-producing step.",
+      "No recent evidence is available to support fact or capability promotion."
+    ],
+    "hints": null,
+    "budget_state": {
+      "max_iterations": 0,
+      "current_iteration": 0,
+      "remaining_iterations": 0
+    },
+    "surface_facts": null,
+    "fingerprints": null,
+    "code_facts": [
+      "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+    ],
+    "business_facts": null,
+    "secret_facts": null,
+    "capabilities": null,
+    "pending_intents": null,
+    "negative_facts": null,
+    "environment_model": "",
+    "evidence_count": 0,
+    "iteration_budget": 0,
+    "iterations_current": 0
+  },
+  "intent": {
+    "id": 791,
+    "taskId": 94,
+    "parentNodeId": null,
+    "intentType": "clue_chain_extend",
+    "title": "启动授权安全验证",
+    "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+    "constraintsJson": {
+      "policy": "authorized-scope-only",
+      "legacy_hint": "code_trace",
+      "branch_value": {
+        "reason": "novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-29T06:16:58.741022634Z",
+        "risk_value": 0.55,
+        "final_score": 0.4333000000000001,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.84,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.6200000000000001,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.51,
+        "capability_unlock_score": 0.48,
+        "matched_environment_refs": null,
+        "environment_alignment_boost": 0
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 555,
+      "expected_evidence": "first-layer authorized observations and evidence",
+      "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+      "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+      "validation_method": "bootstrap_surface_observation",
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "expected_capability": "source_code_read"
+    },
+    "requiredEvidence": [
+      "baseline_evidence",
+      "scope_statement",
+      "safety_statement"
+    ],
+    "priorityScore": 0.4333000000000001,
+    "status": "running",
+    "claimedBy": "worker:7:glm-5",
+    "claimExpiresAt": "2026-05-29T06:23:58.743665551Z",
+    "createdBy": "system",
+    "createdReason": "initial task bootstrap",
+    "startedAt": "2026-05-29T06:16:58.743665551Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-29T06:16:58.580274Z",
+    "UpdatedAt": "2026-05-29T06:16:58.743665551Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "find",
+      "ls"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 94,
+    "objective": "Clue-driven exploration with evidence bridge",
+    "scope": {
+      "targets": [],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "code_audit"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:7:glm-5",
+    "max_running": 2,
+    "model": "glm-5",
+    "model_config": 7,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

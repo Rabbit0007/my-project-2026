@@ -1,0 +1,49 @@
+RAW QUERY CONTROL VULNERABILITY ANALYSIS
+========================================
+
+Target: raw-query-control fixture
+Date: 2026-05-29
+
+FILE INVENTORY:
+---------------
+1. UserController.java - HTTP controller accepting 'orderBy' parameter
+2. AdminExportController.java - Export controller with format/includeInactive params
+3. UserService.java - Service layer passing orderBy to mapper
+4. AdminExportService.java - Export service with format validation
+5. UserMapper.java - Mapper interface for search
+6. UserMapper.xml - MyBatis SQL mapper with VULNERABLE raw interpolation
+
+VULNERABILITY FINDING:
+---------------------
+File: UserMapper.xml
+Line: 7
+Code: ORDER BY ${orderBy}
+
+Issue: Uses MyBatis ${} syntax (raw string interpolation) instead of #{} (parameterized query)
+
+SECURITY ANALYSIS:
+-----------------
+Vulnerable Path:
+  UserController.search(HttpServletRequest) 
+    -> request.getParameter("orderBy") [NO VALIDATION]
+    -> UserService.search(keyword, orderBy) 
+    -> UserMapper.search(keyword, orderBy)
+    -> MyBatis XML: ORDER BY ${orderBy} [RAW INTERPOLATION]
+
+Attack Surface:
+  - HTTP parameter 'orderBy' is directly interpolated into SQL
+  - No allowlist/validation of allowed column names
+  - Attacker can inject arbitrary SQL via orderBy parameter
+
+Safe Pattern (for comparison):
+  - #{keyword} is used correctly - parameterized, safe from injection
+
+COMPARISON WITH AdminExportController:
+------------------------------------
+AdminExportService validates format parameter against allowlist ("csv", "json")
+This shows the project knows about input validation but failed to apply it to orderBy.
+
+RISK LEVEL: HIGH
+- Direct SQL injection via HTTP parameter
+- No input validation or sanitization
+- Affects ORDER BY clause - can leak data via error-based injection

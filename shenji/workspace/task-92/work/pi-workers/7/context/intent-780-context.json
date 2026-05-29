@@ -1,0 +1,2547 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return a GraphDelta-style packet. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-29T05:33:52.93013634Z",
+  "graph": {
+    "task": {
+      "id": 92,
+      "workspaceId": 92,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "Phase5B-v3-final",
+      "taskType": "code_audit",
+      "status": "running",
+      "objective": "Clue-driven exploration",
+      "scopeJson": {
+        "targets": [],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": null,
+      "isTestTask": true,
+      "archived": false,
+      "progressStage": "探索: Validate hypothesis: Potential SQL injection path requires validation",
+      "progressPercent": 40,
+      "startedAt": "2026-05-29T05:13:24.07605Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-29T05:13:23.918733Z",
+      "UpdatedAt": "2026-05-29T05:32:52.465789Z"
+    },
+    "intent": {
+      "id": 780,
+      "taskId": 92,
+      "parentNodeId": null,
+      "intentType": "clue_validate",
+      "title": "Validate hypothesis: Potential SQL injection path requires validation",
+      "objective": "Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+      "constraintsJson": {
+        "legacy_hint": "sqli_probe",
+        "branch_value": {
+          "reason": "high capability gain, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-29T05:32:52.463552423Z",
+          "risk_value": 0.9,
+          "final_score": 0.5648000000000001,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.54,
+          "execution_cost": 0.42,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.5,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.69,
+          "capability_unlock_score": 0.82,
+          "matched_environment_refs": null,
+          "environment_alignment_boost": 0
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 544,
+        "expected_evidence": "evidence that validates or refutes: Potential SQL injection path requires validation",
+        "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+        "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+        "validation_method": "evidence_triggered_validation",
+        "expected_capability": "sql_injection",
+        "environment_context_snapshot": {
+          "updated_at": "2026-05-29T05:23:51Z",
+          "updated_from": "toolrun-3058",
+          "runtime_environment": {
+            "java": "plausible",
+            "python": "plausible"
+          }
+        }
+      },
+      "requiredEvidence": [
+        "validation_result",
+        "scope_statement",
+        "safety_statement"
+      ],
+      "priorityScore": 0.5648000000000001,
+      "status": "running",
+      "claimedBy": "worker:7:glm-5",
+      "claimExpiresAt": "2026-05-29T05:39:52.466599673Z",
+      "createdBy": "dynamic-intent-expander",
+      "createdReason": "Generated from pending hypothesis with expected capability gain.",
+      "startedAt": "2026-05-29T05:32:52.466599673Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-29T05:32:52.442054Z",
+      "UpdatedAt": "2026-05-29T05:32:52.466599673Z"
+    },
+    "keyFacts": [
+      {
+        "id": 13741,
+        "taskId": 92,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 774,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 92,
+          "CreatedAt": "2026-05-29T05:13:23.930350591Z",
+          "UpdatedAt": "2026-05-29T05:13:23.930350632Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_chain_extend",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "legacy_hint": "code_trace",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 538,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "source_code_read"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "2f31c240ebeefedaa233d76e44b5925a0769f61577a9aeeae7466e2dae8d94ac",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "774",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:13:23.931923Z",
+        "lastSeenAt": "2026-05-29T05:13:24.090156Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:13:23.932257Z",
+        "UpdatedAt": "2026-05-29T05:13:24.09032Z"
+      },
+      {
+        "id": 13738,
+        "taskId": 92,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration",
+        "contentJson": {
+          "objective": "Clue-driven exploration"
+        },
+        "dedupKey": "025b347d284d9702cd1083480fa11f2ef3130ad79b352c561a3632cfe6c61e11",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:13:23.923316Z",
+        "lastSeenAt": "2026-05-29T05:13:23.923316Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:13:23.92365Z",
+        "UpdatedAt": "2026-05-29T05:13:23.92365Z"
+      },
+      {
+        "id": 13737,
+        "taskId": 92,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "c9f41608db6228be8b4e98961a4968cbf06518542429a07b50f9c8d363813ec5",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:13:23.921942Z",
+        "lastSeenAt": "2026-05-29T05:13:23.921942Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:13:23.922621Z",
+        "UpdatedAt": "2026-05-29T05:13:23.922621Z"
+      },
+      {
+        "id": 13755,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Collect auth boundary candidate clues from extracted source",
+        "summary": "Search extracted workspace for code constructs related to authentication, session, or access control, producing structured origin_or_entry clues.",
+        "contentJson": {
+          "id": 541,
+          "title": "Collect auth boundary candidate clues from extracted source",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:23:51.043161714Z",
+          "updatedAt": "2026-05-29T05:23:51.043161714Z",
+          "description": "Search extracted workspace for code constructs related to authentication, session, or access control, producing structured origin_or_entry clues.",
+          "validatedAt": null,
+          "targetEntity": "Search extracted workspace for code constructs related to authentication, session, or access control, producing structured origin_or_entry clues.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:775",
+            "blackboard_node:13749"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "581f51826dc92cbcfcd558a62e0baea694e6f0c892f65e7a9d93ead55187639c",
+        "importanceScore": 0.98,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "541",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:23:51.043612Z",
+        "lastSeenAt": "2026-05-29T05:32:52.447391Z",
+        "seenCount": 4,
+        "CreatedAt": "2026-05-29T05:23:51.043821Z",
+        "UpdatedAt": "2026-05-29T05:32:52.447499Z"
+      },
+      {
+        "id": 13779,
+        "taskId": 92,
+        "nodeType": "capability",
+        "title": "[verified] internal_service_access",
+        "summary": "Clue-chain validated capability internal_service_access at AdminExportController.export with 3 evidence items via intent 777.",
+        "contentJson": {
+          "id": 87,
+          "scope": "",
+          "target": "AdminExportController.export",
+          "taskId": 92,
+          "strength": "verified",
+          "createdAt": "2026-05-29T05:32:52.44659809Z",
+          "riskLevel": "low",
+          "updatedAt": "2026-05-29T05:32:52.446598132Z",
+          "evidenceRefs": [
+            15922,
+            15923,
+            15924
+          ],
+          "proofSummary": "Clue-chain validated capability internal_service_access at AdminExportController.export with 3 evidence items via intent 777.",
+          "sourceNodeIds": null,
+          "canAdvanceGoal": true,
+          "capabilityType": "internal_service_access",
+          "acquiredByIntentId": 777,
+          "nextSuggestedIntents": null,
+          "derivedFromEvidenceRefs": [
+            15922,
+            15923,
+            15924
+          ],
+          "validatedByHypothesisId": 541
+        },
+        "dedupKey": "3e8d83fbcea8803894e74baadd430f7b092c93cd66ac0e031db1ad96626770ea",
+        "importanceScore": 0.95,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "capability-87",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.446856Z",
+        "lastSeenAt": "2026-05-29T05:32:52.446856Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.447022Z",
+        "UpdatedAt": "2026-05-29T05:32:52.447022Z"
+      },
+      {
+        "id": 13739,
+        "taskId": 92,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for code_audit",
+        "summary": "Clue-driven exploration",
+        "contentJson": {
+          "id": 32,
+          "mode": "code_audit",
+          "name": "Hypothesis-driven coverage objective for code_audit",
+          "taskId": 92,
+          "goalType": "coverage",
+          "createdAt": "2026-05-29T05:13:23.924589924Z",
+          "updatedAt": "2026-05-29T05:13:23.924589924Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "Clue-driven exploration",
+          "normalizedGoal": "Clue-driven exploration",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "7a4c7931bd959fdad692371ae7238e01f7a05c38ae48e58043177bda6da7af23",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-32",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:13:23.925317Z",
+        "lastSeenAt": "2026-05-29T05:13:23.925317Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:13:23.925579Z",
+        "UpdatedAt": "2026-05-29T05:13:23.925579Z"
+      },
+      {
+        "id": 13742,
+        "taskId": 92,
+        "nodeType": "fact",
+        "title": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "contentJson": {
+          "files": [
+            "src/main/resources/mapper/UserMapper.xml",
+            "src/main/java/demo/UserService.java",
+            "src/main/java/demo/AdminExportController.java",
+            "src/main/java/demo/UserMapper.java",
+            "src/main/java/demo/AdminExportService.java",
+            "src/main/java/demo/UserController.java"
+          ],
+          "skipped": [],
+          "totalBytes": 1988,
+          "extractedDir": "/app/workspace/task-92/input/extracted"
+        },
+        "dedupKey": "9e1b0a35bd50b7923699df1cb23f0a2a6b04162809ae5dea126f11d8ffac8010",
+        "importanceScore": 0.9,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "workspace",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:13:24.064189Z",
+        "lastSeenAt": "2026-05-29T05:13:24.064189Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:13:24.06465Z",
+        "UpdatedAt": "2026-05-29T05:13:24.06465Z"
+      },
+      {
+        "id": 13743,
+        "taskId": 92,
+        "nodeType": "environment_model",
+        "title": "Environment model",
+        "summary": "runtime_environment: java=plausible, python=plausible",
+        "contentJson": {
+          "id": 22,
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:16:57.938137176Z",
+          "modelJson": {
+            "updated_at": "2026-05-29T05:16:57Z",
+            "updated_from": "toolrun-3057",
+            "runtime_environment": {
+              "java": "plausible"
+            }
+          },
+          "updatedAt": "2026-05-29T05:16:57.938137176Z",
+          "updatedFrom": "toolrun-3057"
+        },
+        "dedupKey": "3667e1f2d9d0d816383789517ba5970e253a1bcf1b1a213cde8c5bf9446aa79b",
+        "importanceScore": 0.88,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "toolrun-3057",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:16:57.93874Z",
+        "lastSeenAt": "2026-05-29T05:23:51.029838Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:16:57.938922Z",
+        "UpdatedAt": "2026-05-29T05:23:51.030195Z"
+      },
+      {
+        "id": 13756,
+        "taskId": 92,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Collect auth boundary candidate clues from extracted source",
+        "summary": "Search extracted workspace for code constructs related to authentication, session, or access control, producing structured origin_or_entry clues.",
+        "contentJson": {
+          "id": 777,
+          "title": "Validate hypothesis: Collect auth boundary candidate clues from extracted source",
+          "status": "pending",
+          "taskId": 92,
+          "CreatedAt": "2026-05-29T05:23:51.045543881Z",
+          "UpdatedAt": "2026-05-29T05:23:51.045543964Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Search extracted workspace for code constructs related to authentication, session, or access control, producing structured origin_or_entry clues.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 541,
+            "expected_evidence": "evidence that validates or refutes: Collect auth boundary candidate clues from extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:23:51Z",
+              "updated_from": "toolrun-3058",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "6b928b40653db84faf11f5f44ae7847ed1d8f379d1de7b82b0b09fd1b7c4a74e",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "777",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:23:51.047668Z",
+        "lastSeenAt": "2026-05-29T05:28:11.007191Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:23:51.047863Z",
+        "UpdatedAt": "2026-05-29T05:28:11.00732Z"
+      },
+      {
+        "id": 13751,
+        "taskId": 92,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Validate reachability of entrypoint candidates",
+        "summary": "Exercise the identified entrypoints in a controlled runtime to confirm they are reachable and respond to inputs, establishing verification_or_observation clues.",
+        "contentJson": {
+          "id": 776,
+          "title": "Validate hypothesis: Validate reachability of entrypoint candidates",
+          "status": "pending",
+          "taskId": 92,
+          "CreatedAt": "2026-05-29T05:16:57.957649259Z",
+          "UpdatedAt": "2026-05-29T05:16:57.957649343Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Exercise the identified entrypoints in a controlled runtime to confirm they are reachable and respond to inputs, establishing verification_or_observation clues.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_validate",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 540,
+            "expected_evidence": "evidence that validates or refutes: Validate reachability of entrypoint candidates",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:16:57Z",
+              "updated_from": "toolrun-3057",
+              "runtime_environment": {
+                "java": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "73807a2387641c01feb7e88fb73d9795d9e8c047602cf950ea67e77aa6c68e41",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "776",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:16:57.958779Z",
+        "lastSeenAt": "2026-05-29T05:23:51.06978Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:16:57.959003Z",
+        "UpdatedAt": "2026-05-29T05:23:51.069948Z"
+      },
+      {
+        "id": 13749,
+        "taskId": 92,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Enumerate auth boundary candidates in extracted source",
+        "summary": "Identify code constructs that handle authentication, session management, or access control within the extracted workspace to form initial clue set for reachability and impact analysis.",
+        "contentJson": {
+          "id": 775,
+          "title": "Validate hypothesis: Enumerate auth boundary candidates in extracted source",
+          "status": "pending",
+          "taskId": 92,
+          "CreatedAt": "2026-05-29T05:16:57.952406093Z",
+          "UpdatedAt": "2026-05-29T05:16:57.952406176Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Identify code constructs that handle authentication, session management, or access control within the extracted workspace to form initial clue set for reachability and impact analysis.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_collect",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.7,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 539,
+            "expected_evidence": "evidence that validates or refutes: Enumerate auth boundary candidates in extracted source",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup",
+            "expected_capability": "internal_service_access",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:16:57Z",
+              "updated_from": "toolrun-3057",
+              "runtime_environment": {
+                "java": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "daceb6bae72e1be8ab99f2b3c145a4d233aff8467c48e2324903451ccf0f9b97",
+        "importanceScore": 0.86,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "775",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:16:57.953709Z",
+        "lastSeenAt": "2026-05-29T05:16:57.973175Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:16:57.953893Z",
+        "UpdatedAt": "2026-05-29T05:16:57.973398Z"
+      },
+      {
+        "id": 13777,
+        "taskId": 92,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Potential SQL injection path requires validation",
+        "summary": "Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+        "contentJson": {
+          "id": 780,
+          "title": "Validate hypothesis: Potential SQL injection path requires validation",
+          "status": "pending",
+          "taskId": 92,
+          "CreatedAt": "2026-05-29T05:32:52.44205459Z",
+          "UpdatedAt": "2026-05-29T05:32:52.442054632Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "clue_validate",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.84,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "legacy_hint": "sqli_probe",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 544,
+            "expected_evidence": "evidence that validates or refutes: Potential SQL injection path requires validation",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "evidence_triggered_validation",
+            "expected_capability": "sql_injection",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:23:51Z",
+              "updated_from": "toolrun-3058",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "6b93dc73722ce343f6cc97dda6c4d21349040f258b6cc0baa17d8772f9ab41ed",
+        "importanceScore": 0.84,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "780",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:32:52.443202Z",
+        "lastSeenAt": "2026-05-29T05:32:52.443202Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.443324Z",
+        "UpdatedAt": "2026-05-29T05:32:52.443324Z"
+      },
+      {
+        "id": 13769,
+        "taskId": 92,
+        "nodeType": "intent",
+        "title": "Validate hypothesis: Verify observed capability: sql_injection",
+        "summary": "Re-validate observed capability sql_injection on UserController.search:orderBy -\u003e UserMapper.xml ORDER BY using Rabbit-controlled validation before it can advance the goal.",
+        "contentJson": {
+          "id": 778,
+          "title": "Validate hypothesis: Verify observed capability: sql_injection",
+          "status": "pending",
+          "taskId": 92,
+          "CreatedAt": "2026-05-29T05:32:52.426132007Z",
+          "UpdatedAt": "2026-05-29T05:32:52.426132048Z",
+          "claimedBy": "",
+          "createdBy": "dynamic-intent-expander",
+          "objective": "Re-validate observed capability sql_injection on UserController.search:orderBy -\u003e UserMapper.xml ORDER BY using Rabbit-controlled validation before it can advance the goal.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "sqli_probe",
+          "parentNodeId": null,
+          "createdReason": "Generated from pending hypothesis with expected capability gain.",
+          "priorityScore": 0.82,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 542,
+            "expected_evidence": "evidence that validates or refutes: Verify observed capability: sql_injection",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "observed_capability_promotion",
+            "expected_capability": "sql_injection",
+            "environment_context_snapshot": {
+              "updated_at": "2026-05-29T05:23:51Z",
+              "updated_from": "toolrun-3058",
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              }
+            }
+          },
+          "requiredEvidence": [
+            "validation_result",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "fce0bdde941e0d2700340d8d64d4dd98330f683c895abba945e77b440118ccfe",
+        "importanceScore": 0.82,
+        "status": "active",
+        "sourceType": "dynamic-intent-expander",
+        "sourceId": "778",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:32:52.427403Z",
+        "lastSeenAt": "2026-05-29T05:32:52.427403Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.427563Z",
+        "UpdatedAt": "2026-05-29T05:32:52.427563Z"
+      },
+      {
+        "id": 13764,
+        "taskId": 92,
+        "nodeType": "capability",
+        "title": "[observed] sql_injection",
+        "summary": "orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection",
+        "contentJson": {
+          "id": 86,
+          "scope": "",
+          "target": "UserController.search:orderBy -\u003e UserMapper.xml ORDER BY",
+          "taskId": 92,
+          "strength": "observed",
+          "createdAt": "2026-05-29T05:32:52.421113215Z",
+          "riskLevel": "low",
+          "updatedAt": "2026-05-29T05:32:52.421113257Z",
+          "evidenceRefs": [
+            15922,
+            15923,
+            15924
+          ],
+          "proofSummary": "orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection",
+          "sourceNodeIds": null,
+          "canAdvanceGoal": false,
+          "capabilityType": "sql_injection",
+          "acquiredByIntentId": 777,
+          "nextSuggestedIntents": null,
+          "derivedFromEvidenceRefs": [
+            15922,
+            15923,
+            15924
+          ],
+          "validatedByHypothesisId": null
+        },
+        "dedupKey": "f332ac263636ce8433f376a902e427b2f171b82c410f04db29e1f570777ddeae",
+        "importanceScore": 0.8,
+        "status": "active",
+        "sourceType": "agent",
+        "sourceId": "capability-86",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.421695Z",
+        "lastSeenAt": "2026-05-29T05:32:52.421695Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.421865Z",
+        "UpdatedAt": "2026-05-29T05:32:52.421865Z"
+      },
+      {
+        "id": 13740,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 538,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:13:23.926801549Z",
+          "updatedAt": "2026-05-29T05:13:23.926801549Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "source_code_read",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:13737"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "8094df57e6658d8e0aa795a99a2370e295042374ef11bc73f9467d14d19aa6d7",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "538",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:13:23.927541Z",
+        "lastSeenAt": "2026-05-29T05:16:57.947867Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:13:23.927813Z",
+        "UpdatedAt": "2026-05-29T05:16:57.948004Z"
+      },
+      {
+        "id": 13763,
+        "taskId": 92,
+        "nodeType": "behavior_fact",
+        "title": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+        "summary": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+        "contentJson": {
+          "fact": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+          "source": "worker_agent",
+          "intentId": 777,
+          "toolRunId": 3060
+        },
+        "dedupKey": "1c86671f2b9f334c69c820f36ddfcaa884c6811b1b5759bc3ae022fe12d45069",
+        "importanceScore": 0.762,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3060",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.420409Z",
+        "lastSeenAt": "2026-05-29T05:32:52.420409Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.420596Z",
+        "UpdatedAt": "2026-05-29T05:32:52.420596Z"
+      },
+      {
+        "id": 13762,
+        "taskId": 92,
+        "nodeType": "behavior_fact",
+        "title": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+        "summary": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+        "contentJson": {
+          "fact": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+          "source": "worker_agent",
+          "intentId": 777,
+          "toolRunId": 3060
+        },
+        "dedupKey": "6675eaf20493a1ea21403703685287da882aa8775806578b21900b7868fa55c8",
+        "importanceScore": 0.762,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3060",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.419867Z",
+        "lastSeenAt": "2026-05-29T05:32:52.419867Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.420004Z",
+        "UpdatedAt": "2026-05-29T05:32:52.420004Z"
+      },
+      {
+        "id": 13761,
+        "taskId": 92,
+        "nodeType": "behavior_fact",
+        "title": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+        "summary": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+        "contentJson": {
+          "fact": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+          "source": "worker_agent",
+          "intentId": 777,
+          "toolRunId": 3060
+        },
+        "dedupKey": "b71ca54500deffe5231e52d1ccd148fdae11ab775bb64f592753bc3e4bf31c6e",
+        "importanceScore": 0.762,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3060",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.419419Z",
+        "lastSeenAt": "2026-05-29T05:32:52.419419Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.419618Z",
+        "UpdatedAt": "2026-05-29T05:32:52.419618Z"
+      },
+      {
+        "id": 13760,
+        "taskId": 92,
+        "nodeType": "behavior_fact",
+        "title": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+        "summary": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+        "contentJson": {
+          "fact": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+          "source": "worker_agent",
+          "intentId": 777,
+          "toolRunId": 3060
+        },
+        "dedupKey": "798fd3da1a5fabd3d24ec436eea61cd4d63e5f82819db0bcfbc2f5e4c680adb9",
+        "importanceScore": 0.762,
+        "status": "active",
+        "sourceType": "worker-agent",
+        "sourceId": "toolrun-3060",
+        "evidenceRefs": [
+          "15922",
+          "15923",
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.418963Z",
+        "lastSeenAt": "2026-05-29T05:32:52.418963Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.419138Z",
+        "UpdatedAt": "2026-05-29T05:32:52.419138Z"
+      },
+      {
+        "id": 13780,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Search code for auth and access-control constructs",
+        "summary": "Use code_search on the extracted workspace for patterns: 'password', 'session', 'auth', 'login', 'token', 'access', 'permission' to surface candidate origin_or_entry clues.",
+        "contentJson": {
+          "id": 545,
+          "title": "Search code for auth and access-control constructs",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:32:52.452348632Z",
+          "updatedAt": "2026-05-29T05:32:52.452348632Z",
+          "description": "Use code_search on the extracted workspace for patterns: 'password', 'session', 'auth', 'login', 'token', 'access', 'permission' to surface candidate origin_or_entry clues.",
+          "validatedAt": null,
+          "targetEntity": "Use code_search on the extracted workspace for patterns: 'password', 'session', 'auth', 'login', 'token', 'access', 'permission' to surface candidate origin_or_entry clues.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:777",
+            "blackboard_node:13756",
+            "evidence:15922",
+            "evidence:15923",
+            "evidence:15924"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "d17d442ee0fc3e0596a8e40add6f8b40a50dea08aa21b058271ef10ceff47706",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "545",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:32:52.452687Z",
+        "lastSeenAt": "2026-05-29T05:32:52.454307Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.452816Z",
+        "UpdatedAt": "2026-05-29T05:32:52.454406Z"
+      },
+      {
+        "id": 13776,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Potential SQL injection path requires validation",
+        "summary": "Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+        "contentJson": {
+          "id": 544,
+          "title": "Potential SQL injection path requires validation",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:32:52.441111465Z",
+          "updatedAt": "2026-05-29T05:32:52.441111465Z",
+          "description": "Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+          "validatedAt": null,
+          "targetEntity": "UserMapper.xml:search",
+          "hypothesisType": "injection_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "sql_injection",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "evidence:15924"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "4b46f70c3b3df6ae740dee4bdcb612b0577cb85d55d22ebb31dd8d3b0945404f",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "544",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:32:52.441326Z",
+        "lastSeenAt": "2026-05-29T05:32:52.442916Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.441443Z",
+        "UpdatedAt": "2026-05-29T05:32:52.443024Z"
+      },
+      {
+        "id": 13770,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Validate SQL injection exploitability via orderBy parameter",
+        "summary": "Confirm SQL injection is exploitable through UserController.search orderBy parameter by testing injection payloads",
+        "contentJson": {
+          "id": 543,
+          "title": "Validate SQL injection exploitability via orderBy parameter",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:32:52.429785673Z",
+          "updatedAt": "2026-05-29T05:32:52.429785673Z",
+          "description": "Confirm SQL injection is exploitable through UserController.search orderBy parameter by testing injection payloads",
+          "validatedAt": null,
+          "targetEntity": "Confirm SQL injection is exploitable through UserController.search orderBy parameter by testing injection payloads",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "worker_intent:777",
+            "worker_toolrun:3060",
+            "blackboard_node:13756",
+            "evidence:15922",
+            "evidence:15923",
+            "evidence:15924"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "d8141a43f2e375ec0a21db9bebe298cd085c9771cc93016789d1665192eb9eb5",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "543",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:32:52.430043Z",
+        "lastSeenAt": "2026-05-29T05:32:52.431682Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.430159Z",
+        "UpdatedAt": "2026-05-29T05:32:52.431819Z"
+      },
+      {
+        "id": 13768,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Verify observed capability: sql_injection",
+        "summary": "Re-validate observed capability sql_injection on UserController.search:orderBy -\u003e UserMapper.xml ORDER BY using Rabbit-controlled validation before it can advance the goal.",
+        "contentJson": {
+          "id": 542,
+          "title": "Verify observed capability: sql_injection",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:32:52.424348132Z",
+          "updatedAt": "2026-05-29T05:32:52.424348132Z",
+          "description": "Re-validate observed capability sql_injection on UserController.search:orderBy -\u003e UserMapper.xml ORDER BY using Rabbit-controlled validation before it can advance the goal.",
+          "validatedAt": null,
+          "targetEntity": "UserController.search:orderBy -\u003e UserMapper.xml ORDER BY",
+          "hypothesisType": "injection_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "sql_injection",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "capability:86",
+            "evidence:15922",
+            "evidence:15923",
+            "evidence:15924"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "b994f3ea467b15f1cae138d969497c4584c1b90532e21f65c7d07e96cf9f99ff",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "542",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:32:52.424842Z",
+        "lastSeenAt": "2026-05-29T05:32:52.427096Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.424995Z",
+        "UpdatedAt": "2026-05-29T05:32:52.427209Z"
+      },
+      {
+        "id": 13750,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Validate reachability of entrypoint candidates",
+        "summary": "Exercise the identified entrypoints in a controlled runtime to confirm they are reachable and respond to inputs, establishing verification_or_observation clues.",
+        "contentJson": {
+          "id": 540,
+          "title": "Validate reachability of entrypoint candidates",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:16:57.956281759Z",
+          "updatedAt": "2026-05-29T05:16:57.956281759Z",
+          "description": "Exercise the identified entrypoints in a controlled runtime to confirm they are reachable and respond to inputs, establishing verification_or_observation clues.",
+          "validatedAt": null,
+          "targetEntity": "Exercise the identified entrypoints in a controlled runtime to confirm they are reachable and respond to inputs, establishing verification_or_observation clues.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:774",
+            "blackboard_node:13741",
+            "evidence:15921"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "c9ae2fca4cccc58dad391202b649754224d544e2a3e1e071601bc47ab6e2a151",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "540",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:16:57.956557Z",
+        "lastSeenAt": "2026-05-29T05:28:10.996154Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:16:57.956694Z",
+        "UpdatedAt": "2026-05-29T05:28:10.996265Z"
+      },
+      {
+        "id": 13748,
+        "taskId": 92,
+        "nodeType": "hypothesis",
+        "title": "Enumerate auth boundary candidates in extracted source",
+        "summary": "Identify code constructs that handle authentication, session management, or access control within the extracted workspace to form initial clue set for reachability and impact analysis.",
+        "contentJson": {
+          "id": 539,
+          "title": "Enumerate auth boundary candidates in extracted source",
+          "status": "pending",
+          "taskId": 92,
+          "createdAt": "2026-05-29T05:16:57.950420134Z",
+          "updatedAt": "2026-05-29T05:16:57.950420134Z",
+          "description": "Identify code constructs that handle authentication, session management, or access control within the extracted workspace to form initial clue set for reachability and impact analysis.",
+          "validatedAt": null,
+          "targetEntity": "Identify code constructs that handle authentication, session management, or access control within the extracted workspace to form initial clue set for reachability and impact analysis.",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "internal_service_access",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "planner_intent:774",
+            "blackboard_node:13741",
+            "evidence:15921"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "835b2b77b5773ad21521cac91c55b60bb73aedab05fa399dcbfd71d8eb7fe97e",
+        "importanceScore": 0.74,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "539",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T05:16:57.950878Z",
+        "lastSeenAt": "2026-05-29T05:23:51.039232Z",
+        "seenCount": 3,
+        "CreatedAt": "2026-05-29T05:16:57.951053Z",
+        "UpdatedAt": "2026-05-29T05:23:51.039498Z"
+      },
+      {
+        "id": 13767,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "Evidence 15924",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15924
+        },
+        "dedupKey": "8fb2e45d4e9a590bd25bb669ed79ef9478c431889b72a6379c2fc208b4422183",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15924",
+        "evidenceRefs": [
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.423594Z",
+        "lastSeenAt": "2026-05-29T05:32:52.449267Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.423714Z",
+        "UpdatedAt": "2026-05-29T05:32:52.449359Z"
+      },
+      {
+        "id": 13766,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "Evidence 15923",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15923
+        },
+        "dedupKey": "d4a90541163bfe1a3aefd666700bf15b1ebc72b64833e138387e08633c9dbdc9",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15923",
+        "evidenceRefs": [
+          "15923"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.422986Z",
+        "lastSeenAt": "2026-05-29T05:32:52.448806Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.42313Z",
+        "UpdatedAt": "2026-05-29T05:32:52.448909Z"
+      },
+      {
+        "id": 13765,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "Evidence 15922",
+        "summary": "Evidence linked to capability derivation.",
+        "contentJson": {
+          "evidenceId": 15922
+        },
+        "dedupKey": "8b0cc5eedfe43a41819a87aa2c562500507966d9a81b3a0c8c1a37fe53165af8",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "15922",
+        "evidenceRefs": [
+          "15922"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.422133Z",
+        "lastSeenAt": "2026-05-29T05:32:52.448255Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T05:32:52.42226Z",
+        "UpdatedAt": "2026-05-29T05:32:52.448358Z"
+      },
+      {
+        "id": 13775,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "SQL injection sink in MyBatis mapper",
+        "summary": "MyBatis ${orderBy} allows arbitrary SQL injection - unsafe string interpolation",
+        "contentJson": {
+          "id": 15924,
+          "hash": "558f421e3ee9edd3aea7755e74a69ba7894fa1a3716602132d3ee221f0936aa6",
+          "title": "SQL injection sink in MyBatis mapper",
+          "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780032772417447757-code_slice.txt",
+          "target": "UserMapper.xml:search",
+          "taskId": 92,
+          "lineEnd": null,
+          "summary": "MyBatis ${orderBy} allows arbitrary SQL injection - unsafe string interpolation",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T05:32:52.418415632Z",
+          "lineStart": null,
+          "toolRunId": 3060,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780032772417447757-code_slice.txt",
+          "evidenceType": "code_slice",
+          "relationType": "worker_observation",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "fb3bd7475852b57bfbf792797e7e2f776902ee5f82e2851e49a6c97c4ffebee7",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3060",
+        "evidenceRefs": [
+          "15924"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.439519Z",
+        "lastSeenAt": "2026-05-29T05:32:52.439519Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.439674Z",
+        "UpdatedAt": "2026-05-29T05:32:52.439674Z"
+      },
+      {
+        "id": 13774,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "UserController - missing auth check",
+        "summary": "User controller has no authentication annotation or check",
+        "contentJson": {
+          "id": 15923,
+          "hash": "2811674b3bca76bf68159df968be22343229a41bf869e0986770bbe70d055711",
+          "title": "UserController - missing auth check",
+          "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780032772415944507-code_slice.txt",
+          "target": "UserController.search",
+          "taskId": 92,
+          "lineEnd": null,
+          "summary": "User controller has no authentication annotation or check",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T05:32:52.41713609Z",
+          "lineStart": null,
+          "toolRunId": 3060,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780032772415944507-code_slice.txt",
+          "evidenceType": "code_slice",
+          "relationType": "worker_observation",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "a0fad275e010901317d04e103eb4fc1c74de541396974f75e6bd55cb0ec5e592",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3060",
+        "evidenceRefs": [
+          "15923"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.438743Z",
+        "lastSeenAt": "2026-05-29T05:32:52.438743Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.438913Z",
+        "UpdatedAt": "2026-05-29T05:32:52.438913Z"
+      },
+      {
+        "id": 13773,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "AdminExportController - missing auth check",
+        "summary": "Controller named 'Admin' has no explicit role/permission annotation or check",
+        "contentJson": {
+          "id": 15922,
+          "hash": "26f76a55f6fa40f0a3cdcbff6c5f0e27219fea44bbb15bfa60f6fb4f5947c92e",
+          "title": "AdminExportController - missing auth check",
+          "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780032772413118007-code_slice.txt",
+          "target": "AdminExportController.export",
+          "taskId": 92,
+          "lineEnd": null,
+          "summary": "Controller named 'Admin' has no explicit role/permission annotation or check",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T05:32:52.41499159Z",
+          "lineStart": null,
+          "toolRunId": 3060,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780032772413118007-code_slice.txt",
+          "evidenceType": "code_slice",
+          "relationType": "worker_observation",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "13f8694cb9315ac8d634a42d266b96a6933da5ccdd13faf57fdf98188c4d9040",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3060",
+        "evidenceRefs": [
+          "15922"
+        ],
+        "firstSeenAt": "2026-05-29T05:32:52.43805Z",
+        "lastSeenAt": "2026-05-29T05:32:52.43805Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:32:52.438186Z",
+        "UpdatedAt": "2026-05-29T05:32:52.438186Z"
+      },
+      {
+        "id": 13745,
+        "taskId": 92,
+        "nodeType": "evidence",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "contentJson": {
+          "id": 15921,
+          "hash": "8f473b928658d7b719bbeb0e47cd5533a27d1d3c0bdcbfdb360ff6a74b916872",
+          "title": "Unstructured Pi worker observation",
+          "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780031817933356593-worker_observation.txt",
+          "target": "",
+          "taskId": 92,
+          "lineEnd": null,
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+          "filePath": "",
+          "redacted": false,
+          "CreatedAt": "2026-05-29T05:16:57.935184593Z",
+          "lineStart": null,
+          "toolRunId": 3057,
+          "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780031817933356593-worker_observation.txt",
+          "evidenceType": "worker_observation",
+          "relationType": "worker_result",
+          "requestSnapshot": {},
+          "responseSnapshot": {}
+        },
+        "dedupKey": "f3f710653a90c9140afd52a836d12ef9c22667431e3ec5a3fae211115ca8ff15",
+        "importanceScore": 0.72,
+        "status": "active",
+        "sourceType": "tool",
+        "sourceId": "3057",
+        "evidenceRefs": [
+          "15921"
+        ],
+        "firstSeenAt": "2026-05-29T05:16:57.94256Z",
+        "lastSeenAt": "2026-05-29T05:16:57.94256Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T05:16:57.942757Z",
+        "UpdatedAt": "2026-05-29T05:16:57.942757Z"
+      }
+    ],
+    "recentEvidence": [
+      {
+        "id": 15924,
+        "taskId": 92,
+        "toolRunId": 3060,
+        "evidenceType": "code_slice",
+        "title": "SQL injection sink in MyBatis mapper",
+        "summary": "MyBatis ${orderBy} allows arbitrary SQL injection - unsafe string interpolation",
+        "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780032772417447757-code_slice.txt",
+        "hash": "558f421e3ee9edd3aea7755e74a69ba7894fa1a3716602132d3ee221f0936aa6",
+        "target": "UserMapper.xml:search",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780032772417447757-code_slice.txt",
+        "relationType": "worker_observation",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T05:32:52.418415Z"
+      },
+      {
+        "id": 15923,
+        "taskId": 92,
+        "toolRunId": 3060,
+        "evidenceType": "code_slice",
+        "title": "UserController - missing auth check",
+        "summary": "User controller has no authentication annotation or check",
+        "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780032772415944507-code_slice.txt",
+        "hash": "2811674b3bca76bf68159df968be22343229a41bf869e0986770bbe70d055711",
+        "target": "UserController.search",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780032772415944507-code_slice.txt",
+        "relationType": "worker_observation",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T05:32:52.417136Z"
+      },
+      {
+        "id": 15922,
+        "taskId": 92,
+        "toolRunId": 3060,
+        "evidenceType": "code_slice",
+        "title": "AdminExportController - missing auth check",
+        "summary": "Controller named 'Admin' has no explicit role/permission annotation or check",
+        "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780032772413118007-code_slice.txt",
+        "hash": "26f76a55f6fa40f0a3cdcbff6c5f0e27219fea44bbb15bfa60f6fb4f5947c92e",
+        "target": "AdminExportController.export",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780032772413118007-code_slice.txt",
+        "relationType": "worker_observation",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T05:32:52.414991Z"
+      },
+      {
+        "id": 15921,
+        "taskId": 92,
+        "toolRunId": 3057,
+        "evidenceType": "worker_observation",
+        "title": "Unstructured Pi worker observation",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents.",
+        "rawRef": "minio://rabbit-artifacts/task-92/evidence/1780031817933356593-worker_observation.txt",
+        "hash": "8f473b928658d7b719bbeb0e47cd5533a27d1d3c0bdcbfdb360ff6a74b916872",
+        "target": "",
+        "filePath": "",
+        "lineStart": null,
+        "lineEnd": null,
+        "requestSnapshot": {},
+        "responseSnapshot": {},
+        "artifactUrl": "http://localhost:18190/artifacts/rabbit-artifacts/task-92/evidence/1780031817933356593-worker_observation.txt",
+        "relationType": "worker_result",
+        "redacted": false,
+        "CreatedAt": "2026-05-29T05:16:57.935184Z"
+      }
+    ],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+    "failedToolRuns": [
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-92/work/pi-workers/7",
+        "error": "worker capability candidate 0 must include capability_type, target, and proof_summary"
+      },
+      {
+        "toolName": "pi_worker",
+        "filePath": "/app/workspace/task-92/work/pi-workers/7",
+        "error": "context deadline exceeded"
+      }
+    ],
+    "capabilities": [
+      "[verified] internal_service_access: AdminExportController.export",
+      "[observed] sql_injection: UserController.search:orderBy -\u003e UserMapper.xml ORDER BY"
+    ],
+    "graphSummary": {
+      "task_id": 92,
+      "task_type": "code_audit",
+      "goal": "Clue-driven exploration",
+      "goal_state": {
+        "task_id": 92,
+        "type": "scope_bounded_security_discovery",
+        "goal_type": "scope_bounded_security_discovery",
+        "description": "Clue-driven exploration",
+        "success_criteria": [
+          "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+          "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+          "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+        ],
+        "status": "active",
+        "verified_capability_count": 1,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "coverage_summary": {
+          "total_surfaces": 0,
+          "explored_surfaces": 0,
+          "resolved_surfaces": 0,
+          "resolved_verified": 0,
+          "resolved_refuted": 0,
+          "blocked_surfaces": 0,
+          "inconclusive_surfaces": 0,
+          "out_of_scope": 0
+        },
+        "stop_reason": "",
+        "should_continue": true
+      },
+      "coverage_state": {
+        "scope_summary": {
+          "targets": null,
+          "entrypoint_count": 0,
+          "surface_count": 0,
+          "auth_contexts": [],
+          "excluded_paths": null
+        },
+        "surface_coverage": null,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "verified_capability_count": 1,
+        "refuted_path_count": 0,
+        "blocked_path_count": 0,
+        "inconclusive_path_count": 0,
+        "recent_progress": {
+          "new_facts_last_n": 30,
+          "new_evidence_last_n": 3,
+          "new_capabilities_last_n": 2,
+          "new_surfaces_last_n": 0,
+          "new_clue_facts_last_n": 0
+        }
+      },
+      "confirmed_facts": [
+        {
+          "id": 13737,
+          "kind": "origin",
+          "subject": "Authorized task origin",
+          "summary": "Task created from user-provided authorized scope.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13738,
+          "kind": "goal",
+          "subject": "Delivery-ready evidence report",
+          "summary": "Clue-driven exploration",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13742,
+          "kind": "fact",
+          "subject": "Source archive extracted safely",
+          "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13760,
+          "kind": "behavior_fact",
+          "subject": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+          "summary": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13761,
+          "kind": "behavior_fact",
+          "subject": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+          "summary": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13762,
+          "kind": "behavior_fact",
+          "subject": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+          "summary": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13763,
+          "kind": "behavior_fact",
+          "subject": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+          "summary": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13772,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13744,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status success",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13757,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status failed",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13752,
+          "kind": "fact",
+          "subject": "ToolRun: pi_worker",
+          "summary": "pi_worker finished with status failed",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13778,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Collect auth boundary candidate clues from extracted source",
+          "summary": "Validation method produced evidence that can support or refine the current hypothesis.",
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ],
+          "confidence_source": "evidence"
+        },
+        {
+          "id": 13753,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Enumerate auth boundary candidates in extracted source",
+          "summary": "Validation method executed and produced evidence for graph reasoning.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13758,
+          "kind": "tested_path",
+          "subject": "Tested path: Validate hypothesis: Validate reachability of entrypoint candidates",
+          "summary": "Validation method executed and produced evidence for graph reasoning.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13746,
+          "kind": "tested_path",
+          "subject": "Tested path: 启动授权安全验证",
+          "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+          "evidence_refs": [
+            15921
+          ],
+          "confidence_source": "evidence"
+        }
+      ],
+      "open_intents": [
+        {
+          "id": 779,
+          "kind": "clue_collect",
+          "goal": "Confirm SQL injection is exploitable through UserController.search orderBy parameter by testing injection payloads",
+          "reason": "Worker suggested follow-up exploration from observed evidence; StateExpansionPlanner and NextPending still control execution.",
+          "priority": 0.5640000000000002,
+          "status": "pending",
+          "target": {
+            "branch_value": {
+              "capability_unlock_score": 0.76,
+              "coverage_gain": 0.5,
+              "duplicate_penalty": 0,
+              "environment_alignment_boost": 0,
+              "evidence_quality": 0.5,
+              "execution_cost": 0.42,
+              "final_score": 0.5640000000000002,
+              "goal_type_boost": 0,
+              "graph_expansion_score": 0.79,
+              "matched_environment_refs": null,
+              "negative_fact_refs": null,
+              "novelty_score": 0.6,
+              "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+              "risk_value": 0.82,
+              "safety_risk": 0.24,
+              "scored_at": "2026-05-29T05:32:52.464208548Z"
+            },
+            "environment_context_snapshot": {
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              },
+              "updated_at": "2026-05-29T05:23:51Z",
+              "updated_from": "toolrun-3058"
+            },
+            "evidenceIds": [
+              15922,
+              15923,
+              15924
+            ],
+            "expected_capability": "internal_service_access",
+            "expected_evidence": "evidence that validates or refutes: Validate SQL injection exploitability via orderBy parameter",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "hypothesis_id": 543,
+            "legacy_hint": "resolve_unknown",
+            "parentIntentId": 777,
+            "safety_level": "authorized_non_destructive",
+            "source": "worker_agent",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "toolRunId": 3060,
+            "validation_method": "worker_suggested_followup",
+            "workerFactQualityScore": 0.9
+          }
+        },
+        {
+          "id": 781,
+          "kind": "clue_collect",
+          "goal": "Use code_search on the extracted workspace for patterns: 'password', 'session', 'auth', 'login', 'token', 'access', 'permission' to surface candidate origin_or_entry clues.",
+          "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+          "priority": 0.5568000000000002,
+          "status": "pending",
+          "target": {
+            "branch_value": {
+              "capability_unlock_score": 0.76,
+              "coverage_gain": 0.5,
+              "duplicate_penalty": 0,
+              "environment_alignment_boost": 0,
+              "evidence_quality": 0.5,
+              "execution_cost": 0.42,
+              "final_score": 0.5568000000000002,
+              "goal_type_boost": 0,
+              "graph_expansion_score": 0.79,
+              "matched_environment_refs": null,
+              "negative_fact_refs": null,
+              "novelty_score": 0.54,
+              "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+              "risk_value": 0.82,
+              "safety_risk": 0.24,
+              "scored_at": "2026-05-29T05:32:52.464571257Z"
+            },
+            "environment_context_snapshot": {
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              },
+              "updated_at": "2026-05-29T05:23:51Z",
+              "updated_from": "toolrun-3058"
+            },
+            "evidenceIds": [
+              15922,
+              15923,
+              15924
+            ],
+            "expected_capability": "internal_service_access",
+            "expected_evidence": "evidence that validates or refutes: Search code for auth and access-control constructs",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "hypothesis_id": 545,
+            "parentIntentId": 777,
+            "safety_level": "authorized_non_destructive",
+            "source": "iteration_planner",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "planner_suggested_followup"
+          }
+        },
+        {
+          "id": 778,
+          "kind": "sqli_probe",
+          "goal": "Re-validate observed capability sql_injection on UserController.search:orderBy -\u003e UserMapper.xml ORDER BY using Rabbit-controlled validation before it can advance the goal.",
+          "reason": "Generated from pending hypothesis with expected capability gain.",
+          "priority": 0.5180000000000001,
+          "status": "pending",
+          "target": {
+            "branch_value": {
+              "capability_unlock_score": 0.82,
+              "coverage_gain": 0.5,
+              "duplicate_penalty": 0,
+              "environment_alignment_boost": 0,
+              "evidence_quality": 0.5,
+              "execution_cost": 0.42,
+              "final_score": 0.5180000000000001,
+              "goal_type_boost": 0,
+              "graph_expansion_score": 0.69,
+              "matched_environment_refs": null,
+              "negative_fact_refs": null,
+              "novelty_score": 0.15,
+              "reason": "high capability gain, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+              "risk_value": 0.9,
+              "safety_risk": 0.24,
+              "scored_at": "2026-05-29T05:32:52.464980632Z"
+            },
+            "environment_context_snapshot": {
+              "runtime_environment": {
+                "java": "plausible",
+                "python": "plausible"
+              },
+              "updated_at": "2026-05-29T05:23:51Z",
+              "updated_from": "toolrun-3058"
+            },
+            "expected_capability": "sql_injection",
+            "expected_evidence": "evidence that validates or refutes: Verify observed capability: sql_injection",
+            "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+            "hypothesis_id": 542,
+            "safety_level": "authorized_non_destructive",
+            "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+            "validation_method": "observed_capability_promotion"
+          }
+        }
+      ],
+      "recent_evidence": [
+        {
+          "id": 15924,
+          "kind": "code_slice",
+          "relation": "worker_observation",
+          "target": "UserMapper.xml:search",
+          "summary": "MyBatis ${orderBy} allows arbitrary SQL injection - unsafe string interpolation"
+        },
+        {
+          "id": 15923,
+          "kind": "code_slice",
+          "relation": "worker_observation",
+          "target": "UserController.search",
+          "summary": "User controller has no authentication annotation or check"
+        },
+        {
+          "id": 15922,
+          "kind": "code_slice",
+          "relation": "worker_observation",
+          "target": "AdminExportController.export",
+          "summary": "Controller named 'Admin' has no explicit role/permission annotation or check"
+        },
+        {
+          "id": 15921,
+          "kind": "worker_observation",
+          "relation": "worker_result",
+          "target": "",
+          "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+        }
+      ],
+      "structured_negative_facts": null,
+      "capability_candidates": [
+        {
+          "id": 86,
+          "status": "observed",
+          "summary": "orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection",
+          "impact": "validated SQL injection behavior may allow unauthorized data access or query manipulation inside the authorized application scope",
+          "capability_type": "sql_injection",
+          "target": "UserController.search:orderBy -\u003e UserMapper.xml ORDER BY",
+          "fact_refs": null,
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ]
+        }
+      ],
+      "verified_capabilities": [
+        {
+          "id": 87,
+          "status": "verified",
+          "summary": "Clue-chain validated capability internal_service_access at AdminExportController.export with 3 evidence items via intent 777.",
+          "impact": "validated capability can affect protected application behavior inside scope",
+          "capability_type": "internal_service_access",
+          "target": "AdminExportController.export",
+          "fact_refs": null,
+          "evidence_refs": [
+            15922,
+            15923,
+            15924
+          ]
+        }
+      ],
+      "unknowns": [],
+      "hints": null,
+      "budget_state": {
+        "max_iterations": 0,
+        "current_iteration": 0,
+        "remaining_iterations": 0
+      },
+      "surface_facts": [
+        "ToolRun: pi_worker: pi_worker finished with status success",
+        "ToolRun: pi_worker: pi_worker finished with status success",
+        "ToolRun: pi_worker: pi_worker finished with status failed",
+        "ToolRun: pi_worker: pi_worker finished with status failed"
+      ],
+      "fingerprints": null,
+      "code_facts": [
+        "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+      ],
+      "business_facts": null,
+      "secret_facts": null,
+      "capabilities": [
+        "[verified] internal_service_access",
+        "[observed] sql_injection: orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection",
+        "[verified] internal_service_access (AdminExportController.export) - Clue-chain validated capability internal_service_access at AdminExportController.export with 3 evidence items via intent 777.",
+        "[observed] sql_injection (UserController.search:orderBy -\u003e UserMapper.xml ORDER BY) - orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection"
+      ],
+      "pending_intents": [
+        "[clue_collect] Validate hypothesis: Validate SQL injection exploitability via orderBy parameter",
+        "[clue_collect] Validate hypothesis: Search code for auth and access-control constructs",
+        "[sqli_probe] Validate hypothesis: Verify observed capability: sql_injection"
+      ],
+      "negative_facts": null,
+      "environment_model": "runtime_environment: java=plausible, python=plausible",
+      "evidence_count": 4,
+      "iteration_budget": 0,
+      "iterations_current": 0
+    }
+  },
+  "graph_summary": {
+    "task_id": 92,
+    "task_type": "code_audit",
+    "goal": "Clue-driven exploration",
+    "goal_state": {
+      "task_id": 92,
+      "type": "scope_bounded_security_discovery",
+      "goal_type": "scope_bounded_security_discovery",
+      "description": "Clue-driven exploration",
+      "success_criteria": [
+        "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+        "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+        "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+      ],
+      "status": "active",
+      "verified_capability_count": 1,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "coverage_summary": {
+        "total_surfaces": 0,
+        "explored_surfaces": 0,
+        "resolved_surfaces": 0,
+        "resolved_verified": 0,
+        "resolved_refuted": 0,
+        "blocked_surfaces": 0,
+        "inconclusive_surfaces": 0,
+        "out_of_scope": 0
+      },
+      "stop_reason": "",
+      "should_continue": true
+    },
+    "coverage_state": {
+      "scope_summary": {
+        "targets": null,
+        "entrypoint_count": 0,
+        "surface_count": 0,
+        "auth_contexts": [],
+        "excluded_paths": null
+      },
+      "surface_coverage": null,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "verified_capability_count": 1,
+      "refuted_path_count": 0,
+      "blocked_path_count": 0,
+      "inconclusive_path_count": 0,
+      "recent_progress": {
+        "new_facts_last_n": 30,
+        "new_evidence_last_n": 3,
+        "new_capabilities_last_n": 2,
+        "new_surfaces_last_n": 0,
+        "new_clue_facts_last_n": 0
+      }
+    },
+    "confirmed_facts": [
+      {
+        "id": 13737,
+        "kind": "origin",
+        "subject": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13738,
+        "kind": "goal",
+        "subject": "Delivery-ready evidence report",
+        "summary": "Clue-driven exploration",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13742,
+        "kind": "fact",
+        "subject": "Source archive extracted safely",
+        "summary": "6 files extracted into isolated workspace; 0 entries skipped.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13760,
+        "kind": "behavior_fact",
+        "subject": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+        "summary": "AdminExportController.export takes format and includeInactive parameters but has no visible authentication/authorization check despite 'Admin' naming convention",
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13761,
+        "kind": "behavior_fact",
+        "subject": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+        "summary": "UserController.search takes keyword and orderBy parameters with no visible authentication check",
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13762,
+        "kind": "behavior_fact",
+        "subject": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+        "summary": "UserMapper.xml uses MyBatis ${orderBy} string interpolation allowing SQL injection via orderBy parameter from UserController.search",
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13763,
+        "kind": "behavior_fact",
+        "subject": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+        "summary": "Data flow exists from UserController.search orderBy parameter through UserService.search to UserMapper.xml ORDER BY clause",
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13772,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13744,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status success",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13757,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13752,
+        "kind": "fact",
+        "subject": "ToolRun: pi_worker",
+        "summary": "pi_worker finished with status failed",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13778,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Collect auth boundary candidate clues from extracted source",
+        "summary": "Validation method produced evidence that can support or refine the current hypothesis.",
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ],
+        "confidence_source": "evidence"
+      },
+      {
+        "id": 13753,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Enumerate auth boundary candidates in extracted source",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13758,
+        "kind": "tested_path",
+        "subject": "Tested path: Validate hypothesis: Validate reachability of entrypoint candidates",
+        "summary": "Validation method executed and produced evidence for graph reasoning.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13746,
+        "kind": "tested_path",
+        "subject": "Tested path: 启动授权安全验证",
+        "summary": "method_not_observable: Pi worker returned unstructured output, so Rabbit preserved it as observation-only evidence instead of treating it as hypothesis validation.",
+        "evidence_refs": [
+          15921
+        ],
+        "confidence_source": "evidence"
+      }
+    ],
+    "open_intents": [
+      {
+        "id": 779,
+        "kind": "clue_collect",
+        "goal": "Confirm SQL injection is exploitable through UserController.search orderBy parameter by testing injection payloads",
+        "reason": "Worker suggested follow-up exploration from observed evidence; StateExpansionPlanner and NextPending still control execution.",
+        "priority": 0.5640000000000002,
+        "status": "pending",
+        "target": {
+          "branch_value": {
+            "capability_unlock_score": 0.76,
+            "coverage_gain": 0.5,
+            "duplicate_penalty": 0,
+            "environment_alignment_boost": 0,
+            "evidence_quality": 0.5,
+            "execution_cost": 0.42,
+            "final_score": 0.5640000000000002,
+            "goal_type_boost": 0,
+            "graph_expansion_score": 0.79,
+            "matched_environment_refs": null,
+            "negative_fact_refs": null,
+            "novelty_score": 0.6,
+            "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+            "risk_value": 0.82,
+            "safety_risk": 0.24,
+            "scored_at": "2026-05-29T05:32:52.464208548Z"
+          },
+          "environment_context_snapshot": {
+            "runtime_environment": {
+              "java": "plausible",
+              "python": "plausible"
+            },
+            "updated_at": "2026-05-29T05:23:51Z",
+            "updated_from": "toolrun-3058"
+          },
+          "evidenceIds": [
+            15922,
+            15923,
+            15924
+          ],
+          "expected_capability": "internal_service_access",
+          "expected_evidence": "evidence that validates or refutes: Validate SQL injection exploitability via orderBy parameter",
+          "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+          "hypothesis_id": 543,
+          "legacy_hint": "resolve_unknown",
+          "parentIntentId": 777,
+          "safety_level": "authorized_non_destructive",
+          "source": "worker_agent",
+          "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+          "toolRunId": 3060,
+          "validation_method": "worker_suggested_followup",
+          "workerFactQualityScore": 0.9
+        }
+      },
+      {
+        "id": 781,
+        "kind": "clue_collect",
+        "goal": "Use code_search on the extracted workspace for patterns: 'password', 'session', 'auth', 'login', 'token', 'access', 'permission' to surface candidate origin_or_entry clues.",
+        "reason": "Iteration planner suggested follow-up exploration from graph facts; StateExpansionPlanner and NextPending still control execution.",
+        "priority": 0.5568000000000002,
+        "status": "pending",
+        "target": {
+          "branch_value": {
+            "capability_unlock_score": 0.76,
+            "coverage_gain": 0.5,
+            "duplicate_penalty": 0,
+            "environment_alignment_boost": 0,
+            "evidence_quality": 0.5,
+            "execution_cost": 0.42,
+            "final_score": 0.5568000000000002,
+            "goal_type_boost": 0,
+            "graph_expansion_score": 0.79,
+            "matched_environment_refs": null,
+            "negative_fact_refs": null,
+            "novelty_score": 0.54,
+            "reason": "strong graph expansion, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+            "risk_value": 0.82,
+            "safety_risk": 0.24,
+            "scored_at": "2026-05-29T05:32:52.464571257Z"
+          },
+          "environment_context_snapshot": {
+            "runtime_environment": {
+              "java": "plausible",
+              "python": "plausible"
+            },
+            "updated_at": "2026-05-29T05:23:51Z",
+            "updated_from": "toolrun-3058"
+          },
+          "evidenceIds": [
+            15922,
+            15923,
+            15924
+          ],
+          "expected_capability": "internal_service_access",
+          "expected_evidence": "evidence that validates or refutes: Search code for auth and access-control constructs",
+          "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+          "hypothesis_id": 545,
+          "parentIntentId": 777,
+          "safety_level": "authorized_non_destructive",
+          "source": "iteration_planner",
+          "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+          "validation_method": "planner_suggested_followup"
+        }
+      },
+      {
+        "id": 778,
+        "kind": "sqli_probe",
+        "goal": "Re-validate observed capability sql_injection on UserController.search:orderBy -\u003e UserMapper.xml ORDER BY using Rabbit-controlled validation before it can advance the goal.",
+        "reason": "Generated from pending hypothesis with expected capability gain.",
+        "priority": 0.5180000000000001,
+        "status": "pending",
+        "target": {
+          "branch_value": {
+            "capability_unlock_score": 0.82,
+            "coverage_gain": 0.5,
+            "duplicate_penalty": 0,
+            "environment_alignment_boost": 0,
+            "evidence_quality": 0.5,
+            "execution_cost": 0.42,
+            "final_score": 0.5180000000000001,
+            "goal_type_boost": 0,
+            "graph_expansion_score": 0.69,
+            "matched_environment_refs": null,
+            "negative_fact_refs": null,
+            "novelty_score": 0.15,
+            "reason": "high capability gain, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+            "risk_value": 0.9,
+            "safety_risk": 0.24,
+            "scored_at": "2026-05-29T05:32:52.464980632Z"
+          },
+          "environment_context_snapshot": {
+            "runtime_environment": {
+              "java": "plausible",
+              "python": "plausible"
+            },
+            "updated_at": "2026-05-29T05:23:51Z",
+            "updated_from": "toolrun-3058"
+          },
+          "expected_capability": "sql_injection",
+          "expected_evidence": "evidence that validates or refutes: Verify observed capability: sql_injection",
+          "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+          "hypothesis_id": 542,
+          "safety_level": "authorized_non_destructive",
+          "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+          "validation_method": "observed_capability_promotion"
+        }
+      }
+    ],
+    "recent_evidence": [
+      {
+        "id": 15924,
+        "kind": "code_slice",
+        "relation": "worker_observation",
+        "target": "UserMapper.xml:search",
+        "summary": "MyBatis ${orderBy} allows arbitrary SQL injection - unsafe string interpolation"
+      },
+      {
+        "id": 15923,
+        "kind": "code_slice",
+        "relation": "worker_observation",
+        "target": "UserController.search",
+        "summary": "User controller has no authentication annotation or check"
+      },
+      {
+        "id": 15922,
+        "kind": "code_slice",
+        "relation": "worker_observation",
+        "target": "AdminExportController.export",
+        "summary": "Controller named 'Admin' has no explicit role/permission annotation or check"
+      },
+      {
+        "id": 15921,
+        "kind": "worker_observation",
+        "relation": "worker_result",
+        "target": "",
+        "summary": "Worker output could not be parsed as structured JSON, so Rabbit preserved it as evidence without creating capabilities or follow-up intents."
+      }
+    ],
+    "structured_negative_facts": null,
+    "capability_candidates": [
+      {
+        "id": 86,
+        "status": "observed",
+        "summary": "orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection",
+        "impact": "validated SQL injection behavior may allow unauthorized data access or query manipulation inside the authorized application scope",
+        "capability_type": "sql_injection",
+        "target": "UserController.search:orderBy -\u003e UserMapper.xml ORDER BY",
+        "fact_refs": null,
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ]
+      }
+    ],
+    "verified_capabilities": [
+      {
+        "id": 87,
+        "status": "verified",
+        "summary": "Clue-chain validated capability internal_service_access at AdminExportController.export with 3 evidence items via intent 777.",
+        "impact": "validated capability can affect protected application behavior inside scope",
+        "capability_type": "internal_service_access",
+        "target": "AdminExportController.export",
+        "fact_refs": null,
+        "evidence_refs": [
+          15922,
+          15923,
+          15924
+        ]
+      }
+    ],
+    "unknowns": [],
+    "hints": null,
+    "budget_state": {
+      "max_iterations": 0,
+      "current_iteration": 0,
+      "remaining_iterations": 0
+    },
+    "surface_facts": [
+      "ToolRun: pi_worker: pi_worker finished with status success",
+      "ToolRun: pi_worker: pi_worker finished with status success",
+      "ToolRun: pi_worker: pi_worker finished with status failed",
+      "ToolRun: pi_worker: pi_worker finished with status failed"
+    ],
+    "fingerprints": null,
+    "code_facts": [
+      "Source archive extracted safely: 6 files extracted into isolated workspace; 0 entries skipped."
+    ],
+    "business_facts": null,
+    "secret_facts": null,
+    "capabilities": [
+      "[verified] internal_service_access",
+      "[observed] sql_injection: orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection",
+      "[verified] internal_service_access (AdminExportController.export) - Clue-chain validated capability internal_service_access at AdminExportController.export with 3 evidence items via intent 777.",
+      "[observed] sql_injection (UserController.search:orderBy -\u003e UserMapper.xml ORDER BY) - orderBy parameter flows directly to MyBatis ${orderBy} interpolation, enabling SQL injection"
+    ],
+    "pending_intents": [
+      "[clue_collect] Validate hypothesis: Validate SQL injection exploitability via orderBy parameter",
+      "[clue_collect] Validate hypothesis: Search code for auth and access-control constructs",
+      "[sqli_probe] Validate hypothesis: Verify observed capability: sql_injection"
+    ],
+    "negative_facts": null,
+    "environment_model": "runtime_environment: java=plausible, python=plausible",
+    "evidence_count": 4,
+    "iteration_budget": 0,
+    "iterations_current": 0
+  },
+  "intent": {
+    "id": 780,
+    "taskId": 92,
+    "parentNodeId": null,
+    "intentType": "clue_validate",
+    "title": "Validate hypothesis: Potential SQL injection path requires validation",
+    "objective": "Evidence indicates user-controlled data may reach dynamic SQL construction or query execution; validate source-to-sink reachability and exploitability before producing a finding.",
+    "constraintsJson": {
+      "legacy_hint": "sqli_probe",
+      "branch_value": {
+        "reason": "high capability gain, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-29T05:32:52.463552423Z",
+        "risk_value": 0.9,
+        "final_score": 0.5648000000000001,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.54,
+        "execution_cost": 0.42,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.5,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.69,
+        "capability_unlock_score": 0.82,
+        "matched_environment_refs": null,
+        "environment_alignment_boost": 0
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 544,
+      "expected_evidence": "evidence that validates or refutes: Potential SQL injection path requires validation",
+      "failure_condition": "Evidence shows the path is not exploitable or does not support the hypothesis.",
+      "success_condition": "Evidence demonstrates the hypothesis is true within authorized scope.",
+      "validation_method": "evidence_triggered_validation",
+      "expected_capability": "sql_injection",
+      "environment_context_snapshot": {
+        "updated_at": "2026-05-29T05:23:51Z",
+        "updated_from": "toolrun-3058",
+        "runtime_environment": {
+          "java": "plausible",
+          "python": "plausible"
+        }
+      }
+    },
+    "requiredEvidence": [
+      "validation_result",
+      "scope_statement",
+      "safety_statement"
+    ],
+    "priorityScore": 0.5648000000000001,
+    "status": "running",
+    "claimedBy": "worker:7:glm-5",
+    "claimExpiresAt": "2026-05-29T05:39:52.466599673Z",
+    "createdBy": "dynamic-intent-expander",
+    "createdReason": "Generated from pending hypothesis with expected capability gain.",
+    "startedAt": "2026-05-29T05:32:52.466599673Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-29T05:32:52.442054Z",
+    "UpdatedAt": "2026-05-29T05:32:52.466599673Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "find",
+      "ls"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 92,
+    "objective": "Clue-driven exploration",
+    "scope": {
+      "targets": [],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "code_audit"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:7:glm-5",
+    "max_running": 2,
+    "model": "glm-5",
+    "model_config": 7,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+SQL INJECTION VALIDATION REPORT - Intent 771
+=============================================
+Hypothesis ID: 535
+Target: UserController.search() orderBy parameter -> UserMapper.xml ${orderBy}
+
+SOURCE-TO-SINK REACHABILITY ANALYSIS
+====================================
+
+Source: UserController.java (HTTP entry point)
+---
+public List<UserRecord> search(HttpServletRequest request) {
+    String keyword = request.getParameter("keyword");
+    String orderBy = request.getParameter("orderBy");  // <-- USER-CONTROLLED INPUT
+    return userService.search(keyword, orderBy);       // <-- PASSES TO SERVICE UNMODIFIED
+}
+
+Transfer: UserService.java (business service)
+---
+public List<UserRecord> search(String keyword, String orderBy) {
+    return userMapper.search(keyword, orderBy);  // <-- PASSES TO MAPPER UNMODIFIED
+}
+
+Sink: UserMapper.xml (MyBatis SQL template)
+---
+<select id="search" resultType="demo.UserRecord">
+    SELECT id, name
+    FROM users
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY ${orderBy}  // <-- UNSAFE STRING INTERPOLATION
+</select>
+
+VULNERABILITY CONFIRMATION
+==========================
+
+1. USER-CONTROLLED INPUT: orderBy parameter extracted directly from HttpServletRequest.getParameter()
+   - No validation
+   - No sanitization
+   - No allowlist/checklist for valid column names
+
+2. DATA FLOW UNMODIFIED: orderBy flows through the entire call chain without any transformation
+   - UserController -> UserService -> UserMapper
+   - No intervening sanitization layer
+
+3. UNSAFE SQL INTERPOLATION: MyBatis ${orderBy} syntax
+   - ${} is string interpolation (UNSAFE)
+   - #{} would be prepared statement parameter (SAFE)
+   - The value is directly substituted into the SQL string
+
+4. INJECTION VECTOR: ORDER BY clause accepts arbitrary SQL
+   - Attacker can inject: orderBy=1; DROP TABLE users--
+   - Result: ORDER BY 1; DROP TABLE users--
+   - Or boolean-based blind injection: orderBy=IF(1=1,id,name)
+
+EXPLOITABILITY ASSESSMENT
+========================
+
+The SQL injection is EXPLOITABLE:
+- Direct user input reaches SQL sink
+- No input validation or sanitization
+- MyBatis ${} interpolation allows arbitrary SQL injection
+- ORDER BY clause is a valid injection point (can use CASE, IF, subqueries)
+
+Example attack payloads:
+1. orderBy=id;SELECT*SLEEP(5)--  (time-based blind)
+2. orderBy=IF(MID(version(),1,1)='5',id,name)  (boolean-based blind)
+3. orderBy=1;DROP TABLE users--  (destructive - would work if DB permissions allow)
+
+CONCLUSION
+==========
+Hypothesis VALIDATED: The SQL injection path exists and is exploitable.
+The orderBy parameter flows from HTTP request to SQL ORDER BY clause via unsafe MyBatis string interpolation.
+
+Validated by: Worker 7
+Intent: 771
+Task: 91

@@ -1,0 +1,71 @@
+ENTRY POINT SURFACE ANALYSIS - Task 94
+=======================================
+
+Source Files Scanned:
+- /workspace/input/extracted/src/main/java/demo/AdminExportController.java
+- /workspace/input/extracted/src/main/java/demo/UserController.java
+- /workspace/input/extracted/src/main/java/demo/UserService.java
+- /workspace/input/extracted/src/main/java/demo/AdminExportService.java
+- /workspace/input/extracted/src/main/java/demo/UserMapper.java
+- /workspace/input/extracted/src/main/resources/mapper/UserMapper.xml
+
+=== ENTRY POINTS DISCOVERED ===
+
+1. AdminExportController.export(HttpServletRequest request)
+   - Type: HTTP request handler (no explicit annotations, inferred controller pattern)
+   - Parameters extracted from request:
+     * format: request.getParameter("format")
+     * includeInactive: request.getParameter("includeInactive")
+   - Data flow: AdminExportController.export() -> AdminExportService.exportUsers(format, includeInactive)
+   - Surface: format value influences control flow (validated against "csv"/"json")
+   - Surface: includeInactive value is passed without validation
+
+2. UserController.search(HttpServletRequest request)
+   - Type: HTTP request handler (no explicit annotations, inferred controller pattern)
+   - Parameters extracted from request:
+     * keyword: request.getParameter("keyword")
+     * orderBy: request.getParameter("orderBy")
+   - Data flow: UserController.search() -> UserService.search() -> UserMapper.search(keyword, orderBy)
+   - Surface: orderBy parameter flows to MyBatis mapper with string interpolation (${orderBy})
+   - RISK: SQL injection via ORDER BY clause - MyBatis ${} syntax performs direct interpolation
+
+=== PUBLIC METHODS (NON-ENTRY) ===
+
+UserService.search(String keyword, String orderBy)
+- Internal service method, not direct entry point
+- Invoked by UserController
+
+AdminExportService.exportUsers(String format, String includeInactive)
+- Internal service method, not direct entry point
+- Invoked by AdminExportController
+
+UserMapper.search(String keyword, String orderBy)
+- Interface method, SQL mapper target
+- Invoked by UserService
+- SQL defined in UserMapper.xml uses ${orderBy} interpolation (SQLi surface)
+
+=== SECURITY SURFACE SUMMARY ===
+
+HTTP Entry Points: 2
+- AdminExportController.export() [format, includeInactive params]
+- UserController.search() [keyword, orderBy params]
+
+High-Risk Surfaces:
+- UserController.search() -> orderBy -> MyBatis ${orderBy} = SQL Injection vector
+
+Data Flow Chains:
+1. HttpServletRequest -> UserController.search() -> UserService.search() -> UserMapper.search() -> SQL ORDER BY ${orderBy}
+2. HttpServletRequest -> AdminExportController.export() -> AdminExportService.exportUsers()
+
+=== RAW SQL MAPPER ===
+
+UserMapper.xml:
+  <select id="search" resultType="demo.UserRecord">
+    SELECT id, name
+    FROM users
+    WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY ${orderBy}
+  </select>
+
+Note: #{keyword} uses safe parameter binding
+      ${orderBy} uses unsafe string interpolation

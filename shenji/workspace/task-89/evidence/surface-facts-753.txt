@@ -1,0 +1,69 @@
+=== SURFACE FACTS COLLECTION ===
+Intent: 753 - Read extracted source files to collect surface facts
+Timestamp: 2026-05-29T03:44:00Z
+
+=== HTTP HANDLERS (ENTRYPOINTS) ===
+
+1. UserController.search(HttpServletRequest)
+   - File: src/main/java/demo/UserController.java
+   - Method: public List<UserRecord> search(HttpServletRequest request)
+   - Parameters extracted:
+     * keyword = request.getParameter("keyword")
+     * orderBy = request.getParameter("orderBy")
+   - Calls: userService.search(keyword, orderBy)
+   - Auth annotation: NONE VISIBLE
+   - Risk: orderBy parameter flows to raw SQL interpolation
+
+2. AdminExportController.export(HttpServletRequest)
+   - File: src/main/java/demo/AdminExportController.java
+   - Method: public String export(HttpServletRequest request)
+   - Parameters extracted:
+     * format = request.getParameter("format")
+     * includeInactive = request.getParameter("includeInactive")
+   - Calls: service.exportUsers(format, includeInactive)
+   - Auth annotation: NONE VISIBLE
+   - Risk: No auth check, direct parameter access
+
+=== AUTH DECORATORS/MIDDLEWARE ===
+
+NONE FOUND in analyzed files:
+- No @PreAuthorize, @Secured, @RolesAllowed annotations
+- No Spring Security annotations
+- No explicit authentication checks in controller methods
+- Both controllers accept HttpServletRequest without auth validation
+
+=== ORM/RAW-QUERY CALLS ===
+
+1. UserMapper.search(String keyword, String orderBy)
+   - Interface: src/main/java/demo/UserMapper.java
+   - MyBatis XML: src/main/resources/mapper/UserMapper.xml
+   
+   CRITICAL VULNERABILITY:
+   Query: SELECT id, name FROM users WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY ${orderBy}
+   
+   - #{keyword} - SAFE (parameterized query)
+   - ${orderBy} - UNSAFE (raw string interpolation)
+   
+   Data flow:
+   HTTP request.getParameter("orderBy") 
+   -> UserController.search()
+   -> UserService.search()
+   -> UserMapper.search()
+   -> MyBatis ${orderBy} (SQL INJECTION POINT)
+
+=== SERVICE LAYER ===
+
+1. UserService.search(String keyword, String orderBy)
+   - File: src/main/java/demo/UserService.java
+   - Passes parameters directly to UserMapper without validation
+
+2. AdminExportService.exportUsers(String format, String includeInactive)
+   - File: src/main/java/demo/AdminExportService.java
+   - Only validates format (csv/json), no auth check
+
+=== SUMMARY ===
+
+Entrypoints: 2 HTTP handlers (no auth)
+Auth boundaries: NONE VISIBLE
+SQL injection points: 1 (MyBatis ${orderBy})
+Safe parameterized queries: 1 (#{keyword})

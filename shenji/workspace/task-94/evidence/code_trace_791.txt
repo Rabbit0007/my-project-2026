@@ -1,0 +1,36 @@
+=== Source Code Security Analysis ===
+Task: 94 (code_audit)
+Intent: 791 - Bootstrap surface observation
+
+Files analyzed:
+1. AdminExportController.java - Admin export endpoint with format/includeInactive parameters
+2. AdminExportService.java - Export validation (format limited to csv/json)
+3. UserController.java - User search endpoint with keyword/orderBy parameters
+4. UserService.java - Pass-through to UserMapper
+5. UserMapper.java - Interface for search method
+6. UserMapper.xml - MyBatis mapper with SQL query
+
+=== Critical Finding: SQL Injection Pattern ===
+File: UserMapper.xml
+Line: ORDER BY ${orderBy}
+
+The XML mapper uses ${orderBy} syntax which is raw string interpolation.
+This is NOT a parameterized query (which would use #{orderBy}).
+
+Flow: HttpServletRequest.getParameter("orderBy") -> UserController.search() -> UserService.search() -> UserMapper.search() -> SQL ORDER BY ${orderBy}
+
+This allows arbitrary SQL to be injected via the orderBy parameter.
+
+=== Code Patterns ===
+AdminController:
+- Direct request parameter extraction (format, includeInactive)
+- Service validates format (csv/json only)
+
+UserController:
+- Direct request parameter extraction (keyword, orderBy)
+- No validation on orderBy parameter
+- Passes orderBy directly to persistence layer
+
+UserMapper.xml:
+- keyword uses #{keyword} - safe parameterized query
+- orderBy uses ${orderBy} - UNSAFE raw interpolation

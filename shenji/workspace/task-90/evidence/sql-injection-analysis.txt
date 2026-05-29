@@ -1,0 +1,42 @@
+=== MyBatis SQL Injection Vulnerability Analysis ===
+Date: 2026-05-29
+Task: 90
+Intent: 749
+
+1. DATA FLOW TRACE:
+   UserController.search(HttpServletRequest)
+     -> String orderBy = request.getParameter("orderBy")
+     -> UserService.search(keyword, orderBy)
+       -> UserMapper.search(keyword, orderBy)
+         -> UserMapper.xml: ORDER BY ${orderBy}
+
+2. VULNERABLE PATTERN IDENTIFIED:
+   File: /workspace/input/extracted/src/main/resources/mapper/UserMapper.xml
+   Line 6: ORDER BY ${orderBy}
+   
+   MyBatis Syntax Analysis:
+   - #{keyword} = prepared statement parameter (SAFE)
+   - ${orderBy} = string interpolation (VULNERABLE)
+   
+   The ${} syntax performs direct string substitution without escaping,
+   allowing arbitrary SQL to be injected via the orderBy request parameter.
+
+3. ATTACK SURFACE:
+   Endpoint: UserController.search()
+   Parameter: orderBy
+   Payload Example: orderBy=id; DROP TABLE users;--
+   
+   This would result in:
+   SELECT id, name FROM users WHERE name LIKE CONCAT('%', ?, '%') ORDER BY id; DROP TABLE users;--
+
+4. SUPPORTING FILES:
+   - /workspace/input/extracted/src/main/java/demo/UserController.java
+   - /workspace/input/extracted/src/main/java/demo/UserService.java
+   - /workspace/input/extracted/src/main/java/demo/UserMapper.java
+   - /workspace/input/extracted/src/main/resources/mapper/UserMapper.xml
+
+5. SECURITY CLASSIFICATION:
+   Vulnerability Type: SQL Injection (CWE-89)
+   Severity: High (direct database access, arbitrary SQL execution)
+   Exploitability: High (user-controlled input reaches vulnerable sink)
+   Authentication: Required (depends on application authentication)

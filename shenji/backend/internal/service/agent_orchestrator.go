@@ -883,6 +883,7 @@ func (o *AgentOrchestrator) createPlannerSuggestedIntent(ctx context.Context, ta
 	}
 	parentNodeID := blackboardNodeIDForIntent(ctx, o.db, taskID, parent.ID)
 	lifecycle := NewHypothesisLifecycleService(o.db, o.blackboard)
+	lifecycle.SetClueDrivenPhase(o.cfg.ClueDrivenPhase)
 	hypothesis, err := lifecycle.FormHypothesis(ctx, plannerSuggestionHypothesisDraft(taskID, parent.ID, parentNodeID, suggestion, evidenceIDs))
 	if err != nil {
 		return false
@@ -903,6 +904,8 @@ func (o *AgentOrchestrator) createPlannerSuggestedIntent(ctx context.Context, ta
 	values = mergeIntentMetadata(values, legacyMetadata)
 	intent.ConstraintsJSON = mustJSON(values)
 	intent.UpdatedAt = time.Now().UTC()
+	// Safety net: ensure intent type is normalized before final save
+	normalizeIntentBeforeCreate(&intent, o.cfg.ClueDrivenPhase)
 	if err := o.db.WithContext(ctx).Save(&intent).Error; err != nil {
 		return false
 	}
@@ -1139,6 +1142,7 @@ func (o *AgentOrchestrator) runSingleIteration(ctx context.Context, task *model.
 	toolFailed := false
 	toolFailureReason := ""
 	hypotheses := NewHypothesisLifecycleService(o.db, o.blackboard)
+	hypotheses.SetClueDrivenPhase(o.cfg.ClueDrivenPhase)
 	for _, outcome := range outcomes {
 		toolRunIDs = append(toolRunIDs, outcome.ToolRun.ID)
 		_ = hypotheses.UpdateEnvironmentFromOutcome(ctx, task.ID, outcome)
@@ -1199,6 +1203,10 @@ func (o *AgentOrchestrator) runSingleIteration(ctx context.Context, task *model.
 			}
 		}
 	}
+	// Phase 5-C: Bridge evidence to clue_observation nodes
+	bridge := NewEvidenceClueBridge(o.db, o.blackboard, o.cfg.ClueDrivenPhase)
+	bridge.BridgeEvidence(ctx, task.ID, evidenceItems, nil, &currentIntent.ID)
+
 	_, _ = hypotheses.ExpandFromEvidence(ctx, task.ID, nonHTTPInputSurfaceEvidence(evidenceItems), ExpansionBudget{})
 	_, _ = o.replenishHTTPInputSurfaceFrontier(ctx, task.ID, hypotheses)
 	if currentIntent.HypothesisID() != nil {
@@ -2672,6 +2680,7 @@ func (o *AgentOrchestrator) createGraphReasonedIntent(ctx context.Context, taskI
 	}
 	priority := graphReasonerPriority(suggestion.Priority)
 	lifecycle := NewHypothesisLifecycleService(o.db, o.blackboard)
+	lifecycle.SetClueDrivenPhase(o.cfg.ClueDrivenPhase)
 	hypothesis, err := lifecycle.FormHypothesis(ctx, graphReasonerHypothesisDraft(taskID, suggestion, intentType, sourceNodeIDs))
 	if err != nil {
 		return false

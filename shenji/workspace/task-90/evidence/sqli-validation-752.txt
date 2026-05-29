@@ -1,0 +1,52 @@
+SQL Injection Validation - Intent 752
+======================================
+
+HYPOTHESIS: Potential SQL injection path requires validation
+TARGET: UserController.search() orderBy parameter -> UserMapper.xml ${orderBy}
+
+SOURCE-TO-SINK VALIDATION
+========================
+
+1. TAINT SOURCE (UserController.java:13-14)
+   String orderBy = request.getParameter("orderBy");
+   return userService.search(keyword, orderBy);
+   
+   CONFIRMED: User-controlled HTTP request parameter extracted with no validation.
+
+2. PROPAGATION (UserService.java:11)
+   return userMapper.search(keyword, orderBy);
+   
+   CONFIRMED: Pass-through with no sanitization, allowlist, or transformation.
+
+3. VULNERABLE SINK (UserMapper.xml:6)
+   ORDER BY ${orderBy}
+   
+   CONFIRMED: MyBatis ${...} syntax performs literal string interpolation.
+   - #{keyword} uses safe PreparedStatement parameter binding
+   - ${orderBy} uses unsafe string concatenation into SQL
+
+DATA FLOW CHAIN
+===============
+request.getParameter("orderBy") 
+  -> UserController.search():14 
+  -> UserService.search():11 
+  -> UserMapper.search() 
+  -> SQL: ORDER BY ${orderBy}
+
+EXPLOITABILITY ASSESSMENT
+========================
+- No input validation: orderBy is not checked against an allowlist
+- No sanitization: No escaping or character filtering
+- Direct interpolation: ${orderBy} is replaced literally in SQL
+- Exploitable payload examples:
+  * id; DROP TABLE users; --
+  * id UNION SELECT password FROM admin--
+  * (CASE WHEN (1=1) THEN id ELSE name END)
+
+CONCLUSION
+==========
+The SQL injection path is VALIDATED and EXPLOITABLE.
+User-controlled input reaches a vulnerable MyBatis string interpolation sink
+without any sanitization or validation barriers.
+
+VALIDATION STATUS: CONFIRMED_EXPLOITABLE

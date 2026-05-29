@@ -77,6 +77,13 @@ var runtimeIntentTypes = map[string]struct{}{
 	model.IntentCapabilityExpand:     {},
 	model.IntentGoalAttempt:          {},
 	model.IntentReportFinalize:       {},
+
+	// Clue-driven intent types (Phase 3+)
+	model.IntentClueCollect:      {},
+	model.IntentClueValidate:     {},
+	model.IntentClueRefute:       {},
+	model.IntentClueChainExtend:  {},
+	model.IntentScopeObservation: {},
 }
 
 var genericGraphIntentTypes = map[string]struct{}{
@@ -104,6 +111,13 @@ var genericGraphIntentTypes = map[string]struct{}{
 	model.IntentBusinessLogicProbe:  {},
 	model.IntentCapabilityExpand:    {},
 	model.IntentGoalAttempt:         {},
+
+	// Clue-driven intent types (Phase 3+)
+	model.IntentClueCollect:      {},
+	model.IntentClueValidate:     {},
+	model.IntentClueRefute:       {},
+	model.IntentClueChainExtend:  {},
+	model.IntentScopeObservation: {},
 }
 
 var legacyVulnIntentNormalization = map[string]struct {

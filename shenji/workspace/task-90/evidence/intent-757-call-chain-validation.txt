@@ -1,0 +1,69 @@
+=== SQL Injection Taint Flow Validation for Intent 757 ===
+Hypothesis 521: Validate SQL injection exploitability on orderBy parameter
+
+=== COMPLETE CALL CHAIN ANALYSIS ===
+
+[1] SOURCE - UserController.java (lines 12-13)
+    String orderBy = request.getParameter("orderBy");
+    return userService.search(keyword, orderBy);
+    
+    FINDING: User-controlled HTTP parameter extracted with zero validation.
+    - No allowlist check for valid column names
+    - No character filtering (quotes, semicolons, etc.)
+    - No length restriction
+    - Direct extraction via request.getParameter()
+
+[2] PROPAGATION - UserService.java (lines 12-13)
+    public List<UserRecord> search(String keyword, String orderBy) {
+        return userMapper.search(keyword, orderBy);
+    }
+    
+    FINDING: Parameter passed through unchanged.
+    - No transformation applied to orderBy
+    - No validation logic present
+    - Direct pass-through to data layer
+
+[3] INTERFACE - UserMapper.java (line 7)
+    List<UserRecord> search(String keyword, String orderBy);
+    
+    FINDING: Interface accepts String parameter without constraint.
+
+[4] SINK - UserMapper.xml (line 6)
+    ORDER BY ${orderBy}
+    
+    FINDING: Vulnerable MyBatis string interpolation.
+    - Uses ${orderBy} (string interpolation) NOT #{orderBy} (prepared statement)
+    - ${} performs literal text substitution before SQL parsing
+    - Allows arbitrary SQL injection into ORDER BY clause
+
+=== VALIDATION BARRIER CHECK ===
+
+Barrier Type                  | Present | Details
+------------------------------|---------|--------
+Input allowlist validation     | NO      | No check against valid columns like ["id", "name", "created_at"]
+Character filtering            | NO      | No removal/escaping of ', ", ;, --, /*, */
+Length restriction             | NO      | No maxLength check
+Regex pattern validation       | NO      | No pattern like ^[a-zA-Z_]+$ 
+Parameterized query (#{})      | NO      | Uses ${} string interpolation
+Stored procedure wrapping      | NO      | Direct SQL construction
+ORM escape handling            | NO      | MyBatis ${} bypasses escaping
+
+=== TAINT FLOW SUMMARY ===
+
+Source:   request.getParameter("orderBy")     [UserController.java:12]
+    ↓      (no validation)
+Propagate: userService.search(keyword, orderBy) [UserController.java:13]
+    ↓      (pass-through)
+Propagate: userMapper.search(keyword, orderBy)  [UserService.java:13]
+    ↓      (interface pass-through)
+Sink:     SQL ORDER BY ${orderBy}             [UserMapper.xml:6]
+
+EXPLOITABILITY: CONFIRMED
+- Complete source-to-sink path exists
+- Zero validation/sanitization barriers
+- Vulnerable string interpolation at sink
+- Direct SQL clause injection possible
+
+=== CONCLUSION ===
+The hypothesis is VALIDATED: SQL injection on orderBy parameter is exploitable.
+No input validation, sanitization, or parameterized query wrapping blocks the taint flow.

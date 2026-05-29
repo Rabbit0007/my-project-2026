@@ -1,0 +1,707 @@
+{
+  "contract": {
+    "forbidden_outputs": [
+      "finding",
+      "report",
+      "contract",
+      "task_completion_decision",
+      "proof_packet"
+    ],
+    "role": "Explore the current intent and return a GraphDelta-style packet. Rabbit Brain judges graph state, hypothesis resolution, Finding, Contract, and Report."
+  },
+  "created_at": "2026-05-29T02:22:53.863152758Z",
+  "graph": {
+    "task": {
+      "id": 83,
+      "workspaceId": 83,
+      "workspace": {
+        "id": 0,
+        "name": "",
+        "description": "",
+        "rootPath": "",
+        "storageRef": "",
+        "createdBy": 0,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+      },
+      "name": "Phase5-ClueDriven-file-path-control",
+      "taskType": "code_audit",
+      "status": "running",
+      "objective": "Clue-driven security exploration of file-path-control fixture",
+      "scopeJson": {
+        "targets": [],
+        "legacyLevel": 1,
+        "excludePaths": [],
+        "includePaths": [],
+        "evidenceProofPolicy": "non_destructive_authorized_scope"
+      },
+      "authorizationJson": {
+        "legacyLevel": 1,
+        "blockedActions": [
+          "destructive_delete",
+          "process_kill",
+          "download_execute",
+          "persistence",
+          "log_cleanup",
+          "resource_destruction",
+          "out_of_scope_access"
+        ],
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowEvidenceProofCommands": true
+      },
+      "safePolicyJson": {
+        "mode": "enterprise",
+        "allowedScopes": [],
+        "networkPolicy": "authorized-scope-only",
+        "authorizationLevel": 1,
+        "allowChainExploration": true,
+        "allowReadOnlyCommands": true,
+        "allowSandboxVerification": true,
+        "allowEvidenceProofCommands": true
+      },
+      "modelConfigId": 5,
+      "workerModelConfigId": null,
+      "isTestTask": true,
+      "archived": false,
+      "progressStage": "探索: 启动授权安全验证",
+      "progressPercent": 32,
+      "startedAt": "2026-05-29T02:22:18.954344Z",
+      "finishedAt": null,
+      "createdBy": 0,
+      "CreatedAt": "2026-05-29T02:22:18.594562Z",
+      "UpdatedAt": "2026-05-29T02:22:18.981722Z"
+    },
+    "intent": {
+      "id": 634,
+      "taskId": 83,
+      "parentNodeId": null,
+      "intentType": "code_trace",
+      "title": "启动授权安全验证",
+      "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+      "constraintsJson": {
+        "policy": "authorized-scope-only",
+        "branch_value": {
+          "reason": "novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+          "scored_at": "2026-05-29T02:22:18.979104172Z",
+          "risk_value": 0.55,
+          "final_score": 0.4301000000000001,
+          "safety_risk": 0.24,
+          "coverage_gain": 0.5,
+          "novelty_score": 0.84,
+          "execution_cost": 0.46,
+          "goal_type_boost": 0,
+          "evidence_quality": 0.6200000000000001,
+          "duplicate_penalty": 0,
+          "negative_fact_refs": null,
+          "graph_expansion_score": 0.51,
+          "capability_unlock_score": 0.48,
+          "matched_environment_refs": null,
+          "environment_alignment_boost": 0
+        },
+        "safety_level": "authorized_non_destructive",
+        "hypothesis_id": 398,
+        "expected_evidence": "first-layer authorized observations and evidence",
+        "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+        "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+        "validation_method": "bootstrap_surface_observation",
+        "evidenceProofPolicy": "non_destructive_authorized_scope",
+        "expected_capability": "source_code_read"
+      },
+      "requiredEvidence": [
+        "baseline_evidence",
+        "scope_statement",
+        "safety_statement"
+      ],
+      "priorityScore": 0.4301000000000001,
+      "status": "running",
+      "claimedBy": "worker:7:glm-5",
+      "claimExpiresAt": "2026-05-29T02:29:18.983839214Z",
+      "createdBy": "system",
+      "createdReason": "initial task bootstrap",
+      "startedAt": "2026-05-29T02:22:18.983839214Z",
+      "finishedAt": null,
+      "CreatedAt": "2026-05-29T02:22:18.620499Z",
+      "UpdatedAt": "2026-05-29T02:22:18.983839214Z"
+    },
+    "keyFacts": [
+      {
+        "id": 13130,
+        "taskId": 83,
+        "nodeType": "intent",
+        "title": "启动授权安全验证",
+        "summary": "Collect first-layer facts and evidence from the authorized task origin.",
+        "contentJson": {
+          "id": 634,
+          "title": "启动授权安全验证",
+          "status": "pending",
+          "taskId": 83,
+          "CreatedAt": "2026-05-29T02:22:18.620499047Z",
+          "UpdatedAt": "2026-05-29T02:22:18.620499089Z",
+          "claimedBy": "",
+          "createdBy": "system",
+          "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+          "startedAt": null,
+          "finishedAt": null,
+          "intentType": "code_trace",
+          "parentNodeId": null,
+          "createdReason": "initial task bootstrap",
+          "priorityScore": 1,
+          "claimExpiresAt": null,
+          "constraintsJson": {
+            "policy": "authorized-scope-only",
+            "safety_level": "authorized_non_destructive",
+            "hypothesis_id": 398,
+            "expected_evidence": "first-layer authorized observations and evidence",
+            "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+            "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+            "validation_method": "bootstrap_surface_observation",
+            "evidenceProofPolicy": "non_destructive_authorized_scope",
+            "expected_capability": "source_code_read"
+          },
+          "requiredEvidence": [
+            "baseline_evidence",
+            "scope_statement",
+            "safety_statement"
+          ]
+        },
+        "dedupKey": "fce4f274344d10ef3313263262c2672b89a992efc1ff64b87e76f7bece7ec369",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "634",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T02:22:18.623612Z",
+        "lastSeenAt": "2026-05-29T02:22:18.623612Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T02:22:18.6239Z",
+        "UpdatedAt": "2026-05-29T02:22:18.6239Z"
+      },
+      {
+        "id": 13127,
+        "taskId": 83,
+        "nodeType": "goal",
+        "title": "Delivery-ready evidence report",
+        "summary": "Clue-driven security exploration of file-path-control fixture",
+        "contentJson": {
+          "objective": "Clue-driven security exploration of file-path-control fixture"
+        },
+        "dedupKey": "b8ed7251c5c719e3c6cd3c1136e5eefb0b9860b71bcca7c9cac0ab8cd1dd5a87",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T02:22:18.60469Z",
+        "lastSeenAt": "2026-05-29T02:22:18.60469Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T02:22:18.60503Z",
+        "UpdatedAt": "2026-05-29T02:22:18.60503Z"
+      },
+      {
+        "id": 13126,
+        "taskId": 83,
+        "nodeType": "origin",
+        "title": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "contentJson": {
+          "targets": [],
+          "legacyLevel": 1,
+          "excludePaths": [],
+          "includePaths": [],
+          "evidenceProofPolicy": "non_destructive_authorized_scope"
+        },
+        "dedupKey": "5648c890865e02e7b0046ddd1e6d6a8641eed1debf2520089f4b65dc88f05c71",
+        "importanceScore": 1,
+        "status": "active",
+        "sourceType": "human",
+        "sourceId": "task-create",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T02:22:18.598667Z",
+        "lastSeenAt": "2026-05-29T02:22:18.598667Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T02:22:18.599891Z",
+        "UpdatedAt": "2026-05-29T02:22:18.599891Z"
+      },
+      {
+        "id": 13128,
+        "taskId": 83,
+        "nodeType": "coverage_goal",
+        "title": "Hypothesis-driven coverage objective for code_audit",
+        "summary": "Clue-driven security exploration of file-path-control fixture",
+        "contentJson": {
+          "id": 23,
+          "mode": "code_audit",
+          "name": "Hypothesis-driven coverage objective for code_audit",
+          "taskId": 83,
+          "goalType": "coverage",
+          "createdAt": "2026-05-29T02:22:18.606703214Z",
+          "updatedAt": "2026-05-29T02:22:18.606703214Z",
+          "description": "Hypothesis-driven exploration profile generated for backward-compatible task bootstrap.",
+          "rawUserGoal": "Clue-driven security exploration of file-path-control fixture",
+          "normalizedGoal": "Clue-driven security exploration of file-path-control fixture",
+          "completionPolicy": {
+            "stagnation_rounds": 3,
+            "coverage_threshold": 0.8,
+            "max_pending_hypotheses": 80,
+            "max_pending_validation_intents": 40,
+            "max_generated_intents_per_round": 6
+          }
+        },
+        "dedupKey": "bee9a385763909fcbdc767600f31509cab9f09bd0ad0a50519a53b7ef4deb339",
+        "importanceScore": 0.94,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "goal-profile-23",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T02:22:18.608371Z",
+        "lastSeenAt": "2026-05-29T02:22:18.608371Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T02:22:18.608578Z",
+        "UpdatedAt": "2026-05-29T02:22:18.608578Z"
+      },
+      {
+        "id": 13131,
+        "taskId": 83,
+        "nodeType": "fact",
+        "title": "Source archive extracted safely",
+        "summary": "2 files extracted into isolated workspace; 0 entries skipped.",
+        "contentJson": {
+          "files": [
+            "src/main/java/demo/FileService.java",
+            "src/main/java/demo/FileController.java"
+          ],
+          "skipped": [],
+          "totalBytes": 817,
+          "extractedDir": "/app/workspace/task-83/input/extracted"
+        },
+        "dedupKey": "de28aebf97944664fb3ac1c9775795f808bbfc0856547cdef8c099906dc0f8ab",
+        "importanceScore": 0.9,
+        "status": "active",
+        "sourceType": "system",
+        "sourceId": "workspace",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T02:22:18.792257Z",
+        "lastSeenAt": "2026-05-29T02:22:18.792257Z",
+        "seenCount": 1,
+        "CreatedAt": "2026-05-29T02:22:18.79311Z",
+        "UpdatedAt": "2026-05-29T02:22:18.79311Z"
+      },
+      {
+        "id": 13129,
+        "taskId": 83,
+        "nodeType": "hypothesis",
+        "title": "Authorized task surface can yield security-relevant observations",
+        "summary": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+        "contentJson": {
+          "id": 398,
+          "title": "Authorized task surface can yield security-relevant observations",
+          "status": "pending",
+          "taskId": 83,
+          "createdAt": "2026-05-29T02:22:18.614431214Z",
+          "updatedAt": "2026-05-29T02:22:18.614431214Z",
+          "description": "Validate the initial authorized surface to collect evidence-backed observations that can form more precise security hypotheses.",
+          "validatedAt": null,
+          "targetEntity": "authorized task origin",
+          "hypothesisType": "information_disclosure_candidate",
+          "confidenceState": "plausible",
+          "negativeFactRefs": [],
+          "expectedCapability": "source_code_read",
+          "unverifiedRiskRefs": [],
+          "validationIntentRefs": [],
+          "sourceObservationRefs": [
+            "node:13126"
+          ],
+          "supportingEvidenceRefs": []
+        },
+        "dedupKey": "3cefcc858d200e3bac7f5882fa37840fbf6a840ca61824cfca27daac4fddf9c2",
+        "importanceScore": 0.78,
+        "status": "active",
+        "sourceType": "hypothesis-lifecycle",
+        "sourceId": "398",
+        "evidenceRefs": [],
+        "firstSeenAt": "2026-05-29T02:22:18.615955Z",
+        "lastSeenAt": "2026-05-29T02:22:18.62502Z",
+        "seenCount": 2,
+        "CreatedAt": "2026-05-29T02:22:18.616215Z",
+        "UpdatedAt": "2026-05-29T02:22:18.62525Z"
+      }
+    ],
+    "recentEvidence": [],
+    "authorizationView": "Non-destructive evidence proof policy, network policy authorized-scope-only",
+    "recommendedNext": "Execute current intent: Collect first-layer facts and evidence from the authorized task origin.",
+    "graphSummary": {
+      "task_id": 83,
+      "task_type": "code_audit",
+      "goal": "Clue-driven security exploration of file-path-control fixture",
+      "goal_state": {
+        "task_id": 83,
+        "type": "scope_bounded_security_discovery",
+        "goal_type": "scope_bounded_security_discovery",
+        "description": "Clue-driven security exploration of file-path-control fixture",
+        "success_criteria": [
+          "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+          "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+          "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+        ],
+        "status": "active",
+        "verified_capability_count": 0,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "coverage_summary": {
+          "total_surfaces": 0,
+          "explored_surfaces": 0,
+          "resolved_surfaces": 0,
+          "resolved_verified": 0,
+          "resolved_refuted": 0,
+          "blocked_surfaces": 0,
+          "inconclusive_surfaces": 0,
+          "out_of_scope": 0
+        },
+        "stop_reason": "",
+        "should_continue": true
+      },
+      "coverage_state": {
+        "scope_summary": {
+          "targets": null,
+          "entrypoint_count": 0,
+          "surface_count": 0,
+          "auth_contexts": [],
+          "excluded_paths": null
+        },
+        "surface_coverage": null,
+        "unresolved_high_priority_surfaces": 0,
+        "open_high_priority_intents": 0,
+        "verified_capability_count": 0,
+        "refuted_path_count": 0,
+        "blocked_path_count": 0,
+        "inconclusive_path_count": 0,
+        "recent_progress": {
+          "new_facts_last_n": 6,
+          "new_evidence_last_n": 0,
+          "new_capabilities_last_n": 0,
+          "new_surfaces_last_n": 0,
+          "new_clue_facts_last_n": 0
+        }
+      },
+      "confirmed_facts": [
+        {
+          "id": 13126,
+          "kind": "origin",
+          "subject": "Authorized task origin",
+          "summary": "Task created from user-provided authorized scope.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13127,
+          "kind": "goal",
+          "subject": "Delivery-ready evidence report",
+          "summary": "Clue-driven security exploration of file-path-control fixture",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        },
+        {
+          "id": 13131,
+          "kind": "fact",
+          "subject": "Source archive extracted safely",
+          "summary": "2 files extracted into isolated workspace; 0 entries skipped.",
+          "evidence_refs": [],
+          "confidence_source": "graph_observation"
+        }
+      ],
+      "open_intents": null,
+      "recent_evidence": null,
+      "structured_negative_facts": null,
+      "capability_candidates": null,
+      "verified_capabilities": null,
+      "unknowns": [
+        "No open intent currently explains the next evidence-producing step.",
+        "No recent evidence is available to support fact or capability promotion."
+      ],
+      "hints": null,
+      "budget_state": {
+        "max_iterations": 0,
+        "current_iteration": 0,
+        "remaining_iterations": 0
+      },
+      "surface_facts": null,
+      "fingerprints": null,
+      "code_facts": [
+        "Source archive extracted safely: 2 files extracted into isolated workspace; 0 entries skipped."
+      ],
+      "business_facts": null,
+      "secret_facts": null,
+      "capabilities": null,
+      "pending_intents": null,
+      "negative_facts": null,
+      "environment_model": "",
+      "evidence_count": 0,
+      "iteration_budget": 0,
+      "iterations_current": 0
+    }
+  },
+  "graph_summary": {
+    "task_id": 83,
+    "task_type": "code_audit",
+    "goal": "Clue-driven security exploration of file-path-control fixture",
+    "goal_state": {
+      "task_id": 83,
+      "type": "scope_bounded_security_discovery",
+      "goal_type": "scope_bounded_security_discovery",
+      "description": "Clue-driven security exploration of file-path-control fixture",
+      "success_criteria": [
+        "High-priority attack surfaces are verified, refuted, blocked, out of scope, or marked inconclusive.",
+        "Evidence-backed VerifiedCapability items are output artifacts, not global stop conditions.",
+        "Exploration may stop only on coverage sufficiency, budget exhaustion, blocked scope, or plateau."
+      ],
+      "status": "active",
+      "verified_capability_count": 0,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "coverage_summary": {
+        "total_surfaces": 0,
+        "explored_surfaces": 0,
+        "resolved_surfaces": 0,
+        "resolved_verified": 0,
+        "resolved_refuted": 0,
+        "blocked_surfaces": 0,
+        "inconclusive_surfaces": 0,
+        "out_of_scope": 0
+      },
+      "stop_reason": "",
+      "should_continue": true
+    },
+    "coverage_state": {
+      "scope_summary": {
+        "targets": null,
+        "entrypoint_count": 0,
+        "surface_count": 0,
+        "auth_contexts": [],
+        "excluded_paths": null
+      },
+      "surface_coverage": null,
+      "unresolved_high_priority_surfaces": 0,
+      "open_high_priority_intents": 0,
+      "verified_capability_count": 0,
+      "refuted_path_count": 0,
+      "blocked_path_count": 0,
+      "inconclusive_path_count": 0,
+      "recent_progress": {
+        "new_facts_last_n": 6,
+        "new_evidence_last_n": 0,
+        "new_capabilities_last_n": 0,
+        "new_surfaces_last_n": 0,
+        "new_clue_facts_last_n": 0
+      }
+    },
+    "confirmed_facts": [
+      {
+        "id": 13126,
+        "kind": "origin",
+        "subject": "Authorized task origin",
+        "summary": "Task created from user-provided authorized scope.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13127,
+        "kind": "goal",
+        "subject": "Delivery-ready evidence report",
+        "summary": "Clue-driven security exploration of file-path-control fixture",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      },
+      {
+        "id": 13131,
+        "kind": "fact",
+        "subject": "Source archive extracted safely",
+        "summary": "2 files extracted into isolated workspace; 0 entries skipped.",
+        "evidence_refs": [],
+        "confidence_source": "graph_observation"
+      }
+    ],
+    "open_intents": null,
+    "recent_evidence": null,
+    "structured_negative_facts": null,
+    "capability_candidates": null,
+    "verified_capabilities": null,
+    "unknowns": [
+      "No open intent currently explains the next evidence-producing step.",
+      "No recent evidence is available to support fact or capability promotion."
+    ],
+    "hints": null,
+    "budget_state": {
+      "max_iterations": 0,
+      "current_iteration": 0,
+      "remaining_iterations": 0
+    },
+    "surface_facts": null,
+    "fingerprints": null,
+    "code_facts": [
+      "Source archive extracted safely: 2 files extracted into isolated workspace; 0 entries skipped."
+    ],
+    "business_facts": null,
+    "secret_facts": null,
+    "capabilities": null,
+    "pending_intents": null,
+    "negative_facts": null,
+    "environment_model": "",
+    "evidence_count": 0,
+    "iteration_budget": 0,
+    "iterations_current": 0
+  },
+  "intent": {
+    "id": 634,
+    "taskId": 83,
+    "parentNodeId": null,
+    "intentType": "code_trace",
+    "title": "启动授权安全验证",
+    "objective": "Collect first-layer facts and evidence from the authorized task origin.",
+    "constraintsJson": {
+      "policy": "authorized-scope-only",
+      "branch_value": {
+        "reason": "novel branch, Coverage gain is treated as a secondary factor behind capability and graph expansion.",
+        "scored_at": "2026-05-29T02:22:18.979104172Z",
+        "risk_value": 0.55,
+        "final_score": 0.4301000000000001,
+        "safety_risk": 0.24,
+        "coverage_gain": 0.5,
+        "novelty_score": 0.84,
+        "execution_cost": 0.46,
+        "goal_type_boost": 0,
+        "evidence_quality": 0.6200000000000001,
+        "duplicate_penalty": 0,
+        "negative_fact_refs": null,
+        "graph_expansion_score": 0.51,
+        "capability_unlock_score": 0.48,
+        "matched_environment_refs": null,
+        "environment_alignment_boost": 0
+      },
+      "safety_level": "authorized_non_destructive",
+      "hypothesis_id": 398,
+      "expected_evidence": "first-layer authorized observations and evidence",
+      "failure_condition": "Runner cannot collect useful observations from the authorized surface.",
+      "success_condition": "Runner produces evidence that expands the graph from the task origin.",
+      "validation_method": "bootstrap_surface_observation",
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "expected_capability": "source_code_read"
+    },
+    "requiredEvidence": [
+      "baseline_evidence",
+      "scope_statement",
+      "safety_statement"
+    ],
+    "priorityScore": 0.4301000000000001,
+    "status": "running",
+    "claimedBy": "worker:7:glm-5",
+    "claimExpiresAt": "2026-05-29T02:29:18.983839214Z",
+    "createdBy": "system",
+    "createdReason": "initial task bootstrap",
+    "startedAt": "2026-05-29T02:22:18.983839214Z",
+    "finishedAt": null,
+    "CreatedAt": "2026-05-29T02:22:18.620499Z",
+    "UpdatedAt": "2026-05-29T02:22:18.983839214Z"
+  },
+  "phase_contract": {
+    "brain_responsibilities": [
+      "Read graph state and decide which Hypothesis or Intent should exist next.",
+      "Score and budget branch expansion before execution.",
+      "Resolve Hypothesis state from evidence, blocked runs, NegativeFacts, and UnverifiedRisks.",
+      "Promote evidence-backed validated capabilities into delivery artifacts when appropriate."
+    ],
+    "worker_responsibilities": [
+      "Claim and execute exactly one current Intent.",
+      "Use controlled tools to observe or validate only within authorized scope.",
+      "Return incremental facts, evidence, NegativeFacts, UnverifiedRisks, capability candidates, or follow-up intent suggestions.",
+      "Stop at fact production; Rabbit Brain performs graph judgment."
+    ],
+    "tool_responsibilities": [
+      "Perform bounded observation or validation actions.",
+      "Respect SafePolicy, scope, timeout, and workspace boundaries.",
+      "Produce raw observations suitable for Evidence normalization."
+    ],
+    "delivery_responsibilities": [
+      "Generate Findings only from evidence-backed validated paths.",
+      "Use Contract as report quality gate, not as exploration planner.",
+      "Render reports after graph exploration produces sufficient facts."
+    ],
+    "forbidden_worker_decisions": [
+      "Do not decide that the goal is complete.",
+      "Do not mark a Hypothesis as validated or refuted.",
+      "Do not create or confirm Findings.",
+      "Do not run Contract checks or report formatting.",
+      "Do not perform external CVE, PoC, ProofPacket, or repository lookup."
+    ]
+  },
+  "runtime": {
+    "container": "task-scoped Kali-capable worker container",
+    "driver": "pi_container_kali",
+    "output_policy": "Return structured facts and evidence only; Rabbit Brain judges graph state and delivery artifacts.",
+    "timeout": {
+      "bash_command_max_seconds": 60
+    },
+    "tool_policy": "Pi may use local bash and installed Kali tools inside the task worker container.",
+    "tools": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "grep",
+      "find",
+      "ls"
+    ],
+    "turn_policy": "Bounded worker turn: execute the current intent, prefer one compact script for repeated checks, use at most 6 tool calls, then return compact JSON facts/evidence."
+  },
+  "safe_policy": {
+    "authorizationLevel": 1,
+    "allowedScopes": [],
+    "allowChainExploration": true,
+    "allowReadOnlyCommands": true,
+    "allowEvidenceProofCommands": true,
+    "allowSandboxVerification": true,
+    "networkPolicy": "authorized-scope-only",
+    "mode": "enterprise"
+  },
+  "task": {
+    "authorization": {
+      "legacyLevel": 1,
+      "blockedActions": [
+        "destructive_delete",
+        "process_kill",
+        "download_execute",
+        "persistence",
+        "log_cleanup",
+        "resource_destruction",
+        "out_of_scope_access"
+      ],
+      "evidenceProofPolicy": "non_destructive_authorized_scope",
+      "allowChainExploration": true,
+      "allowReadOnlyCommands": true,
+      "allowEvidenceProofCommands": true
+    },
+    "id": 83,
+    "objective": "Clue-driven security exploration of file-path-control fixture",
+    "scope": {
+      "targets": [],
+      "legacyLevel": 1,
+      "excludePaths": [],
+      "includePaths": [],
+      "evidenceProofPolicy": "non_destructive_authorized_scope"
+    },
+    "type": "code_audit"
+  },
+  "worker": {
+    "current_load": 0,
+    "driver": "pi_container_kali",
+    "id": "worker:7:glm-5",
+    "max_running": 2,
+    "model": "glm-5",
+    "model_config": 7,
+    "ownership_note": "This worker owns only the current intent. Other workers may explore other intents, but not this clue.",
+    "task_types": [
+      "all"
+    ]
+  }
+}

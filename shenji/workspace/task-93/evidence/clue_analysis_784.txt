@@ -1,0 +1,63 @@
+=== Structural Clue Analysis for Intent 784 ===
+Task: code_audit, TaskId: 93
+Hypothesis: Collect structural clues from extracted source
+Timestamp: 2026-05-29T05:50:00Z
+
+=== FILES EXAMINED ===
+1. /workspace/input/extracted/src/main/java/demo/AdminExportController.java
+2. /workspace/input/extracted/src/main/java/demo/AdminExportService.java
+3. /workspace/input/extracted/src/main/java/demo/UserController.java
+4. /workspace/input/extracted/src/main/java/demo/UserService.java
+5. /workspace/input/extracted/src/main/java/demo/UserMapper.java
+6. /workspace/input/extracted/src/main/resources/mapper/UserMapper.xml
+
+=== ENTRY POINTS IDENTIFIED ===
+1. AdminExportController.export(HttpServletRequest)
+   - Parameters: format, includeInactive
+   - Endpoint type: implied controller (no annotations in simplified code)
+   - Data flow: request -> AdminExportService.exportUsers()
+
+2. UserController.search(HttpServletRequest)
+   - Parameters: keyword, orderBy
+   - Endpoint type: implied controller (no annotations in simplified code)
+   - Data flow: request -> UserService.search() -> UserMapper.search()
+
+=== SENSITIVE FUNCTION CALLS IDENTIFIED ===
+1. MyBatis SQL query in UserMapper.xml:
+   - SELECT uses #{keyword} (safe parameterized)
+   - ORDER BY uses ${orderBy} (UNSAFE string interpolation!)
+   
+2. HttpServletRequest.getParameter() calls:
+   - request.getParameter("orderBy") - user-controlled input reaching SQL
+   - request.getParameter("keyword") - user-controlled input (parameterized safely)
+   - request.getParameter("format") - user-controlled input
+   - request.getParameter("includeInactive") - user-controlled input
+
+=== DATA FLOW ORIGINS ===
+orderBy parameter flow:
+  HttpServletRequest.getParameter("orderBy")
+  -> UserController.search() as local variable
+  -> UserService.search(keyword, orderBy)
+  -> UserMapper.search(keyword, orderBy)
+  -> MyBatis XML: ORDER BY ${orderBy}
+  
+  VULNERABILITY: SQL injection via ${orderBy} string interpolation!
+
+=== SECURITY FINDINGS ===
+1. SQL Injection Candidate (HIGH PRIORITY):
+   - Location: UserMapper.xml, line 6
+   - Vulnerable construct: ${orderBy}
+   - Entry point: UserController.search()
+   - User-controlled parameter: orderBy
+   - Attack vector: orderBy=if(1=1,id,name)-- 
+   - MyBatis $ syntax performs string interpolation, NOT parameterization
+
+2. Format Parameter (LOW PRIORITY):
+   - Location: AdminExportService.exportUsers()
+   - Validated against whitelist: "csv" or "json" only
+   - Not a security risk
+
+=== CONFIRMED CLUES ===
+- Entry point with user-controlled orderBy parameter
+- MyBatis ${} interpolation (unsafe) in SQL ORDER BY clause
+- Direct data flow from HTTP request to SQL clause without sanitization

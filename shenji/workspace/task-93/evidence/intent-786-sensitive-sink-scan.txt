@@ -1,0 +1,69 @@
+SENSITIVE SINK CORRELATION SCAN RESULTS
+========================================
+Intent: Validate hypothesis: Correlate sensitive sink calls in extracted sources
+Task: 93
+Timestamp: 2026-05-29T06:01:51Z
+
+SCANNED FILES (6 total):
+1. src/main/java/demo/AdminExportController.java (10 lines)
+2. src/main/java/demo/AdminExportService.java (9 lines)
+3. src/main/java/demo/UserController.java (16 lines)
+4. src/main/java/demo/UserMapper.java (7 lines)
+5. src/main/java/demo/UserService.java (12 lines)
+6. src/main/resources/mapper/UserMapper.xml (9 lines)
+
+SENSITIVE SINK PATTERNS SCANNED:
+- runtime.exec
+- ProcessBuilder
+- Reflection APIs (Class.forName, getMethod, invoke)
+- File I/O (FileInputStream, FileOutputStream, FileReader, FileWriter, Files.*)
+- Database query construction (createQuery, prepareStatement, executeQuery)
+- MyBatis string substitution (${...})
+
+========================================
+FINDINGS - SECURITY_EFFECT_OR_IMPACT CLUES
+========================================
+
+[SQL_INJECTION_CANDIDATE]
+File: src/main/resources/mapper/UserMapper.xml
+Line: 7
+Code: ORDER BY ${orderBy}
+Clue Type: security_effect_or_impact
+Sink Type: sql_injection
+Severity: HIGH
+Description: MyBatis string substitution (${orderBy}) directly interpolates user-controlled value into SQL ORDER BY clause without escaping. This allows SQL injection via the orderBy parameter.
+Data Flow: UserController.search() -> UserService.search() -> UserMapper.search() -> MyBatis query with ${orderBy}
+Source: orderBy parameter from HttpServletRequest.getParameter("orderBy")
+
+========================================
+NEGATIVE FINDINGS - SENSITIVE SINKS NOT FOUND
+========================================
+
+[NO_COMMAND_INJECTION]
+- No Runtime.exec() calls found
+- No ProcessBuilder usage found
+- No JNI calls found
+
+[NO_REFLECTION_API]
+- No Class.forName() found
+- No getMethod()/invoke() found
+- No reflection-based instantiation found
+
+[NO_FILE_IO]
+- No FileInputStream/FileOutputStream found
+- No FileReader/FileWriter found
+- No NIO Files.* operations found
+
+[NO_DIRECT_SQL_CONSTRUCTION]
+- No string concatenation for SQL found in Java code
+- SQL is defined in MyBatis XML mapper
+
+========================================
+SUMMARY
+========================================
+Total files scanned: 6
+Sensitive sinks found: 1
+- SQL injection via MyBatis ${orderBy} string substitution
+
+Security-relevant code locations identified for further exploration:
+1. UserMapper.xml:7 - SQL injection candidate (orderBy parameter)

@@ -1,0 +1,39 @@
+=== Auth Boundary Construct Scan Results ===
+Scan Date: 2026-05-29
+Target: /workspace/input/extracted
+
+--- Files Scanned ---
+1. src/main/java/demo/UserService.java - No security annotations
+2. src/main/java/demo/AdminExportController.java - No security annotations  
+3. src/main/java/demo/UserMapper.java - Interface only, no annotations
+4. src/main/java/demo/AdminExportService.java - No security annotations
+5. src/main/java/demo/UserController.java - No security annotations
+6. src/main/resources/mapper/UserMapper.xml - MyBatis mapper config
+
+--- Security Annotations Found ---
+@RolesAllowed: NOT FOUND
+@PermitsAll: NOT FOUND
+@Secure: NOT FOUND
+@Secured: NOT FOUND
+@PreAuthorize: NOT FOUND
+@PostAuthorize: NOT FOUND
+@DenyAll: NOT FOUND
+
+--- Filter Classes Found ---
+None detected in scanned files
+
+--- Interceptor Configurations Found ---
+None detected in scanned files
+
+--- Authentication Logic Found ---
+No explicit authentication/authorization logic detected in service or controller classes.
+Controllers accept HttpServletRequest parameters directly without visible auth checks.
+
+--- Additional Observations ---
+1. AdminExportController exposes export functionality without visible authorization
+2. UserController exposes user search without visible authorization
+3. UserMapper.xml uses ${orderBy} string interpolation - potential SQL injection vector
+
+--- Conclusion ---
+NO AUTH BOUNDARY CONSTRUCTS DETECTED in extracted source files.
+All public endpoints appear to lack declarative security annotations.

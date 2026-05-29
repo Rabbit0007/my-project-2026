@@ -1,0 +1,38 @@
+HTTP Handler Entrypoints Discovery - Intent 758
+Target: 6 extracted source files in /workspace/input/extracted
+Runtime Environment: Java (plausible)
+
+DISCOVERED HANDLERS:
+
+1. AdminExportController - Plain servlet-style controller
+   File: /workspace/input/extracted/src/main/java/demo/AdminExportController.java
+   Lines: 1-13 (class definition)
+   Handler method: export(HttpServletRequest request) at line 9
+   HTTP request parameters: 
+     - format (line 10): request.getParameter("format")
+     - includeInactive (line 10): request.getParameter("includeInactive")
+   Import: javax.servlet.http.HttpServletRequest (Jakarta EE / Servlet API)
+   Note: No Spring @Controller or @RequestMapping annotations; plain servlet pattern
+
+2. UserController - Plain servlet-style controller  
+   File: /workspace/input/extracted/src/main/java/demo/UserController.java
+   Lines: 1-17 (class definition)
+   Handler method: search(HttpServletRequest request) at line 12
+   HTTP request parameters:
+     - keyword (line 13): request.getParameter("keyword")
+     - orderBy (line 13): request.getParameter("orderBy")
+   Import: jakarta.servlet.http.HttpServletRequest (Jakarta EE 9+ / Servlet API)
+   Note: No Spring @Controller or @RequestMapping annotations; plain servlet pattern
+
+NON-HANDLER FILES:
+
+3. UserService.java (lines 1-13) - Service layer, not HTTP handler
+4. AdminExportService.java (lines 1-11) - Service layer, not HTTP handler
+5. UserMapper.java (lines 1-8) - MyBatis mapper interface, not HTTP handler
+6. UserMapper.xml - MyBatis XML mapper, not HTTP handler
+
+SUMMARY:
+- Found 2 HTTP handler entrypoint candidates
+- Both use HttpServletRequest parameter extraction pattern
+- Neither uses Spring Framework annotations
+- Environment: Java Servlet API (javax.servlet and jakarta.servlet imports)

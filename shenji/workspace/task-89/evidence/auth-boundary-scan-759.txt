@@ -1,0 +1,41 @@
+Auth boundary scan for task-89 intent-759
+==========================================
+Scan target: /workspace/input/extracted (6 source files)
+
+Files analyzed:
+1. src/main/java/demo/UserController.java - Servlet-style HTTP handler, NO AUTH
+2. src/main/java/demo/AdminExportController.java - Servlet-style HTTP handler, NO AUTH
+3. src/main/java/demo/UserService.java - Service layer, NO AUTH
+4. src/main/java/demo/AdminExportService.java - Service layer, NO AUTH
+5. src/main/java/demo/UserMapper.java - MyBatis mapper interface, N/A
+6. src/main/resources/mapper/UserMapper.xml - MyBatis XML mapper, N/A
+
+Authentication/Authorization patterns searched:
+- Java annotations: @PreAuthorize, @PostAuthorize, @Secured, @RolesAllowed, @RequiresAuthentication, @Authenticated
+- Spring Security: @EnableWebSecurity, WebSecurityConfigurerAdapter, SecurityFilterChain
+- Servlet filters: javax.servlet.Filter implementations for auth
+- Session checks: request.getSession().getAttribute("user"), session.getAttribute for auth tokens
+- JWT patterns: JWT validation, token parsing
+- Custom middleware: Any class matching *Auth* or *Security*
+
+FINDINGS:
+==========
+
+[NO AUTH BOUNDARY] UserController.search(HttpServletRequest) at UserController.java:12
+  - No authentication decorator on method or class
+  - No authorization check before calling userService.search()
+  - Accepts 'keyword' and 'orderBy' parameters from untrusted HTTP request
+
+[NO AUTH BOUNDARY] AdminExportController.export(HttpServletRequest) at AdminExportController.java:9
+  - No authentication decorator on method or class
+  - No authorization check before calling service.exportUsers()
+  - Endpoint name suggests admin-level operation (export users) with NO auth protection
+  - Accepts 'format' and 'includeInactive' parameters from untrusted HTTP request
+
+SUMMARY:
+- Total HTTP entrypoints found: 2
+- Entry points with auth boundaries: 0
+- Entry points without auth boundaries: 2 (100% unauthenticated)
+- Admin/sensitive endpoints without auth: 1 (AdminExportController.export)
+
+This indicates a missing authentication boundary vulnerability - both controllers accept requests without any authentication/authorization validation.

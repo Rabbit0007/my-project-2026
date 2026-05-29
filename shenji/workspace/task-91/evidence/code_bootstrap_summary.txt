@@ -1,0 +1,30 @@
+=== Code Audit Bootstrap Summary ===
+Task: 91 - Clue-driven exploration
+Workspace: /workspace/input/extracted
+
+=== Files Analyzed ===
+1. src/main/java/demo/UserController.java - HTTP controller, passes request params to service
+2. src/main/java/demo/UserService.java - Service layer, forwards params to mapper
+3. src/main/java/demo/UserMapper.java - MyBatis mapper interface
+4. src/main/java/demo/AdminExportController.java - Admin export endpoint
+5. src/main/java/demo/AdminExportService.java - Export logic with format validation
+6. src/main/resources/mapper/UserMapper.xml - MyBatis XML mapper with SQL query
+
+=== Key Observations ===
+[SECURITY-CANDIDATE] SQL Injection via ORDER BY clause
+- File: UserMapper.xml line 7
+- Pattern: ORDER BY ${orderBy}
+- Vulnerability: MyBatis ${...} syntax performs string substitution (not prepared statement)
+- Call chain: UserController.search() -> UserService.search() -> UserMapper.search()
+- HTTP parameter "orderBy" is directly interpolated into SQL without sanitization
+
+[SAFE] Keyword parameter uses prepared statement
+- File: UserMapper.xml line 6
+- Pattern: #{keyword} - safe MyBatis parameter binding
+
+[INFO] AdminExportController has format validation
+- Only "csv" and "json" formats are accepted
+
+=== Endpoints Identified ===
+- /search - UserController.search() - SQL injection candidate via orderBy parameter
+- /export - AdminExportController.export() - appears safe with format validation

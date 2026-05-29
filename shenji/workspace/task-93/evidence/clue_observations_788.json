@@ -1,0 +1,188 @@
+{
+  "intent_id": 788,
+  "task_id": 93,
+  "summary": "Produced 9 structured clue observations with 4 distinct clue roles from 6 extracted source files",
+  "clue_observations": [
+    {
+      "clue_role": "origin_or_entry",
+      "clue_type": "controller_method",
+      "source_location": {
+        "file": "src/main/java/demo/UserController.java",
+        "line_start": 12,
+        "line_end": 15,
+        "method": "search",
+        "class": "UserController"
+      },
+      "description": "Public controller method receiving HttpServletRequest - entry point for user input",
+      "signature": "public List<UserRecord> search(HttpServletRequest request)",
+      "evidence_type": "code_slice",
+      "risk_level": "low",
+      "propagation_chain": ["UserController.search", "UserService.search", "UserMapper.search"]
+    },
+    {
+      "clue_role": "trigger_or_control",
+      "clue_type": "request_parameter",
+      "source_location": {
+        "file": "src/main/java/demo/UserController.java",
+        "line_start": 13,
+        "line_end": 13,
+        "method": "search",
+        "class": "UserController"
+      },
+      "description": "User-controlled parameter 'keyword' received from HttpServletRequest",
+      "parameter_name": "keyword",
+      "source_api": "HttpServletRequest.getParameter",
+      "evidence_type": "code_slice",
+      "risk_level": "medium",
+      "flows_to": "UserService.search.keyword"
+    },
+    {
+      "clue_role": "trigger_or_control",
+      "clue_type": "request_parameter",
+      "source_location": {
+        "file": "src/main/java/demo/UserController.java",
+        "line_start": 14,
+        "line_end": 14,
+        "method": "search",
+        "class": "UserController"
+      },
+      "description": "User-controlled parameter 'orderBy' received from HttpServletRequest - flows to SQL ORDER BY",
+      "parameter_name": "orderBy",
+      "source_api": "HttpServletRequest.getParameter",
+      "evidence_type": "code_slice",
+      "risk_level": "high",
+      "flows_to": "UserService.search.orderBy",
+      "sink_note": "Used in MyBatis ${orderBy} SQL interpolation"
+    },
+    {
+      "clue_role": "propagator",
+      "clue_type": "method_call",
+      "source_location": {
+        "file": "src/main/java/demo/UserController.java",
+        "line_start": 15,
+        "line_end": 15,
+        "method": "search",
+        "class": "UserController"
+      },
+      "description": "Parameter propagation: keyword and orderBy passed to UserService.search()",
+      "propagates": ["keyword", "orderBy"],
+      "target_method": "UserService.search",
+      "evidence_type": "code_slice",
+      "risk_level": "medium"
+    },
+    {
+      "clue_role": "propagator",
+      "clue_type": "method_call",
+      "source_location": {
+        "file": "src/main/java/demo/UserService.java",
+        "line_start": 13,
+        "line_end": 13,
+        "method": "search",
+        "class": "UserService"
+      },
+      "description": "Parameter propagation: keyword and orderBy passed to UserMapper.search()",
+      "propagates": ["keyword", "orderBy"],
+      "target_method": "UserMapper.search",
+      "evidence_type": "code_slice",
+      "risk_level": "medium"
+    },
+    {
+      "clue_role": "security_effect_or_impact",
+      "clue_type": "sql_injection_sink",
+      "source_location": {
+        "file": "src/main/resources/mapper/UserMapper.xml",
+        "line_start": 8,
+        "line_end": 8,
+        "statement_id": "search",
+        "namespace": "demo.UserMapper"
+      },
+      "description": "SQL injection vulnerable sink: ${orderBy} uses string interpolation in ORDER BY clause",
+      "vulnerable_expression": "${orderBy}",
+      "sink_type": "mybatis_string_interpolation",
+      "sink_category": "sql_order_by_injection",
+      "evidence_type": "code_slice",
+      "risk_level": "critical",
+      "attack_vector": "orderBy parameter from UserController.search flows unmodified to this sink",
+      "remediation": "Use #{orderBy} parameterized binding or whitelist validation for ORDER BY columns"
+    },
+    {
+      "clue_role": "security_effect_or_impact",
+      "clue_type": "sql_parameterized",
+      "source_location": {
+        "file": "src/main/resources/mapper/UserMapper.xml",
+        "line_start": 7,
+        "line_end": 7,
+        "statement_id": "search",
+        "namespace": "demo.UserMapper"
+      },
+      "description": "Safe parameterized query: #{keyword} uses MyBatis parameter binding",
+      "safe_expression": "#{keyword}",
+      "sink_type": "mybatis_parameter_binding",
+      "evidence_type": "code_slice",
+      "risk_level": "low"
+    },
+    {
+      "clue_role": "origin_or_entry",
+      "clue_type": "controller_method",
+      "source_location": {
+        "file": "src/main/java/demo/AdminExportController.java",
+        "line_start": 10,
+        "line_end": 13,
+        "method": "export",
+        "class": "AdminExportController"
+      },
+      "description": "Public controller method receiving HttpServletRequest - entry point for user input",
+      "signature": "public String export(HttpServletRequest request)",
+      "evidence_type": "code_slice",
+      "risk_level": "low",
+      "propagation_chain": ["AdminExportController.export", "AdminExportService.exportUsers"]
+    },
+    {
+      "clue_role": "trigger_or_control",
+      "clue_type": "request_parameter",
+      "source_location": {
+        "file": "src/main/java/demo/AdminExportController.java",
+        "line_start": 11,
+        "line_end": 11,
+        "method": "export",
+        "class": "AdminExportController"
+      },
+      "description": "User-controlled parameter 'format' received from HttpServletRequest",
+      "parameter_name": "format",
+      "source_api": "HttpServletRequest.getParameter",
+      "evidence_type": "code_slice",
+      "risk_level": "medium",
+      "flows_to": "AdminExportService.exportUsers.format"
+    }
+  ],
+  "clue_roles_found": ["origin_or_entry", "trigger_or_control", "propagator", "security_effect_or_impact"],
+  "distinct_roles_count": 4,
+  "critical_findings": [
+    {
+      "clue_role": "security_effect_or_impact",
+      "clue_type": "sql_injection_sink",
+      "source_location": {
+        "file": "src/main/resources/mapper/UserMapper.xml",
+        "line_start": 8,
+        "line_end": 8,
+        "statement_id": "search",
+        "namespace": "demo.UserMapper"
+      },
+      "description": "SQL injection vulnerable sink: ${orderBy} uses string interpolation in ORDER BY clause",
+      "vulnerable_expression": "${orderBy}",
+      "sink_type": "mybatis_string_interpolation",
+      "sink_category": "sql_order_by_injection",
+      "evidence_type": "code_slice",
+      "risk_level": "critical",
+      "attack_vector": "orderBy parameter from UserController.search flows unmodified to this sink",
+      "remediation": "Use #{orderBy} parameterized binding or whitelist validation for ORDER BY columns"
+    }
+  ],
+  "data_flow_summary": {
+    "complete_path": "UserController.search(orderBy) -> UserService.search(orderBy) -> UserMapper.search(orderBy) -> ${orderBy} in SQL",
+    "vulnerability": "SQL injection in ORDER BY clause via MyBatis string interpolation"
+  },
+  "validation_result": "success",
+  "scope_statement": "Analysis limited to 6 extracted source files within authorized task workspace",
+  "safety_statement": "Read-only code analysis performed, no network access, no external lookups, no code execution"
+}

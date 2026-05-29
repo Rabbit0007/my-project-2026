@@ -1,0 +1,62 @@
+{
+  "intent_id": 777,
+  "hypothesis_id": 541,
+  "timestamp": "2026-05-29T05:30:00Z",
+  "auth_boundary_candidates": [
+    {
+      "type": "potential_missing_authorization",
+      "file": "src/main/java/demo/AdminExportController.java",
+      "line": 5,
+      "construct": "AdminExportController.export",
+      "evidence": "Class named with 'Admin' prefix but no explicit role/permission check visible in code",
+      "params": ["format", "includeInactive"],
+      "risk": "admin_function_without_auth_check"
+    },
+    {
+      "type": "potential_missing_authentication",
+      "file": "src/main/java/demo/UserController.java",
+      "line": 11,
+      "construct": "UserController.search",
+      "evidence": "User-facing controller with no authentication check visible",
+      "params": ["keyword", "orderBy"],
+      "risk": "unauthenticated_entry_point"
+    },
+    {
+      "type": "sql_injection_sink",
+      "file": "src/main/resources/mapper/UserMapper.xml",
+      "line": 6,
+      "construct": "ORDER BY ${orderBy}",
+      "evidence": "MyBatis ${} interpolation allows arbitrary SQL injection via orderBy parameter",
+      "source_param": "orderBy",
+      "source_controller": "UserController.search",
+      "risk": "sql_injection"
+    }
+  ],
+  "entrypoint_candidates": [
+    {
+      "class": "AdminExportController",
+      "method": "export",
+      "params": ["format", "includeInactive"],
+      "annotations": [],
+      "auth_visible": false
+    },
+    {
+      "class": "UserController",
+      "method": "search",
+      "params": ["keyword", "orderBy"],
+      "annotations": [],
+      "auth_visible": false
+    }
+  ],
+  "dataflow_summary": {
+    "user_input_to_sql": [
+      {
+        "source": "UserController.search:orderBy",
+        "sink": "UserMapper.xml:orderBy",
+        "via": ["UserService.search", "UserMapper.search"],
+        "vulnerable": true,
+        "vulnerability_type": "sql_injection"
+      }
+    ]
+  }
+}

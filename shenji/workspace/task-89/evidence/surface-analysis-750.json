@@ -1,0 +1,44 @@
+{
+  "intent_id": 750,
+  "analysis_timestamp": "2026-05-29T03:38:00Z",
+  "entrypoints": [
+    {
+      "type": "http_handler",
+      "class": "demo.UserController",
+      "method": "search",
+      "file": "src/main/java/demo/UserController.java",
+      "parameters": ["keyword", "orderBy"],
+      "auth_boundary": "none_visible"
+    },
+    {
+      "type": "http_handler",
+      "class": "demo.AdminExportController",
+      "method": "export",
+      "file": "src/main/java/demo/AdminExportController.java",
+      "parameters": ["format", "includeInactive"],
+      "auth_boundary": "none_visible"
+    }
+  ],
+  "auth_boundaries": [],
+  "database_interactions": [
+    {
+      "type": "mybatis_mapper",
+      "namespace": "demo.UserMapper",
+      "method": "search",
+      "file": "src/main/resources/mapper/UserMapper.xml",
+      "query": "SELECT id, name FROM users WHERE name LIKE CONCAT('%', #{keyword}, '%') ORDER BY ${orderBy}",
+      "parameters": {
+        "keyword": {"binding": "#{}", "safe": true},
+        "orderBy": {"binding": "${}", "safe": false, "vulnerability": "sql_injection_candidate"}
+      }
+    }
+  ],
+  "data_flows": [
+    {
+      "source": "HTTP parameter orderBy",
+      "path": ["UserController.search", "UserService.search", "UserMapper.search", "SQL ORDER BY clause"],
+      "sink_type": "sql_order_by",
+      "taint_status": "user_controlled_unsanitized"
+    }
+  ]
+}

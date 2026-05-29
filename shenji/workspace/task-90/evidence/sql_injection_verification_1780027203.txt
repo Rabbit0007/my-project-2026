@@ -1,0 +1,68 @@
+SQL INJECTION VERIFICATION - orderBy Parameter Chain
+=====================================================
+
+VERIFICATION METHOD: Static code analysis - source-to-sink trace
+
+SOURCE (UserController.java:11-13):
+-----------------------------------
+    String orderBy = request.getParameter("orderBy");
+    return userService.search(keyword, orderBy);
+
+ANALYSIS: 
+- Direct extraction from HttpServletRequest.getParameter()
+- No validation, no allowlist check, no character filtering
+- Immediately passed to service layer
+- USER-CONTROLLED: TRUE
+
+PROPAGATION (UserService.java:11):
+----------------------------------
+    return userMapper.search(keyword, orderBy);
+
+ANALYSIS:
+- Parameter received as String orderBy
+- No transformation, validation, or sanitization
+- Immediately passed to persistence layer
+- TAINT PRESERVED: TRUE
+
+SINK (UserMapper.xml:6):
+------------------------
+    ORDER BY ${orderBy}
+
+ANALYSIS:
+- MyBatis ${orderBy} syntax = STRING INTERPOLATION
+- NOT prepared statement parameterization (which would be #{orderBy})
+- Direct SQL clause injection possible
+- VULNERABLE: TRUE
+
+COMPARISON WITH EXPECTED EXPLOITABILITY PATTERNS:
+=================================================
+
+Pattern 1: User-controlled input reaching dynamic SQL
+  Status: CONFIRMED
+  Evidence: request.getParameter() -> ${orderBy}
+
+Pattern 2: No input validation/sanitization barriers
+  Status: CONFIRMED
+  Evidence: No validation code in UserController, UserService, or interceptor
+
+Pattern 3: Vulnerable string interpolation sink
+  Status: CONFIRMED
+  Evidence: ${orderBy} performs literal substitution, not parameterization
+
+Pattern 4: ORDER BY clause injection vector
+  Status: CONFIRMED
+  Evidence: ORDER BY accepts arbitrary SQL expressions
+
+EXPLOITABILITY ASSESSMENT:
+=========================
+- Attack Vector: HTTP GET/POST parameter "orderBy"
+- Injection Type: SQL clause injection (ORDER BY)
+- Example Payload: orderBy=name; DROP TABLE users;--
+- Expected Impact: Arbitrary SQL execution in ORDER BY context
+- Authentication Required: Unknown (depends on deployment)
+- Defense Barriers: NONE IDENTIFIED
+
+VERIFICATION STATUS: EXPLOITABLE
+================================
+The observed capability sql_injection on orderBy parameter is CONFIRMED
+via static code analysis. All evidence items match actual source code.
